@@ -22,7 +22,7 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} 🕶️ ${NC} => a = add question, q = quit, r = restart, any other key = next sentence "$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, q = quit, r = restart, any other key = next sentence"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -54,7 +54,51 @@ questions_from_research() {
 }
 
 answers_from_questions() {
-	:
+	if [[ -n $current_term ]]; then
+		question_number=1
+		file_length="$(cat "Terms/$current_term/questions" | wc -l)"
+		cat "Terms/$current_term/questions" | while IFS= read -r question; do
+			if [[ $question == "" ]] || [[ $question == " " ]]; then
+				continue
+			else
+				while : ; do
+					WHITE='\033[30;107m'
+					RED='\033[30;101m'
+					GREEN='\033[30;102m'
+					BLUE='\033[30;104m'
+					NC='\033[0m'
+					percent="$(perl -e "print int($question_number / $file_length * 100 + 0.5)")"
+					printf "\033c"
+					echo $question
+					echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️  ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
+					read -n1 -r -s input <&3
+					case $input in
+						"a")
+							read -p "Answer question here: " answer <&3
+							add_answer "$answer" "$question_number"
+							sleep 1
+							;;
+						"q")
+							break 2
+							;;
+					  "r")
+							read -p "Really restart answers from questions reading? " restart_reading <&3
+							if [[ $restart_reading =~ "y" ]]; then
+								echo "$questions" | answers_from_questions
+								break 2;
+							fi
+							;;
+						*)
+							break;
+							;;
+					esac
+				done
+			fi
+			question_number=$(($question_number + 1))
+		done
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
 }
 
 statements_from_answers() {
