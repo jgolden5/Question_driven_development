@@ -70,12 +70,12 @@ answers_from_questions() {
 					percent="$(perl -e "print int($question_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $question
-					echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️  ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
+					echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
 							read -p "Answer question here: " answer <&3
-							add_answer "$answer" "$question_number"
+							add_answer "$question" "$answer" 
 							sleep 1
 							;;
 						"q")
@@ -103,6 +103,18 @@ answers_from_questions() {
 
 statements_from_answers() {
 	:
+}
+
+add_answer() { #$1 = question, $2 = answer
+	if [[ -n $current_term ]]; then
+		if [[ "$1" =~ "?" ]] && [[ "$2" != "" ]]; then
+			echo "$1 $2" >>"Terms/$current_term/answers" && echo "answer was added to $current_term answers" || echo "ERROR: question was not added to $current_term answers."
+		else
+			echo "question and/or answer was invalid"
+		fi
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
 }
 
 add_question() {
@@ -195,6 +207,8 @@ alias sfa='statements_from_answers'
 alias aq='add_question'
 alias lq='list_questions'
 alias vq='vim_questions_current_term'
+
+alias aa='add_answer'
 
 alias ct='change_term'
 alias lt='list_terms'
