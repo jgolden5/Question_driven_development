@@ -127,6 +127,14 @@ list_answers() {
 	fi
 }
 
+vim_answers_from_current_term() {
+	if [[ -n $current_term ]]; then
+		vi "Terms/$current_term/answers"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
 add_question() {
 	if [[ -n $current_term ]]; then
 		if [[ $1 =~ "?" ]]; then
@@ -220,6 +228,7 @@ alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
 alias la='list_answers'
+alias va='vim_answers_from_current_term'
 
 alias ct='change_term'
 alias lt='list_terms'
