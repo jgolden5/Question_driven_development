@@ -3,34 +3,6 @@
 
 current_term=
 
-add_question() {
-	if [[ -n $current_term ]]; then
-		echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
-	else
-		echo "You have not yet defined a current term. Please do so with change_term, then try again."
-	fi
-}
-
-change_term() { #set current term to $1
-	if [[ -n "$1" ]]; then
-		if [[ ! -d "Terms/$1" ]]; then
-			mkdir "Terms/$1"
-			touch "Terms/$1/answers" "Terms/$1/questions" "Terms/$1/statements"
-			echo "Added directory $1 to Terms, with answers, questions, and statements files. View a list of all terms with list_terms or lt"
-		fi
-		current_term="$1"
-	else
-		echo "term was invalid."
-	fi
-	update_qdd_prompt
-}
-
-list_terms() {
-	number_of_terms="$(ls Terms | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
-	echo "<-- $number_of_terms Terms -->"
-	ls -1 Terms
-}
-
 questions_from_research() {
 	if [[ -n $current_term ]]; then
 		line_number=1
@@ -82,6 +54,34 @@ statements_from_answers() {
 	:
 }
 
+add_question() {
+	if [[ -n $current_term ]]; then
+		echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
+change_term() { #set current term to $1
+	if [[ -n "$1" ]]; then
+		if [[ ! -d "Terms/$1" ]]; then
+			mkdir "Terms/$1"
+			touch "Terms/$1/answers" "Terms/$1/questions" "Terms/$1/statements"
+			echo "Added directory $1 to Terms, with answers, questions, and statements files. View a list of all terms with list_terms or lt"
+		fi
+		current_term="$1"
+	else
+		echo "term was invalid."
+	fi
+	update_qdd_prompt
+}
+
+list_terms() {
+	number_of_terms="$(ls Terms | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+	echo "<-- $number_of_terms Terms -->"
+	ls -1 Terms
+}
+
 remove_term() {
 	rm -r "Terms/$1"
 	echo "removed term $1"
@@ -95,6 +95,11 @@ remove_wikipedia_citations() {
 	cat research.txt | sed 's/\[.*\]//g' >backup
 	cp backup research.txt
 	rm backup
+}
+
+source_qdd() {
+	source ../../qdd.sh
+	echo "qdd.sh was sourced successfully"
 }
 
 update_qdd_prompt() {
@@ -128,5 +133,7 @@ alias rt='remove_term'
 
 alias aq='add_question'
 alias vq='vim_questions_current_term'
+
+alias sqdd='source_qdd'
 
 update_qdd_prompt
