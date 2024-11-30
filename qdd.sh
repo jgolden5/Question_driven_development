@@ -1,6 +1,7 @@
 #!/bin/bash
 #All functions and aliases relevant to question_driven_development project
 
+exec 3<&0
 current_term=
 
 questions_from_research() {
@@ -25,10 +26,9 @@ questions_from_research() {
 					read -n1 -r -s input <&3
 					case $input in
 						"q")
-							read -p "Enter question here: " question
-							add_question $question
+							read -p "Enter question here: " question <&3
+							add_question "$question"
 							sleep 1
-							break;
 							;;
 						"x")
 							break 2;
@@ -56,7 +56,29 @@ statements_from_answers() {
 
 add_question() {
 	if [[ -n $current_term ]]; then
-		echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
+		if [[ $1 =~ "?" ]]; then
+			echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
+		else
+			echo "Invalid question format."
+		fi
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
+list_questions() {
+	if [[ -n $current_term ]]; then
+		number_of_terms="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		echo "<-- $number_of_terms questions about $current_term -->"
+		cat "Terms/$current_term/questions"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
+vim_questions_current_term() {
+	if [[ -n $current_term ]]; then
+		vi "Terms/$current_term/questions"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -115,25 +137,18 @@ update_qdd_prompt() {
 	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
 }
 
-vim_questions_current_term() {
-	if [[ -n $current_term ]]; then
-		vi "Terms/$current_term/questions"
-	else
-		echo "You have not yet defined a current term. Please do so with change_term, then try again."
-	fi
-}
-
 alias qfr='questions_from_research'
 alias afq='answers_from_questions'
 alias sfa='statements_from_answers'
+
+alias aq='add_question'
+alias lq='list_questions'
+alias vq='vim_questions_current_term'
 
 alias ct='change_term'
 alias lt='list_terms'
 alias rt='remove_term'
 
-alias aq='add_question'
-alias vq='vim_questions_current_term'
-
-alias sqdd='source_qdd'
+alias qdd='source_qdd'
 
 update_qdd_prompt
