@@ -117,6 +117,16 @@ add_answer() { #$1 = question, $2 = answer
 	fi
 }
 
+list_answers() {
+	if [[ -n $current_term ]]; then
+		number_of_answers="$(cat "Terms/$current_term/answers" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		echo "<-- $number_of_answers answers about $current_term -->"
+		cat "Terms/$current_term/answers"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
 add_question() {
 	if [[ -n $current_term ]]; then
 		if [[ $1 =~ "?" ]]; then
@@ -131,8 +141,8 @@ add_question() {
 
 list_questions() {
 	if [[ -n $current_term ]]; then
-		number_of_terms="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
-		echo "<-- $number_of_terms questions about $current_term -->"
+		number_of_questions="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		echo "<-- $number_of_questions questions about $current_term -->"
 		cat "Terms/$current_term/questions"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
@@ -209,6 +219,7 @@ alias lq='list_questions'
 alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
+alias la='list_answers'
 
 alias ct='change_term'
 alias lt='list_terms'
