@@ -2,7 +2,7 @@
 #All functions and aliases relevant to question_driven_development project
 
 exec 3<&0
-current_term=
+current_term="$current_term"
 
 questions_from_research() {
 	if [[ -n $current_term ]]; then
@@ -22,16 +22,23 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} 🕶️ ${NC} => q = question, x = exit, any other key = next sentence "$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} 🕶️ ${NC} => a = add question, q = quit, r = restart, any other key = next sentence "$'\n'
 					read -n1 -r -s input <&3
 					case $input in
-						"q")
+						"a")
 							read -p "Enter question here: " question <&3
 							add_question "$question"
 							sleep 1
 							;;
-						"x")
-							break 2;
+						"q")
+							break 2
+							;;
+					  "r")
+							read -p "Really restart questions from research reading? " restart_reading <&3
+							if [[ $restart_reading =~ "y" ]]; then
+								echo "$sentences" | questions_from_research
+								break 2;
+							fi
 							;;
 						*)
 							break;
