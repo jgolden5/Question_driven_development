@@ -1,0 +1,16 @@
+Linux (/ˈlɪnʊks/, LIN-uuks) Linux is typically packaged as a Linux distribution (distro), which includes the kernel and supporting system software and libraries — many of which are provided by the GNU Project — to create a complete operating system.
+
+Many Linux distributions use the word "Linux" in their name, but the Free Software Foundation uses and recommends the name "GNU/Linux" to emphasize the use and importance of GNU software in many distributions, causing some controversy. include Debian, Fedora Linux, Arch Linux, and Ubuntu, while commercial distributions include Red Hat Enterprise Linux and SUSE Linux Enterprise. Other than the Linux kernel, key components that make up a distribution may include a display server (windowing system), a package manager, a bootloader and the Bash shell.
+
+Linux is one of the most prominent examples of free and open-source software collaboration. While originally developed for x86 based personal computers, it has since been ported to more platforms than any other operating system, When combined with Android, which is Linux-based and designed for smartphones, they have the largest installed base of all general-purpose operating systems.
+
+Overview
+The Linux kernel was designed by Linus Torvalds, following the lack of a working kernel for GNU, a Unix-compatible operating system made entirely of free software that had been undergoing development since 1983 by Richard Stallman. While a separate working Unix-compatible system called Minix was later released, its license was not entirely free at the time.
+
+Desktop Linux distributions include a windowing system such as X11 or Wayland and a desktop environment such as GNOME, KDE Plasma or Xfce. Distributions intended for servers may not have a graphical user interface at all or include a solution stack such as LAMP.
+
+The source code of Linux may be used, modified, and distributed commercially or non-commercially by anyone under the terms of its respective licenses, such as the GNU General Public License (GPL). The license means creating novel distributions is permitted by anyone
+
+Because of the dominance of Linux-based Android on smartphones, Linux, including Android, has the largest installed base of all general-purpose operating systems as of May 2022.
+
+Linux also runs on embedded systems, i.e., devices whose operating system is typically built into the firmware and is highly tailored to the system. This includes routers, automation controls, smart home devices, video game consoles, televisions (Samsung and LG smart TVs),
