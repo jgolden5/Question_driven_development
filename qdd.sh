@@ -82,7 +82,16 @@ statements_from_answers() {
 	:
 }
 
-remove_citations() { #this is for extracting wikipedia articles and getting rid of annoying [numbers] that mess up my sentencify function and are not clean to read
+remove_term() {
+	rm -r "Terms/$1"
+	echo "removed term $1"
+	if [[ $current_term == "$1" ]]; then
+		current_term="termless"
+	fi
+	update_qdd_prompt
+}
+
+remove_wikipedia_citations() {
 	cat research.txt | sed 's/\[.*\]//g' >backup
 	cp backup research.txt
 	rm backup
@@ -113,9 +122,11 @@ alias qfr='questions_from_research'
 alias afq='answers_from_questions'
 alias sfa='statements_from_answers'
 
-alias aq='add_question'
 alias ct='change_term'
 alias lt='list_terms'
+alias rt='remove_term'
+
+alias aq='add_question'
 alias vq='vim_questions_current_term'
 
 update_qdd_prompt
