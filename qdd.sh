@@ -4,7 +4,11 @@
 current_term=
 
 add_question() {
-	echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
+	if [[ -n $current_term ]]; then
+		echo "$1" >>"Terms/$current_term/questions" && echo "question was added to $current_term questions" || echo "ERROR: question was not added to $current_term questions."
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
 }
 
 change_term() { #set current term to $1
@@ -97,11 +101,21 @@ update_qdd_prompt() {
 	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
 }
 
+vim_questions_current_term() {
+	if [[ -n $current_term ]]; then
+		vi "Terms/$current_term/questions"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
 alias qfr='questions_from_research'
 alias afq='answers_from_questions'
 alias sfa='statements_from_answers'
 
+alias aq='add_question'
 alias ct='change_term'
 alias lt='list_terms'
+alias vq='vim_questions_current_term'
 
 update_qdd_prompt
