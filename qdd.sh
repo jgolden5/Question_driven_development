@@ -112,7 +112,23 @@ answers_from_questions() {
 }
 
 statements_from_answers() {
-	:
+	#What is = sed 's/What is \(.*\)\? \(.*\)/\1 is \2./'
+	#What are = sed 's/What are \(.*\)\? \(.*\)/\1 are \2./'
+	#What am = sed 's/What am \(.*\)\? \(.*\)/\1 am \2./'
+	
+	#Why is = sed 's/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
+	#Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
+	#Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
+	#Why does = sed -r 's/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+	#Why _ I = sed 's/Why \(.*\) I \(.*\)\? \(.*\)/I \1 \2 because \3./'
+
+	#How is = sed 's/How is \(.*\) so \(.*\)?
+
+	line="$1"
+	if [[ $line =~ "What is" ]]; then
+		
+	elif
+	fi
 }
 
 add_answer() { #$1 = question, $2 = answer
