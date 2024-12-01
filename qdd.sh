@@ -57,43 +57,53 @@ answers_from_questions() {
 	if [[ -n $current_term ]]; then
 		question_number=1
 		file_length="$(cat "Terms/$current_term/questions" | wc -l)"
+		if [[ "$1" == "-u" ]]; then
+			unanswered_only="true"
+		else
+			unanswered_only="false"
+		fi
 		cat "Terms/$current_term/questions" | while IFS= read -r question; do
 			if [[ $question == "" ]] || [[ $question == " " ]]; then
 				continue
-			else
-				while : ; do
-					WHITE='\033[30;107m'
-					RED='\033[30;101m'
-					GREEN='\033[30;102m'
-					BLUE='\033[30;104m'
-					NC='\033[0m'
-					percent="$(perl -e "print int($question_number / $file_length * 100 + 0.5)")"
-					printf "\033c"
-					echo $question
-					echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
-					read -n1 -r -s input <&3
-					case $input in
-						"a")
-							read -p "Answer question here: " answer <&3
-							add_answer "$question" "$answer" 
-							sleep 1
-							;;
-						"q")
-							break 2
-							;;
-					  "r")
-							read -p "Really restart answers from questions reading? " restart_reading <&3
-							if [[ $restart_reading =~ "y" ]]; then
-								echo "$questions" | answers_from_questions
-								break 2;
-							fi
-							;;
-						*)
-							break;
-							;;
-					esac
-				done
 			fi
+			while : ; do
+				WHITE='\033[30;107m'
+				RED='\033[30;101m'
+				GREEN='\033[30;102m'
+				YELLOW='\033[30;103m'
+				BLUE='\033[30;104m'
+				NC='\033[0m'
+				percent="$(perl -e "print int($question_number / $file_length * 100 + 0.5)")"
+				printf "\033c"
+				if [[ "$1" == "-u" ]]; then
+					grep -q "$question" "Terms/$current_term/answers" && break
+					echo -e "${YELLOW}UNANSWERED${NC}" && echo $question
+				else
+					echo "$question"
+				fi
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
+				read -n1 -r -s input <&3
+				case $input in
+					"a")
+						read -p "Answer question here: " answer <&3
+						add_answer "$question" "$answer" 
+						sleep 1
+						;;
+					"q")
+						break 2
+						;;
+					"r")
+						read -p "Really restart answers from questions reading? " restart_reading <&3
+						if [[ $restart_reading =~ "y" ]]; then
+							echo "$questions" | answers_from_questions
+							break 2;
+						fi
+						;;
+					*)
+						break;
+						;;
+				esac
+			done
 			question_number=$(($question_number + 1))
 		done
 	else
