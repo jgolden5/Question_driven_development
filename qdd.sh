@@ -8,7 +8,8 @@ questions_from_research() {
 	if [[ -n $current_term ]]; then
 		line_number=1
 		research=$(cat research.txt)
-		file_length="$(echo $research | sentencify | wc -l)"
+		file_length="$(echo $research | sentencify | wc -l | sed 's/ //g')"
+		[[ -n $1 ]] && line_start="$1" || line_start=1
 		echo $research | sentencify | while IFS= read -r line; do
 			if [[ $line == "" ]] || [[ $line == " " ]]; then
 				continue
@@ -20,9 +21,10 @@ questions_from_research() {
 					BLUE='\033[30;104m'
 					NC='\033[0m'
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
+					[[ $line_number -lt $line_start ]] && break
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, c = change term, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, c = change term, j = jump to line, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -34,6 +36,16 @@ questions_from_research() {
 							read -p "Change term $current_term to: " new_term <&3
 							change_term "$new_term"
 							sleep 1
+							;;
+						"j")
+							read -p "Jump to which line number? " user_line_start <&3
+							if [[ $user_line_start -le $file_length ]]; then
+								echo "$research" | questions_from_research "$user_line_start"
+								break 2
+							else
+								echo "Sorry, there are only $file_length lines in total. Please jump to a smaller number"
+								sleep 1
+							fi
 							;;
 						"q")
 							break 2
