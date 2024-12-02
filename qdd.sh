@@ -70,8 +70,8 @@ questions_from_research() {
 							break 2
 							;;
 					  "r")
-							read -p "Really restart questions from research reading? " restart_reading <&3
-							if [[ $restart_reading =~ "y" ]]; then
+							read -n1 -s -p "Really restart questions from research reading? " restart_reading <&3
+							if [[ $restart_reading == "y" ]]; then
 								questions_from_research
 								break 2;
 							fi
@@ -189,8 +189,8 @@ answers_from_questions() {
 						break 2
 						;;
 					"r")
-						read -p "Really restart answers from questions reading? " restart_reading <&3
-						if [[ $restart_reading =~ "y" ]]; then
+						read -n1 -s -p "Really restart answers from questions reading? " restart_reading <&3
+						if [[ $restart_reading == "y" ]]; then
 							if [[ "$@" =~ "u" ]]; then
 								answers_from_questions "u"
 							else
