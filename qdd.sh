@@ -24,7 +24,7 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, b = back 1 line, c = change term, j = jump to line, J = jump to end of lines, n = next line, q = quit, r = restart, v = view questions"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, j = jump, J = endjump, n = next, q = quit, r = restart, v = view"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -128,7 +128,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❗️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, J = jump to end of lines, n = next line, q = quit, r = restart, v = view answers"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❗️ ${NC} => a = answer, b = back, c = change, g = google, j = jump, J = endjump, n = next, q = quit, r = restart, v = view"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
