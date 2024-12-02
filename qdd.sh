@@ -305,6 +305,19 @@ list_terms() {
 	ls -1 Terms
 }
 
+move_term() {
+	if [[ -n "$1" ]]; then
+		mv "Terms/$current_term" "Terms/$1"
+		touch "Terms/$1/answers" "Terms/$1/questions" "Terms/$1/statements"
+		rm -rf "Terms/$current_term"
+		current_term="$1"
+		echo "Moved $current_term to $1."
+	else
+		echo "term was invalid."
+	fi
+	update_qdd_prompt
+}
+
 remove_term() {
 	rm -r "Terms/$1"
 	echo "removed term $1"
@@ -362,6 +375,7 @@ alias vz='vim_statements_current_term'
 
 alias ct='change_term'
 alias lt='list_terms'
+alias mt='move_term'
 alias rt='remove_term'
 
 alias qdd='source_qdd'
