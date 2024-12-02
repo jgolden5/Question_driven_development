@@ -105,7 +105,7 @@ answers_from_questions() {
 						read -p "Change term $current_term to: " new_term <&3
 						change_term "$new_term"
 						sleep 1
-						echo "$questions" | answers_from_questions "$1"
+						echo "Terms/$current_term/questions" | answers_from_questions "$1"
 						break 2
 						;;
 					"g")
