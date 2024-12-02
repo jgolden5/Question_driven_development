@@ -176,14 +176,12 @@ get_statement_from_answer() {
 		sed_option="-r"
 		sed_command='s/Under what circumstances does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 if \4/'
 	else
-		should_print="false"
+		return
 	fi
-	if [[ $should_print == "true" ]]; then
-		if [[ -n $sed_option ]]; then
-			echo "$line" | sed "$sed_option" "$sed_command" | capitalize_first_letter
-		else
-			echo "$line" | sed "$sed_command" | capitalize_first_letter
-		fi
+	if [[ -n $sed_option ]]; then
+		echo "$line" | sed "$sed_option" "$sed_command" | capitalize_first_letter
+	else
+		echo "$line" | sed "$sed_command" | capitalize_first_letter
 	fi
 }
 
@@ -359,7 +357,7 @@ alias aa='add_answer'
 alias la='list_answers'
 alias va='vim_answers_current_term'
 
-alias gsfq='get_statement_from_question'
+alias gsfa='get_statement_from_answer'
 alias lz='list_statements'
 alias vz='vim_statements_current_term'
 
