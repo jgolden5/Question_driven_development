@@ -57,7 +57,7 @@ answers_from_questions() {
 	if [[ -n $current_term ]]; then
 		question_number=1
 		file_length="$(cat "Terms/$current_term/questions" | wc -l)"
-		if [[ "$1" == "-u" ]]; then
+		if [[ "$1" == "u" ]]; then
 			unanswered_only="true"
 		else
 			unanswered_only="false"
@@ -75,7 +75,7 @@ answers_from_questions() {
 				NC='\033[0m'
 				percent="$(perl -e "print int($question_number / $file_length * 100 + 0.5)")"
 				printf "\033c"
-				if [[ "$1" == "-u" ]]; then
+				if [[ "$1" == "u" ]]; then
 					grep -q "$question" "Terms/$current_term/answers" && break
 					echo -e "${YELLOW}UNANSWERED${NC}" && echo $question
 				else
@@ -273,6 +273,7 @@ update_qdd_prompt() {
 
 alias qfr='questions_from_research'
 alias afq='answers_from_questions'
+alias afqu='answers_from_questions u' #only unanswered questions
 alias sfa='statements_from_answers'
 
 alias aq='add_question'
