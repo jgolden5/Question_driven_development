@@ -9,7 +9,7 @@ questions_from_research() {
 		line_number=1
 		research=$(cat research.txt)
 		file_length="$(echo $research | sentencify | wc -l)"
-		echo $sentences | sentencify | while IFS= read -r line; do
+		echo $research | sentencify | while IFS= read -r line; do
 			if [[ $line == "" ]] || [[ $line == " " ]]; then
 				continue
 			else
@@ -36,7 +36,7 @@ questions_from_research() {
 					  "r")
 							read -p "Really restart questions from research reading? " restart_reading <&3
 							if [[ $restart_reading =~ "y" ]]; then
-								echo "$sentences" | questions_from_research
+								echo "$research" | questions_from_research
 								break 2;
 							fi
 							;;
@@ -120,7 +120,7 @@ statements_from_answers() {
 	#Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
 	#Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
 	#Why does = sed '-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
-	#Why _ I = sed 's/Why \(.*\) I \(.*\)\? \(.*\)/I \1 \2 because \3./'
+	#Why should I = sed 's/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
 
 	empty_file "Terms/$current_term/statements"
 	while read line; do
@@ -138,6 +138,8 @@ statements_from_answers() {
 			sed_command='s/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
 		elif [[ $line =~ "Why does" ]]; then
 			sed_command='-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+		elif [[ $line =~ "Why should I" ]]; then
+			sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
 		else
 			continue
 		fi
