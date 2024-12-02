@@ -90,7 +90,7 @@ answers_from_questions() {
 					"r")
 						read -p "Really restart answers from questions reading? " restart_reading <&3
 						if [[ $restart_reading =~ "y" ]]; then
-							echo "$questions" | answers_from_questions
+							echo "$questions" | answers_from_questions "$1"
 							break 2;
 						fi
 						;;
