@@ -46,7 +46,7 @@ questions_from_research() {
 								echo "Please enter a valid line number."
 								sleep 1
 							else
-								echo "$research" | questions_from_research "$user_line_start"
+								questions_from_research "$user_line_start"
 								break 2
 							fi
 							;;
@@ -56,7 +56,7 @@ questions_from_research() {
 					  "r")
 							read -p "Really restart questions from research reading? " restart_reading <&3
 							if [[ $restart_reading =~ "y" ]]; then
-								echo "$research" | questions_from_research
+								questions_from_research
 								break 2;
 							fi
 							;;
@@ -144,7 +144,7 @@ answers_from_questions() {
 							echo "Please enter a valid question number."
 							sleep 0.5
 						else
-							echo "$question" | answers_from_questions "$user_question_start"
+							[[ $@ =~ u ]] && answers_from_questions "u" "$user_question_start" || answers_from_questions "$user_question_start"
 							break 2
 						fi
 						;;
@@ -154,7 +154,11 @@ answers_from_questions() {
 					"r")
 						read -p "Really restart answers from questions reading? " restart_reading <&3
 						if [[ $restart_reading =~ "y" ]]; then
-							echo "$questions" | answers_from_questions "$1"
+							if [[ "$@" =~ "u" ]]; then
+								answers_from_questions "u"
+							else
+								answers_from_questions
+							fi
 							break 2;
 						fi
 						;;
