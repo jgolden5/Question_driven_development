@@ -2,3 +2,13 @@ What does it mean to pull a docker image? download said image from a docker regi
 What is a docker container? an encapsulated environment that can be perfectly replicated regardless of hardware or operating system
 What is a PID namespace in docker? a way to provide separation of processes
 Why might it be useful to load an environment varialbe from a file with docker run? you can create versatile and reusable configurations by being able to easily manipulate environment variables
+Why does docker-run run a command in a new container as opposed to some other previously used or existing container? the whole point of docker run and containers is to create a new container, and the fact that this is very easy thanks to docker images
+Why does docker-run run a command in a new container as opposed to some other previously used or existing container? this makes them easier to create exact replicas of containers, without any external dependencies
+Under what circumstances does docker-run need to pull an image? it does not exist locally, and DOES exist on some docker registry like docker hub
+What does it mean to pull a docker image? download it to my local computer from some remote server (registry)
+What is a docker container? an independent, easily reproducible environment, whose reproduction does not at all depend on the host computer
+What does detached mode mean? when I run the docker run command that I can continue to use the command line while the docker run process runs my container
+How do you connect a container to a user-defined bridge network? using docker network create my-bridge-network
+What is a bridge network in docker? a way to isolate networks from each other by giving them their own name, and only connecting certain intentional containers to said bridge networks
+What happens when you connect a container to a user-defined bridge network? you gain control over a network which can be used for certain deliberate containers, giving the user security and power
+What is a cidfile in docker run? a flag that tells docker to write the newly created container's id to a specified file
