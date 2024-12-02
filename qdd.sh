@@ -128,7 +128,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, J = jump to end of lines, n = next line, q = quit, r = restart"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❗️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, J = jump to end of lines, n = next line, q = quit, r = restart"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
