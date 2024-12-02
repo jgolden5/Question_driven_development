@@ -15,13 +15,13 @@ questions_from_research() {
 				continue
 			else
 				while : ; do
+					[[ $line_number -lt $line_start ]] && break
 					WHITE='\033[30;107m'
 					RED='\033[30;101m'
 					GREEN='\033[30;102m'
 					BLUE='\033[30;104m'
 					NC='\033[0m'
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
-					[[ $line_number -lt $line_start ]] && break
 					printf "\033c"
 					echo $line
 					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, c = change term, j = jump to line, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
@@ -39,12 +39,15 @@ questions_from_research() {
 							;;
 						"j")
 							read -p "Jump to which line number? " user_line_start <&3
-							if [[ $user_line_start -le $file_length ]]; then
+							if [[ $user_line_start -gt $file_length ]]; then
+								echo "Sorry, there are only $file_length lines in total. Please jump to a smaller number."
+								sleep 1
+							elif [[ ! $user_line_start =~ [0-9] ]]; then
+								echo "Please enter a valid line number."
+								sleep 1
+							else
 								echo "$research" | questions_from_research "$user_line_start"
 								break 2
-							else
-								echo "Sorry, there are only $file_length lines in total. Please jump to a smaller number"
-								sleep 1
 							fi
 							;;
 						"q")
@@ -80,12 +83,20 @@ questions_from_research() {
 answers_from_questions() {
 	if [[ -n $current_term ]]; then
 		question_number=1
-		file_length="$(cat "Terms/$current_term/questions" | wc -l)"
+		file_length="$(cat "Terms/$current_term/questions" | wc -l | sed 's/ //g')"
 		cat "Terms/$current_term/questions" | while IFS= read -r question; do
 			if [[ $question == "" ]] || [[ $question == " " ]]; then
 				continue
 			fi
 			while : ; do
+				if [[ "$1" =~ [0-9] ]]; then
+					question_start="$1"
+				elif [[ "$2" =~ [0-9] ]]; then
+					question_start="$2"
+				else
+					question_start=1
+				fi
+				[[ $question_number -lt $question_start ]] && break
 				WHITE='\033[30;107m'
 				RED='\033[30;101m'
 				GREEN='\033[30;102m'
@@ -100,7 +111,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, c = change term, g = google question, q = quit, r = restart, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, c = change term, g = google question, j = jump to line, q = quit, r = restart, any other key = next question"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -111,18 +122,31 @@ answers_from_questions() {
 						fi
 						read -p "$question_prompt" answer <&3
 						add_answer "$question" "$answer" 
-						sleep 0.75
+						sleep 0.5
 						;;
 					"c")
 						read -p "Change term $current_term to: " new_term <&3
 						change_term "$new_term"
 						sleep 1
-						echo "Terms/$current_term/questions" | answers_from_questions "$1"
+						answers_from_questions "$1"
 						break 2
 						;;
 					"g")
 						echo "$question" | pbcopy
 						google "$question"
+						;;
+					"j")
+						read -p "Jump to which question number? " user_question_start <&3
+						if [[ $user_question_start -gt $file_length ]]; then
+							echo "Sorry, there are only $file_length questions in total. Please jump to a smaller number."
+							sleep 1
+						elif [[ ! $user_question_start =~ [0-9] ]]; then
+							echo "Please enter a valid question number."
+							sleep 0.5
+						else
+							echo "$question" | answers_from_questions "$user_question_start"
+							break 2
+						fi
 						;;
 					"q")
 						break 2
