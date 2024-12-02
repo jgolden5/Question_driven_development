@@ -9,5 +9,5 @@ What happens when you connect a container to a user-defined bridge network?
 What is a cidfile in docker run?
 What is a PID namespace in docker?
 What is a namespace?
-What does port exposure actually do?
-Why might it be useful to load an environment varialbe from a file with docker run?
+What does it mean to expose a port in docker?
+Why might it be useful to load an environment variable from a file with docker run?

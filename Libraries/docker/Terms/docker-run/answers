@@ -1,7 +1,7 @@
 What does it mean to pull a docker image? download said image from a docker registry, which is some place where docker images are stored
 What is a docker container? an encapsulated environment that can be perfectly replicated regardless of hardware or operating system
 What is a PID namespace in docker? a way to provide separation of processes
-Why might it be useful to load an environment varialbe from a file with docker run? you can create versatile and reusable configurations by being able to easily manipulate environment variables
+Why might it be useful to load an environment variable from a file with docker run? you can create versatile and reusable configurations by being able to easily manipulate environment variables
 Why does docker-run run a command in a new container as opposed to some other previously used or existing container? the whole point of docker run and containers is to create a new container, and the fact that this is very easy thanks to docker images
 Why does docker-run run a command in a new container as opposed to some other previously used or existing container? this makes them easier to create exact replicas of containers, without any external dependencies
 Under what circumstances does docker-run need to pull an image? it does not exist locally, and DOES exist on some docker registry like docker hub
@@ -12,3 +12,6 @@ How do you connect a container to a user-defined bridge network? using docker ne
 What is a bridge network in docker? a way to isolate networks from each other by giving them their own name, and only connecting certain intentional containers to said bridge networks
 What happens when you connect a container to a user-defined bridge network? you gain control over a network which can be used for certain deliberate containers, giving the user security and power
 What is a cidfile in docker run? a flag that tells docker to write the newly created container's id to a specified file
+What is a PID namespace in docker? an encapsulation of certain process id visibilities, constrained to each namespace, all of which are visible to the host system, and each of which is only visible to the container running said processes
+What is a namespace? an area in which variable names (and in the latter case, process ids) are able to be seen
+What is a namespace? synonymous with a scope

@@ -258,6 +258,9 @@ get_statement_from_answer() {
 		sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
 	elif [[ $line =~ "Why should I" ]]; then
 		sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2/'
+	elif [[ $line =~ "Why might" ]]; then
+		sed_option="-r"
+		sed_command='s/Why might ([^ ]+) (.*)\? (.*)/\1 might \2 because \3/'
 	elif [[ $line =~ "Under what circumstances does" ]]; then
 		sed_option="-r"
 		sed_command='s/Under what circumstances does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 if \4/'
