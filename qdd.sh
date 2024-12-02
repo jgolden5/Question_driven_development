@@ -140,15 +140,6 @@ statements_from_answers() {
 }
 
 get_statement_from_answer() {
-  #What is = sed 's/What is \(.*\)\? \(.*\)/\1 is \2./'
-  #What are = sed 's/What are \(.*\)\? \(.*\)/\1 are \2./'
-  #What am = sed 's/What am \(.*\)\? \(.*\)/\1 am \2./'
-  #Why is = sed 's/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
-  #Why is _ so _ = sed 's/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3./'
-  #Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
-  #Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
-  #Why does = sed '-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
-  #Why should I = sed 's/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
 	should_print="true"
 	if [[ -n "$1" ]]; then
 		line="$1"
@@ -175,6 +166,9 @@ get_statement_from_answer() {
 		sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
 	elif [[ $line =~ "Why should I" ]]; then
 		sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2/'
+	elif [[ $line =~ "Under what circumstances does" ]]; then
+		sed_option="-r"
+		sed_command='s/Under what circumstances does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 if \4/'
 	else
 		should_print="false"
 	fi
@@ -359,6 +353,7 @@ alias aa='add_answer'
 alias la='list_answers'
 alias va='vim_answers_current_term'
 
+alias gsfq='get_statement_from_question'
 alias lz='list_statements'
 alias vz='vim_statements_current_term'
 
