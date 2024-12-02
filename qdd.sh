@@ -22,7 +22,7 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, q = quit, r = restart, any other key = next sentence"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, q = quit, r = restart, t = change term, any other key = next sentence"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -40,6 +40,11 @@ questions_from_research() {
 								break 2;
 							fi
 							;;
+						"t")
+							read -p "Temporarily change term $current_term to: " new_term <&3
+							change_term "$new_term"
+							sleep 1
+							;;
 						*)
 							break;
 							;;
@@ -48,6 +53,7 @@ questions_from_research() {
 			fi
 			line_number=$(($line_number + 1))
 		done
+		echo "current term after loop = $current_term"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -238,6 +244,7 @@ change_term() { #set current term to $1
 			echo "Added directory $1 to Terms, with answers, questions, and statements files. View a list of all terms with list_terms or lt"
 		fi
 		current_term="$1"
+		echo "changed current term to $current_term"
 	else
 		echo "term was invalid."
 	fi
