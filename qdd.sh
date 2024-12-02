@@ -120,7 +120,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, c = change term, g = google question, j = jump to line, q = quit, r = restart, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, q = quit, r = restart, any other key = next question"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -132,6 +132,15 @@ answers_from_questions() {
 						read -p "$question_prompt" answer <&3
 						add_answer "$question" "$answer" 
 						sleep 0.5
+						;;
+					"b")
+						if [[ $question_number -gt 1 ]]; then
+							[[ $@ =~ "u" ]] && answers_from_questions "u" "$(( $question_number - 1 ))" || answers_from_questions "$(( $question_number - 1 ))"
+							break 2
+						else
+							echo "Cannot go back."
+							sleep 0.5
+						fi
 						;;
 					"c")
 						read -p "Change term $current_term to: " new_term <&3
