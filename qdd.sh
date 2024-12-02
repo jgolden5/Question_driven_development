@@ -41,9 +41,10 @@ questions_from_research() {
 							fi
 							;;
 						"t")
-							read -p "Temporarily change term $current_term to: " new_term <&3
+							read -p "Change term $current_term to: " new_term <&3
 							change_term "$new_term"
 							sleep 1
+							export term_in_func="$new_term"
 							;;
 						*)
 							break;
@@ -56,6 +57,9 @@ questions_from_research() {
 		echo "current term after loop = $current_term"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+	if [[ -n $term_in_func ]]; then
+		current_term="$term_in_func"
 	fi
 }
 
@@ -82,7 +86,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, t = change term, any other key = next question"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -99,6 +103,13 @@ answers_from_questions() {
 							echo "$questions" | answers_from_questions "$1"
 							break 2;
 						fi
+						;;
+					"t")
+						read -p "Change term $current_term to: " new_term <&3
+						change_term "$new_term"
+						sleep 1
+						echo "$questions" | answers_from_questions "$1"
+						break 2;
 						;;
 					*)
 						break;
