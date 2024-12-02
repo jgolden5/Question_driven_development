@@ -24,7 +24,7 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, b = back 1 line, c = change term, j = jump to line, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, b = back 1 line, c = change term, j = jump to line, n = next line, q = quit, r = restart, v = view questions"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -59,6 +59,9 @@ questions_from_research() {
 								break 2
 							fi
 							;;
+						"n" | "")
+							break;
+							;;
 						"q")
 							break 2
 							;;
@@ -77,7 +80,8 @@ questions_from_research() {
 							tput cnorm
 							;;
 						*)
-							break;
+							echo "Sorry, \"$input\" command not recognized."
+							sleep 0.5
 							;;
 					esac
 				done
@@ -120,7 +124,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, q = quit, r = restart, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, b = back 1 line, c = change term, g = google question, j = jump to line, n = next line, q = quit, r = restart"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -135,7 +139,11 @@ answers_from_questions() {
 						;;
 					"b")
 						if [[ $question_number -gt 1 ]]; then
-							[[ $@ =~ "u" ]] && answers_from_questions "u" "$(( $question_number - 1 ))" || answers_from_questions "$(( $question_number - 1 ))"
+							if [[ $@ =~ "u" ]]; then
+								answers_from_questions "u" "$(( $question_number - 1 ))" 
+							else
+								answers_from_questions "$(( $question_number - 1 ))"
+							fi
 							break 2
 						else
 							echo "Cannot go back."
@@ -166,6 +174,9 @@ answers_from_questions() {
 							break 2
 						fi
 						;;
+					"n" | "")
+						break;
+						;;
 					"q")
 						break 2
 						;;
@@ -181,7 +192,8 @@ answers_from_questions() {
 						fi
 						;;
 					*)
-						break;
+						echo "Sorry, \"$input\" command not recognized."
+						sleep 0.5
 						;;
 				esac
 			done
