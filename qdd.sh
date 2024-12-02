@@ -119,16 +119,31 @@ statements_from_answers() {
 	#Why is = sed 's/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
 	#Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
 	#Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
-	#Why does = sed -r 's/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+	#Why does = sed '-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
 	#Why _ I = sed 's/Why \(.*\) I \(.*\)\? \(.*\)/I \1 \2 because \3./'
 
-	#How is = sed 's/How is \(.*\) so \(.*\)?
-
-	line="$1"
-	if [[ $line =~ "What is" ]]; then
-		
-	elif
-	fi
+	empty_file "Terms/$current_term/statements"
+	while read line; do
+		if [[ $line =~ "What is" ]]; then
+			sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2./'
+		elif [[ $line =~ "What are" ]]; then
+			sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2./'
+		elif [[ $line =~ "What am" ]]; then
+			sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2./'
+		elif [[ $line =~ "Why is" ]]; then
+			sed_command='s/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
+		elif [[ $line =~ "Why are" ]]; then
+			sed_command='s/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
+		elif [[ $line =~ "Why am" ]]; then
+			sed_command='s/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
+		elif [[ $line =~ "Why does" ]]; then
+			sed_command='-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+		else
+			continue
+		fi
+		echo "$line" | sed "$sed_command" >>"Terms/$current_term/statements"
+	done <"Terms/$current_term/answers"
+	list_statements
 }
 
 add_answer() { #$1 = question, $2 = answer
@@ -186,6 +201,16 @@ list_questions() {
 vim_questions_current_term() {
 	if [[ -n $current_term ]]; then
 		vi "Terms/$current_term/questions"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
+list_statements() {
+	if [[ -n $current_term ]]; then
+		number_of_statements="$(cat "Terms/$current_term/statements" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		echo "<-- $number_of_statements statements about $current_term -->"
+		cat "Terms/$current_term/statements"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -255,6 +280,8 @@ alias vq='vim_questions_current_term'
 alias aa='add_answer'
 alias la='list_answers'
 alias va='vim_answers_from_current_term'
+
+alias lz='list_statements'
 
 alias ct='change_term'
 alias lt='list_terms'
