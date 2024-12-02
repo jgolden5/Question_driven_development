@@ -313,6 +313,10 @@ update_qdd_prompt() {
 	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
 }
 
+vim_research() {
+	vi research.txt
+}
+
 alias qfr='questions_from_research'
 alias afq='answers_from_questions'
 alias afqu='answers_from_questions u' #only unanswered questions
@@ -334,5 +338,6 @@ alias lt='list_terms'
 alias rt='remove_term'
 
 alias qdd='source_qdd'
+alias vr='vim_research'
 
 update_qdd_prompt
