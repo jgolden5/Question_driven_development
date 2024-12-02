@@ -89,7 +89,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, q = quit, r = restart, t = change term, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, g = google question, q = quit, r = restart, t = change term, any other key = next question"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -101,6 +101,10 @@ answers_from_questions() {
 						read -p "$question_prompt" answer <&3
 						add_answer "$question" "$answer" 
 						sleep 0.75
+						;;
+					"g")
+						echo "$question" | pbcopy
+						google "$question"
 						;;
 					"q")
 						break 2
