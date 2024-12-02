@@ -127,40 +127,49 @@ answers_from_questions() {
 }
 
 statements_from_answers() {
-	#What is = sed 's/What is \(.*\)\? \(.*\)/\1 is \2./'
-	#What are = sed 's/What are \(.*\)\? \(.*\)/\1 are \2./'
-	#What am = sed 's/What am \(.*\)\? \(.*\)/\1 am \2./'
-	
-	#Why is = sed 's/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
-	#Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
-	#Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
-	#Why does = sed '-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
-	#Why should I = sed 's/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
+  #What is = sed 's/What is \(.*\)\? \(.*\)/\1 is \2./'
+  #What are = sed 's/What are \(.*\)\? \(.*\)/\1 are \2./'
+  #What am = sed 's/What am \(.*\)\? \(.*\)/\1 am \2./'
 
-	empty_file "Terms/$current_term/statements"
-	while read line; do
-		if [[ $line =~ "What is" ]]; then
-			sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2./'
-		elif [[ $line =~ "What are" ]]; then
-			sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2./'
-		elif [[ $line =~ "What am" ]]; then
-			sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2./'
-		elif [[ $line =~ "Why is" ]]; then
-			sed_command='s/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
-		elif [[ $line =~ "Why are" ]]; then
-			sed_command='s/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
-		elif [[ $line =~ "Why am" ]]; then
-			sed_command='s/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
-		elif [[ $line =~ "Why does" ]]; then
-			sed_command='-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
-		elif [[ $line =~ "Why should I" ]]; then
-			sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
+  #Why is = sed 's/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
+  #Why is _ so _ = sed 's/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3./'
+  #Why are = sed 's/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
+  #Why am = sed 's/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
+  #Why does = sed '-r s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+  #Why should I = sed 's/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
+
+  empty_file "Terms/$current_term/statements"
+  while read line; do
+		sed_option=""
+    if [[ $line =~ "What is" ]]; then
+      sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2./'
+    elif [[ $line =~ "What are" ]]; then
+      sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2./'
+    elif [[ $line =~ "What am" ]]; then
+      sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2./'
+    elif [[ $line =~ "Why is" ]] && [[ $line =~ "so" ]]; then
+      sed_command='s/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3./'
+    elif [[ $line =~ "Why is" ]]; then
+      sed_command='s/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3./'
+    elif [[ $line =~ "Why are" ]]; then
+      sed_command='s/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3./'
+    elif [[ $line =~ "Why am" ]]; then
+      sed_command='s/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3./'
+    elif [[ $line =~ "Why does" ]]; then
+			sed_option="-r"
+      sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4./'
+    elif [[ $line =~ "Why should I" ]]; then
+      sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2./'
+    else
+      continue
+    fi
+		if [[ -n $sed_option ]]; then
+			echo "$line" | sed "$sed_option" "$sed_command" >>"Terms/$current_term/statements"
 		else
-			continue
+			echo "$line" | sed "$sed_command" >>"Terms/$current_term/statements"
 		fi
-		echo "$line" | sed "$sed_command" >>"Terms/$current_term/statements"
-	done <"Terms/$current_term/answers"
-	list_statements
+  done <"Terms/$current_term/answers"
+  list_statements
 }
 
 add_answer() { #$1 = question, $2 = answer
