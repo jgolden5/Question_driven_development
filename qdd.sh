@@ -24,13 +24,22 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, c = change term, j = jump to line, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, b = back 1 line, c = change term, j = jump to line, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
 							read -p "Enter question here: " question <&3
 							add_question "$question"
 							sleep 1
+							;;
+						"b")
+							if [[ $line_number -gt 1 ]]; then
+								questions_from_research "$(( $line_number - 1 ))"
+								break 2
+							else
+								echo "Cannot go back."
+								sleep 0.5
+							fi
 							;;
 						"c")
 							read -p "Change term $current_term to: " new_term <&3
