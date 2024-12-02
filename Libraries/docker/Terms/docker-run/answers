@@ -1,0 +1,2 @@
+What does it mean to pull a docker image? download said image from a docker registry, which is some place where docker images are stored
+What is a docker container? an encapsulated environment that can be perfectly replicated regardless of hardware or operating system

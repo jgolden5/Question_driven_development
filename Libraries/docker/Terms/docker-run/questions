@@ -1,0 +1,4 @@
+Why does the docker run command run a command in a new container as opposed to some other previously used or existing container?
+Under what circumstances does the docker run command need to pull an image?
+What does it mean to pull a docker image?
+What is a docker container?

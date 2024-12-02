@@ -194,7 +194,7 @@ list_answers() {
 	fi
 }
 
-vim_answers_from_current_term() {
+vim_answers_current_term() {
 	if [[ -n $current_term ]]; then
 		vi "Terms/$current_term/answers"
 	else
@@ -254,6 +254,14 @@ list_statements() {
 		number_of_statements="$(cat "Terms/$current_term/statements" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
 		echo "<-- $number_of_statements statements about $current_term -->"
 		cat "Terms/$current_term/statements"
+	else
+		echo "You have not yet defined a current term. Please do so with change_term, then try again."
+	fi
+}
+
+vim_statements_current_term() {
+	if [[ -n $current_term ]]; then
+		vi "Terms/$current_term/statements"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -329,9 +337,10 @@ alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
 alias la='list_answers'
-alias va='vim_answers_from_current_term'
+alias va='vim_answers_current_term'
 
 alias lz='list_statements'
+alias vz='vim_statements_current_term'
 
 alias ct='change_term'
 alias lt='list_terms'
