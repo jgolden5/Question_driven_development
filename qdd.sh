@@ -288,7 +288,7 @@ add_answer() { #$1 = question, $2 = answer
 
 list_answers() {
 	if [[ -n $current_term ]]; then
-		number_of_answers="$(cat "Terms/$current_term/answers" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		number_of_answers="$(cat "Terms/$current_term/answers" | cat | wc -l | sed 's/ //g')"
 		echo "<-- $number_of_answers answers about $current_term -->"
 		cat "Terms/$current_term/answers"
 	else
@@ -318,7 +318,7 @@ add_question() {
 
 list_questions() {
 	if [[ -n $current_term ]]; then
-		number_of_questions="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+		number_of_questions="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/ //g')"
 		echo "<-- $number_of_questions questions about $current_term -->"
 		cat "Terms/$current_term/questions"
 	else
