@@ -2,3 +2,7 @@ Why does docker-run run a command in a new container as opposed to some other pr
 Under what circumstances does docker-run need to pull an image?
 What does it mean to pull a docker image?
 What is a docker container?
+What does detached mode mean?
+How do you connect a container to a user-defined bridge network?
+What happens when you connect a container to a user-defined bridge network?
+What is a bridge network?

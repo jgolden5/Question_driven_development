@@ -22,12 +22,17 @@ questions_from_research() {
 					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, q = quit, r = restart, t = change term, v = view questions, any other key = next sentence"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = add question, c = change term, q = quit, r = restart, v = view questions, any other key = next sentence"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
 							read -p "Enter question here: " question <&3
 							add_question "$question"
+							sleep 1
+							;;
+						"c")
+							read -p "Change term $current_term to: " new_term <&3
+							change_term "$new_term"
 							sleep 1
 							;;
 						"q")
@@ -39,11 +44,6 @@ questions_from_research() {
 								echo "$research" | questions_from_research
 								break 2;
 							fi
-							;;
-						"t")
-							read -p "Change term $current_term to: " new_term <&3
-							change_term "$new_term"
-							sleep 1
 							;;
 						"v")
 							list_questions
@@ -60,7 +60,6 @@ questions_from_research() {
 			fi
 			line_number=$(($line_number + 1))
 		done
-		echo "current term after loop = $current_term"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -89,7 +88,7 @@ answers_from_questions() {
 				else
 					echo "$question"
 				fi
-				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, g = google question, q = quit, r = restart, t = change term, any other key = next question"$'\n'
+				echo -ne "${WHITE}question $question_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ⁉️ ${NC} => a = answer question, c = change term, g = google question, q = quit, r = restart, any other key = next question"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"a")
@@ -101,6 +100,13 @@ answers_from_questions() {
 						read -p "$question_prompt" answer <&3
 						add_answer "$question" "$answer" 
 						sleep 0.75
+						;;
+					"c")
+						read -p "Change term $current_term to: " new_term <&3
+						change_term "$new_term"
+						sleep 1
+						echo "$questions" | answers_from_questions "$1"
+						break 2
 						;;
 					"g")
 						echo "$question" | pbcopy
@@ -115,13 +121,6 @@ answers_from_questions() {
 							echo "$questions" | answers_from_questions "$1"
 							break 2;
 						fi
-						;;
-					"t")
-						read -p "Change term $current_term to: " new_term <&3
-						change_term "$new_term"
-						sleep 1
-						echo "$questions" | answers_from_questions "$1"
-						break 2;
 						;;
 					*)
 						break;
