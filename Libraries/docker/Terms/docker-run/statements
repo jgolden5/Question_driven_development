@@ -1,2 +1,3 @@
 To pull a docker image means to download said image from a docker registry, which is some place where docker images are stored.
 A docker container is an encapsulated environment that can be perfectly replicated regardless of hardware or operating system.
+A PID namespace in docker is a way to provide separation of processes.
