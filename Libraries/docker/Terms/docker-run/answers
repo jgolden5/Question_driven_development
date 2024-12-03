@@ -14,4 +14,4 @@ What happens when you connect a container to a user-defined bridge network? you 
 What is a cidfile in docker run? a flag that tells docker to write the newly created container's id to a specified file
 What is a PID namespace in docker? an encapsulation of certain process id visibilities, constrained to each namespace, all of which are visible to the host system, and each of which is only visible to the container running said processes
 What is a namespace? an area in which variable names (and in the latter case, process ids) are able to be seen
-What is a namespace? synonymous with a scope
+What is a namespace? synonymous to a scope

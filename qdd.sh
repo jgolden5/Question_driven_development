@@ -378,7 +378,7 @@ vim_statements_current_term() {
 	fi
 }
 
-change_term() { #set current term to $1
+change_term() { 
 	if [[ -n "$1" ]]; then
 		if [[ ! -d "Terms/$1" ]]; then
 			mkdir "Terms/$1"
@@ -417,6 +417,25 @@ remove_term() {
 	echo "removed term $1"
 	if [[ $current_term == "$1" ]]; then
 		current_term="termless"
+	fi
+	update_qdd_prompt
+}
+
+change_library() {
+	if [[ -n "$1" ]]; then
+		if [[ ! -d "../$1" ]]; then
+			mkdir "../$1"
+			mkdir "../$1/Terms"
+			touch "../$1/research.txt"
+			echo "Added library \"$1\" with Terms and research.txt. View a list of all libraries with list_libraries or lt"
+		fi
+		cd "../$1"
+		echo "changed current library to $1"
+		if [[ $(ls "Terms" | grep "$current_term" ) == "" ]]; then
+			current_term="termless"
+		fi
+	else
+		echo "No library was entered. Please try again"
 	fi
 	update_qdd_prompt
 }
@@ -471,6 +490,8 @@ alias ct='change_term'
 alias lt='list_terms'
 alias mt='move_term'
 alias rt='remove_term'
+
+alias cy='change_library'
 
 alias qdd='source_qdd'
 alias vr='vim_research'
