@@ -296,7 +296,18 @@ add_answer() { #$1 = question, $2 = answer
 }
 
 list_answers() {
-	if [[ -n $current_term ]]; then
+	if [[ "$1" == "all" ]]; then
+		last_term="$(ls Terms | tail -1)"
+		for term in $(ls Terms); do
+			echo "[ $term ]"
+			number_of_answers="$(cat "Terms/$term/answers" | cat | wc -l | sed 's/ //g')"
+			echo "<-- $number_of_answers answers about $term -->"
+			cat "Terms/$term/answers"
+			if [[ $term != $last_term ]]; then
+				echo
+			fi
+		done
+	elif [[ -n $current_term ]]; then
 		number_of_answers="$(cat "Terms/$current_term/answers" | cat | wc -l | sed 's/ //g')"
 		echo "<-- $number_of_answers answers about $current_term -->"
 		cat "Terms/$current_term/answers"
@@ -513,6 +524,7 @@ alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
 alias la='list_answers'
+alias laa='list_answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
