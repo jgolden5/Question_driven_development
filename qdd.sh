@@ -331,6 +331,7 @@ list() {
 add_answer() { #$1 = question, $2 = answer
 	if [[ -n $current_term ]]; then
 		if [[ "$1" =~ "?" ]] && [[ "$2" != "" ]]; then
+			grep -q "$1" "Terms/$current_term/questions" || add_question "$1"
 			echo "$1 $2" >>"Terms/$current_term/answers" && echo "answer was added to $current_term answers" || echo "ERROR: question was not added to $current_term answers."
 		else
 			echo "question and/or answer was invalid"

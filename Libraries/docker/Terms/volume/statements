@@ -1,0 +1,1 @@
+A volume in docker is a dedicated folder on the host machine which creates files to be mounted into future containers (used for persistence).
