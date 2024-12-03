@@ -1,2 +1,3 @@
 What is a volume in docker? a dedicated folder on the host machine which creates files to be mounted into future containers (used for persistence)
 What is a volume in docker? a way to persist data, since persistence does not happen by default when a docker container is closed
+What is a volume in docker? an online storagehouse for docker images

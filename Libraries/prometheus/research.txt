@@ -1,0 +1,40 @@
+Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project has a very active developer and user community. It is now a standalone open source project and maintained independently of any company. To emphasize this, and to clarify the project's governance structure, Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes. 
+
+Prometheus collects and stores its metrics as time series data, ie, metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
+
+Prometheus's main features are: A multi-dimensional data model with time series data identified by metric name and key/value pairs. PromQL, a flexible query language to leverage this dimensionality. No reliance on distributed storage; single server nodes are autonomous. Time series collection happens via a pull model over HTTP. Pushing time series is supported via an intermediary gateway. Targets are discovered via service discovery or static configuration. Multiple modes of graphing and dashboarding support.
+
+Metrics are numerical measurements in layperson terms. The term time series refers to the recording of changes over time. What users want to measure differs from application to application. For a web server, it could be request times; for a database, it could be the number of active connections or active queries, and so on.
+
+Metrics play an important role in understanding why your application is working in a certain way. Let's assume you are running a web application and discover that it is slow. To learn what is happening with your application, you will need some information. For example, when the number of requests is high, the application may become slow. If you have the request count metric, you can determine the cause and increase the number of servers to handle the load.
+
+The Prometheus ecosystem consists of multiple components, many of which are optional: The main Prometheus server which scrapes and stores time series data, client libraries for instrumenting application code, a push gateway for supporting short-lived jobs, special-purpose exporters for services like HAProxy, StatsD, Graphite, etc, an alertmanager to handle alerts, and various support tools.
+
+Most Prometheus components are written in Go, making them easy to build and deploy as static binaries.
+
+Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. Grafana or other API consumers can be used to visualize the collected data
+
+When does it fit?
+Prometheus works well for recording any purely numeric time series. It fits both machine-centric monitoring as well as monitoring of highly dynamic service-oriented architectures. In a world of microservices, its support for multi-dimensional data collection and querying is a particular strength.
+Prometheus is designed for reliability, to be the system you go to during an outage to allow you to quickly diagnose problems. Each Prometheus server is standalone, not depending on network storage or other remote services. You can rely on it when other parts of your infrastructure are broken, and you do not need to setup extensive infrastructure to use it.
+
+When does it not fit?
+Prometheus values reliability. You can always view what statistics are available about your system, even under failure conditions. If you need 100% accuracy, such as for per-request billing, Prometheus is not a good choice as the collected data will likely not be detailed and complete enough. In such a case you would be best off using some other system to collect and analyze the data for billing, and Prometheus for the rest of your monitoring.
+Comparison to alternatives: Prometheus Vs Graphite. 
+
+Scope: Graphite focuses on being a passive time series database with a query language and graphing features. Any other concerns are addressed by external components.
+Prometheus is a full monitoring and trending system that includes built-in and active scraping, storing, querying, graphing, and alerting based on time series data. It has knowledge about what the world should look like (which endpoints should exist, what time series patterns mean trouble, etc.), and actively tries to find faults.
+
+Data model: Graphite stores numeric samples for named time series, much like Prometheus does. However, Prometheus's metadata model is richer: while Graphite metric names consist of dot-separated components which implicitly encode dimensions, Prometheus encodes dimensions explicitly as key-value pairs, called labels, attached to a metric name. This allows easy filtering, grouping, and matching by these labels via the query language.
+Further, especially when Graphite is used in combination with StatsD, it is common to store only aggregated data over all monitored instances, rather than preserving the instance as a dimension and being able to drill down into individual problematic instances.
+
+For example, storing the number of HTTP requests to API servers with the response code 500 and the method POST to the /tracks endpoint would commonly be encoded like this in Graphite/StatsD: stats.api-server.tracks.post.500 -> 93
+In Prometheus the same data could be encoded like this (assuming three api-server instances): 
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample1>"} -> 34;
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample2>"} -> 28;
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample3>"} -> 31;
+
+Storage: Graphite stores time series data on local disk in the Whisper format, an RRD-style database that expects samples to arrive at regular intervals. Every time series is stored in a separate file, and new samples overwrite old ones after a certain amount of time.
+Prometheus also creates one local file per time series, but allows storing samples at arbitrary intervals as scrapes or rule evaluations occur. Since new samples are simply appended, old data may be kept arbitrarily long. Prometheus also works well for many short-lived, frequently changing sets of time series.
+
+Summary: Prometheus offers a richer data model and query language, in addition to being easier to run and integrate into your environment. If you want a clustered solution that can hold historical data long term, Graphite may be a better choice.

@@ -98,11 +98,11 @@ questions_from_input() {
 }
 
 questions_from_research() {
-	cat research.txt | questions_from_input
+	cat research.txt | questions_from_input "$1"
 }
 
 questions_from_statements() {
-	[[ -f "Terms/$current_term/statements" ]] && cat "Terms/$current_term/statements" | questions_from_input
+	[[ -f "Terms/$current_term/statements" ]] && cat "Terms/$current_term/statements" | questions_from_input "$1"
 }
 
 answers_from_questions() {
