@@ -77,7 +77,7 @@ questions_from_research() {
 							fi
 							;;
 						"v")
-							list_questions
+							list questions
 							echo ""
 							tput civis
 							read -n1 -s -p "*press any key to escape*" <&3
@@ -200,7 +200,7 @@ answers_from_questions() {
 						fi
 						;;
 					"v")
-						list_answers
+						list answers
 						echo ""
 						tput civis
 						read -n1 -s -p "*press any key to escape*" <&3
@@ -224,7 +224,7 @@ statements_from_answers() {
   while read line; do
 		echo "$(get_statement_from_answer "$line")." >>"Terms/$current_term/statements"
   done <"Terms/$current_term/answers"
-  list_statements
+  list statements
 }
 
 get_statement_from_answer() {
@@ -283,6 +283,31 @@ capitalize_first_letter() {
 	echo "$line" | awk '{print toupper(substr($0, 1, 1)) substr($0, 2)}'
 }
 
+list() {
+	if [[ "$1" == "questions" ]] || [[ "$1" == "answers" ]] || [[ "$1" == "statements" ]]; then
+		if [[ "$2" == "all" ]]; then
+			last_term="$(ls Terms | tail -1)"
+			for term in $(ls Terms); do
+				echo "[ $term ]"
+				number="$(cat "Terms/$term/$1" | cat | wc -l | sed 's/ //g')"
+				echo "<-- $number $1 about $term -->"
+				cat "Terms/$term/$1"
+				if [[ $term != $last_term ]]; then
+					echo
+				fi
+			done
+		elif [[ -n $current_term ]]; then
+			number="$(cat "Terms/$current_term/$1" | cat | wc -l | sed 's/ //g')"
+			echo "<-- $number $1 about $current_term -->"
+			cat "Terms/$current_term/$1"
+		else
+			echo "You have not yet defined a current term. Please do so with change_term, then try again."
+		fi
+	else
+		echo "First parameter was incorrect. After list, please type \"questions\", \"answers\", or \"statements\"."
+	fi
+}
+
 add_answer() { #$1 = question, $2 = answer
 	if [[ -n $current_term ]]; then
 		if [[ "$1" =~ "?" ]] && [[ "$2" != "" ]]; then
@@ -290,27 +315,6 @@ add_answer() { #$1 = question, $2 = answer
 		else
 			echo "question and/or answer was invalid"
 		fi
-	else
-		echo "You have not yet defined a current term. Please do so with change_term, then try again."
-	fi
-}
-
-list_answers() {
-	if [[ "$1" == "all" ]]; then
-		last_term="$(ls Terms | tail -1)"
-		for term in $(ls Terms); do
-			echo "[ $term ]"
-			number_of_answers="$(cat "Terms/$term/answers" | cat | wc -l | sed 's/ //g')"
-			echo "<-- $number_of_answers answers about $term -->"
-			cat "Terms/$term/answers"
-			if [[ $term != $last_term ]]; then
-				echo
-			fi
-		done
-	elif [[ -n $current_term ]]; then
-		number_of_answers="$(cat "Terms/$current_term/answers" | cat | wc -l | sed 's/ //g')"
-		echo "<-- $number_of_answers answers about $current_term -->"
-		cat "Terms/$current_term/answers"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -336,27 +340,6 @@ add_question() {
 	fi
 }
 
-list_questions() {
-	if [[ "$1" == "all" ]]; then
-		last_term="$(ls Terms | tail -1)"
-		for term in $(ls Terms); do
-			echo "[ $term ]"
-			number_of_questions="$(cat "Terms/$term/questions" | cat | wc -l | sed 's/ //g')"
-			echo "<-- $number_of_questions questions about $term -->"
-			cat "Terms/$term/questions"
-			if [[ $term != $last_term ]]; then
-				echo
-			fi
-		done
-	elif [[ -n $current_term ]]; then
-		number_of_questions="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/ //g')"
-		echo "<-- $number_of_questions questions about $current_term -->"
-		cat "Terms/$current_term/questions"
-	else
-		echo "You have not yet defined a current term. Please do so with change_term, then try again."
-	fi
-}
-
 list_unanswered_questions() {
 	if [[ -n $current_term ]]; then
 		unanswered_questions=""
@@ -377,16 +360,6 @@ list_unanswered_questions() {
 vim_questions_current_term() {
 	if [[ -n $current_term ]]; then
 		vi "Terms/$current_term/questions"
-	else
-		echo "You have not yet defined a current term. Please do so with change_term, then try again."
-	fi
-}
-
-list_statements() {
-	if [[ -n $current_term ]]; then
-		number_of_statements="$(cat "Terms/$current_term/statements" | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
-		echo "<-- $number_of_statements statements about $current_term -->"
-		cat "Terms/$current_term/statements"
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -517,18 +490,19 @@ alias afqu='answers_from_questions u' #only unanswered questions
 alias sfa='statements_from_answers'
 
 alias aq='add_question'
-alias lq='list_questions'
+alias lq='list questions'
 alias luq='list_unanswered_questions'
-alias lqa='list_questions all'
+alias lqa='list questions all'
 alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
-alias la='list_answers'
-alias laa='list_answers all'
+alias la='list answers'
+alias laa='list answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
-alias lz='list_statements'
+alias lz='list statements'
+alias lza='list statements all'
 alias vz='vim_statements_current_term'
 
 alias ct='change_term'
