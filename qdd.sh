@@ -314,8 +314,17 @@ list() {
 		else
 			echo "You have not yet defined a current term. Please do so with change_term, then try again."
 		fi
+	elif [[ -z "$1" ]] || [[ $1 == "all" ]]; then
+		echo "{** Questions **}"
+		list questions "$1"
+		echo
+		echo "{** Answers **}"
+		list answers "$1"
+		echo
+		echo "{** Statements **}"
+		list statements "$1"
 	else
-		echo "First parameter was incorrect. After list, please type \"questions\", \"answers\", or \"statements\"."
+		echo "First parameter was incorrect. After list, please type \"questions\", \"answers\", or \"statements\". Calling list with no parameters lists questions, answers, and statements for current term. Calling list all lists questions, answers, and statements for ALL terms in current library."
 	fi
 }
 
