@@ -446,6 +446,21 @@ list_libraries() {
 	ls -1 ..
 }
 
+remove_library() {
+	if [[ $(pwd | grep "$1") == "" ]]; then
+		read -p "really remove library $1? Reply yes or no only: " remove_confirmation
+		if [[ $remove_confirmation == "yes" ]]; then
+			rm -r "../$1"
+			echo "removed library $1"
+			update_qdd_prompt
+		else
+			echo "ok then."
+		fi
+	else
+		echo "You can't remove a library you are currently in. That would be insane."
+	fi
+}
+
 remove_wikipedia_citations() {
 	cat research.txt | sed 's/\[.*\]//g' >backup
 	cp backup research.txt
@@ -499,6 +514,7 @@ alias rt='remove_term'
 
 alias cy='change_library'
 alias ly='list_libraries'
+alias ry='remove_library'
 
 alias qdd='source_qdd'
 alias vr='vim_research'
