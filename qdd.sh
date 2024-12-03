@@ -276,6 +276,8 @@ get_statement_from_answer() {
 		sed_command='s/Under what circumstances does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 if \4/'
 	elif [[ $line =~ "How do" ]]; then
 		sed_command='s/How do \(.*\)\? \(.*\)/\1 by \2/'
+	elif [[ $line =~ "Is" ]]; then
+		sed_command='s/Is \(.*\)\? \(.*\)/\2/'
 	else
 		return
 	fi
