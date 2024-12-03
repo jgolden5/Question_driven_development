@@ -4,13 +4,13 @@
 exec 3<&0
 current_term="$current_term"
 
-questions_from_research() {
+questions_from_input() {
 	if [[ -n $current_term ]]; then
 		line_number=1
-		research=$(cat research.txt)
-		file_length="$(echo $research | sentencify | wc -l | sed 's/ //g')"
+		input_file=$(cat)
+		input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
 		[[ -n $1 ]] && line_start="$1" || line_start=1
-		echo $research | sentencify | while IFS= read -r line; do
+		echo "$input_file" | sentencify | while IFS= read -r line; do
 			if [[ $line == "" ]] || [[ $line == " " ]]; then
 				continue
 			else
@@ -21,7 +21,7 @@ questions_from_research() {
 					GREEN='\033[30;102m'
 					BLUE='\033[30;104m'
 					NC='\033[0m'
-					percent="$(perl -e "print int($line_number / $file_length * 100 + 0.5)")"
+					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
 					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, j = jump, J = endjump, n = next, q = quit, r = restart, v = view"$'\n'
@@ -34,7 +34,7 @@ questions_from_research() {
 							;;
 						"b")
 							if [[ $line_number -gt 1 ]]; then
-								questions_from_research "$(( $line_number - 1 ))"
+								echo "$input_file" | questions_from_input "$(( $line_number - 1 ))"
 								break 2
 							else
 								echo "Cannot go back."
@@ -48,19 +48,19 @@ questions_from_research() {
 							;;
 						"j")
 							read -p "Jump to which line number? " user_line_start <&3
-							if [[ $user_line_start -gt $file_length ]]; then
-								echo "Sorry, there are only $file_length lines in total. Please jump to a smaller number."
+							if [[ $user_line_start -gt $input_length ]]; then
+								echo "Sorry, there are only $input_length lines in total. Please jump to a smaller number."
 								sleep 1
 							elif [[ ! $user_line_start =~ [0-9] ]]; then
 								echo "Please enter a valid line number."
 								sleep 1
 							else
-								questions_from_research "$user_line_start"
+								echo "$input_file" | questions_from_input "$user_line_start"
 								break 2
 							fi
 							;;
 						"J")
-								questions_from_research "$file_length"
+								echo "$input_file" | questions_from_input "$input_length"
 								break 2
 							;;
 						"n" | "")
@@ -70,9 +70,9 @@ questions_from_research() {
 							break 2
 							;;
 					  "r")
-							read -n1 -s -p "Really restart questions from research reading? " restart_reading <&3
+							read -n1 -s -p "Really restart questions from input reading? " restart_reading <&3
 							if [[ $restart_reading == "y" ]]; then
-								questions_from_research
+								echo "$input_file" | questions_from_input
 								break 2;
 							fi
 							;;
@@ -95,6 +95,14 @@ questions_from_research() {
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
+}
+
+questions_from_research() {
+	cat research.txt | questions_from_input
+}
+
+questions_from_statements() {
+	[[ -f "Terms/$current_term/statements" ]] && cat "Terms/$current_term/statements" | questions_from_input
 }
 
 answers_from_questions() {
@@ -484,7 +492,9 @@ vim_research() {
 	vi research.txt
 }
 
+alias qfi='questions_from_input'
 alias qfr='questions_from_research'
+alias qfs='questions_from_statements'
 alias afq='answers_from_questions'
 alias afqu='answers_from_questions u' #only unanswered questions
 alias sfa='statements_from_answers'
