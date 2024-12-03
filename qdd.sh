@@ -440,6 +440,12 @@ change_library() {
 	update_qdd_prompt
 }
 
+list_libraries() {
+	number_of_libraries="$(ls .. | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+	echo "<-- $number_of_libraries Libraries -->"
+	ls -1 ..
+}
+
 remove_wikipedia_citations() {
 	cat research.txt | sed 's/\[.*\]//g' >backup
 	cp backup research.txt
@@ -492,6 +498,7 @@ alias mt='move_term'
 alias rt='remove_term'
 
 alias cy='change_library'
+alias ly='list_libraries'
 
 alias qdd='source_qdd'
 alias vr='vim_research'
