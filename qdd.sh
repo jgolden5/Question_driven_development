@@ -24,7 +24,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, j = jump, J = endjump, n = next, q = quit, r = restart, v = view"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, j = jump, J = endjump, l = list, n = next, q = quit, r = restart"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -63,6 +63,50 @@ questions_from_input() {
 								echo "$input_file" | questions_from_input "$input_length"
 								break 2
 							;;
+						"l")
+							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
+							case $list_op in 
+							"a")
+								list answers
+								;;
+							"A")
+								list answers all
+								;;
+							"l")
+								list
+								;;
+							"L")
+								list all
+								;;
+							"q")
+								list questions
+								;;
+							"Q")
+								list questions all
+								;;
+							"t")
+								list_terms
+								;;
+							"y")
+								list_libraries
+								;;
+							"z")
+								list statements
+								;;
+							"Z")
+								list statements all
+								;;
+							*)
+								echo "Input not recognized. Please refer to the prompt for commands."
+								sleep 1
+								continue
+								;;
+							esac
+							echo ""
+							tput civis
+							read -s -n1 -p "*press any key to escape*" <&3
+							tput cnorm
+							;;
 						"n" | "")
 							break;
 							;;
@@ -75,13 +119,6 @@ questions_from_input() {
 								echo "$input_file" | questions_from_input
 								break 2;
 							fi
-							;;
-						"v")
-							list questions
-							echo ""
-							tput civis
-							read -n1 -s -p "*press any key to escape*" <&3
-							tput cnorm
 							;;
 						*)
 							echo "Sorry, \"$input\" command not recognized."
