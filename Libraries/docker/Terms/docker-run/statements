@@ -15,3 +15,9 @@ A PID namespace in docker is an encapsulation of certain process id visibilities
 A namespace is an area in which variable names (and in the latter case, process ids) are able to be seen.
 A namespace is synonymous to a scope.
 A PID namespace in docker is a namespace represented by a "process id" (PID).
+To expose a port in docker means to let an external client connect to something inside of a docker container by connecting port 90 externally to por 80 internally, for example.
+It is true that a docker container does not depend on hardware or operating system, not even Linux because share the host's operating system, and do not require an os at the application level, but they do require it from the host.
+I load an environment variable from a file with docker run by using the following command = docker run -e ENV_VAR='override_val'.
+An environment variable in docker run is a var set to configure runtime behavior of the container.
+It is true that a namespace is synonymous to a scope because a namespace is similar to a scope in docker, it just specifically applies to something like PID, network, mount, etc..
+It is not true that a docker container does not depend on hardware or operating system, not even Linux because docker containers DO depend upon Linux.

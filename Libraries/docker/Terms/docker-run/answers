@@ -19,4 +19,5 @@ What does it mean to expose a port in docker? let an external client connect to 
 Is it true that a docker container does not depend on hardware or operating system, not even Linux? containers share the host's operating system, and do not require an os at the application level, but they do require it from the host
 How do I load an environment variable from a file with docker run? using the following command = docker run -e ENV_VAR='override_val'
 What is an environment variable in docker run? a var set to configure runtime behavior of the container
-Is a namespace synonymous to a scope? a namespace is similar to a scope in docker, but is more specific, and specifically applies to something like PID, network, mount, etc.
+Is it true that a namespace synonymous to a scope? yes, a namespace is similar to a scope in docker, it just specifically applies to something like PID, network, mount, etc.
+Is it true that a docker container does not depend on hardware or operating system, not even Linux? no, docker containers DO depend upon Linux
