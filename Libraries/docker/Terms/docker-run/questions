@@ -11,3 +11,7 @@ What is a PID namespace in docker?
 What is a namespace?
 What does it mean to expose a port in docker?
 Why might it be useful to load an environment variable from a file with docker run?
+Is it true that a docker container does not depend on hardware or operating system, not even Linux?
+How do I load an environment variable from a file with docker run?
+What is an environment variable in docker run?
+Is a namespace synonymous to a scope?

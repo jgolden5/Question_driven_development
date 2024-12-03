@@ -1,8 +1,7 @@
-To pull a docker image means to download said image from a docker registry onto my computer.
+To pull a docker image means to download said image from a docker registry, which is some place where docker images are stored.
 A docker container is an encapsulated environment that can be perfectly replicated regardless of hardware or operating system.
 A PID namespace in docker is a way to provide separation of processes.
 It might be useful to load an environment variable from a file with docker run because you can create versatile and reusable configurations by being able to easily manipulate environment variables.
-Docker-run runs a command in a new container as opposed to some other previously used or existing container because the whole point of docker run and containers is to create a new container, and the fact that this is very easy thanks to docker images.
 Docker-run runs a command in a new container as opposed to some other previously used or existing container because this makes them easier to create exact replicas of containers, without any external dependencies.
 Docker-run needs to pull an image if it does not exist locally, and DOES exist on some docker registry like docker hub.
 To pull a docker image means to download it to my local computer from some remote server (registry).
@@ -15,3 +14,4 @@ A cidfile in docker run is a flag that tells docker to write the newly created c
 A PID namespace in docker is an encapsulation of certain process id visibilities, constrained to each namespace, all of which are visible to the host system, and each of which is only visible to the container running said processes.
 A namespace is an area in which variable names (and in the latter case, process ids) are able to be seen.
 A namespace is synonymous to a scope.
+A PID namespace in docker is a namespace represented by a "process id" (PID).
