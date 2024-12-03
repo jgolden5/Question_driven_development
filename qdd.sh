@@ -326,7 +326,18 @@ add_question() {
 }
 
 list_questions() {
-	if [[ -n $current_term ]]; then
+	if [[ "$1" == "all" ]]; then
+		last_term="$(ls Terms | tail -1)"
+		for term in $(ls Terms); do
+			echo "[ $term ]"
+			number_of_questions="$(cat "Terms/$term/questions" | cat | wc -l | sed 's/ //g')"
+			echo "<-- $number_of_questions questions about $term -->"
+			cat "Terms/$term/questions"
+			if [[ $term != $last_term ]]; then
+				echo
+			fi
+		done
+	elif [[ -n $current_term ]]; then
 		number_of_questions="$(cat "Terms/$current_term/questions" | cat | wc -l | sed 's/ //g')"
 		echo "<-- $number_of_questions questions about $current_term -->"
 		cat "Terms/$current_term/questions"
@@ -497,6 +508,7 @@ alias sfa='statements_from_answers'
 alias aq='add_question'
 alias lq='list_questions'
 alias luq='list_unanswered_questions'
+alias lqa='list_questions all'
 alias vq='vim_questions_current_term'
 
 alias aa='add_answer'
