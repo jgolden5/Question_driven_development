@@ -4,6 +4,70 @@
 exec 3<&0
 current_term="$current_term"
 
+research_from_input() {
+	line_number=1
+	input_file=$(cat)
+	input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
+	[[ -n $1 ]] && line_start="$1" || line_start=1
+	echo "$input_file" | sentencify | while IFS= read -r line; do
+		if [[ $line == "" ]] || [[ $line == " " ]]; then
+			continue
+		else
+			while : ; do
+				[[ $line_number -lt $line_start ]] && break
+				BLACK_FG='\033[38:5:0m'
+				GREY='\033[48:5:7m'
+				GOLD='\033[48:5:3m'
+				BLUE='\033[30;104m'
+				NC='\033[0m'
+				percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
+				printf "\033c"
+				echo $line
+				echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${BLUE} research.txt ${NC} => y = keep, n = don't keep, j = jump, q = quit"$'\n'
+				read -n1 -r -s input <&3
+				case $input in
+					"j")
+						read -p "Jump to which line number? " user_line_start <&3
+						if [[ $user_line_start -gt $input_length ]]; then
+							echo "Sorry, there are only $input_length lines in total. Please jump to a smaller number."
+							sleep 1
+						elif [[ ! $user_line_start =~ [0-9] ]]; then
+							echo "Please enter a valid line number."
+							sleep 1
+						else
+							echo "$input_file" | research_from_input "$user_line_start"
+							break 2
+						fi
+						;;
+					"n")
+						echo "❌"
+						sleep 0.25
+						break
+						;;
+					"q")
+						break 2
+						;;
+					"y")
+						if [[ $(grep "$line" "research.txt") == "" ]]; then 
+							echo "$line" >>research.txt
+							echo "✅"
+						else
+							echo "❌"
+						fi
+						sleep 0.25
+						break
+						;;
+					*)
+						echo "Sorry, \"$input\" command not recognized."
+						sleep 0.5
+						;;
+				esac
+			done
+		fi
+		line_number=$(($line_number + 1))
+	done
+}
+
 questions_from_input() {
 	if [[ -n $current_term ]]; then
 		line_number=1
@@ -510,6 +574,7 @@ update_qdd_prompt() {
 	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
 }
 
+alias rfi='research_from_input'
 alias qfi='questions_from_input'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
