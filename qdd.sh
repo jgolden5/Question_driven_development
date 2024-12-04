@@ -24,7 +24,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, j = jump, J = endjump, l = list, n = next, q = quit, r = restart"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -128,6 +128,32 @@ questions_from_input() {
 							if [[ $restart_reading == "y" ]]; then
 								echo "$input_file" | questions_from_input
 								break 2;
+							fi
+							;;
+						"w")
+							questions=()
+							index=0
+							while read question; do
+								questions+=("$question");
+								echo "$index - $question"
+								(( index++ ))
+							done <"Terms/$current_term/questions"
+							read -p "please choose which of the above questions you would like to answer: " q_ind <&3
+							if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
+								tput cup 2 0
+								tput ed
+								echo "${questions[$q_ind]}"
+								if [[ "$(get_statement_from_answer "${questions[$q_ind]} ")" != "" ]]; then
+									question_prompt="$(get_statement_from_answer "${questions[$q_ind]} ") "
+								else
+									question_prompt="WARNING: Statement not set up for current question. "
+								fi
+								read -p "$question_prompt" answer <&3
+								add_answer "${questions[$q_ind]}" "$answer" 
+								sleep 0.5
+							else
+								echo "Invalid question index."
+								sleep 0.5
 							fi
 							;;
 						*)

@@ -1,3 +1,6 @@
 What is systems monitering?
 What is a label used for in prometheus?
 What is a multi-dimensional data model?
+What is distributed storage?
+Why might it be bad to rely on distributed storage?
+What is prometheus?
