@@ -535,6 +535,7 @@ alias ry='remove_library'
 
 alias qdd='source_qdd'
 alias cr='cat research.txt'
+alias lr='less -P "%f %P\%" research.txt'
 alias vr='vi research.txt'
 
 update_qdd_prompt
