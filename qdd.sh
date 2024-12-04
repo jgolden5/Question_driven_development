@@ -227,7 +227,10 @@ get_statement_from_answer() {
 		read line
 	fi
 	sed_option=""
-	if [[ $line =~ "What is" ]]; then
+	if [[ $line =~ "What is" ]] && [[ $line =~ "for" ]]; then
+		sed_option="-r"
+		sed_command='s/What is (.*) ([^ ]+) for\? (.*)/\1 is \2 for \3/'
+	elif [[ $line =~ "What is" ]]; then
 		sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
 	elif [[ $line =~ "What are" ]]; then
 		sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2/'
