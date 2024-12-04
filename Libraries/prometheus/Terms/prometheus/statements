@@ -1,1 +1,4 @@
 Prometheus is an open-source systems monitering and alerting toolkit.
+Prometheus is a way to measure certain things in an application, which often differ widely from application to application.
+Instrumentation is the use of a library in an application's code base in order to expose and update metrics about it for a Prometheus instance to scrape.
+You should use prometheus when recording any purely numeric time series.

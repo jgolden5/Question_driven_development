@@ -246,7 +246,7 @@ get_statement_from_answer() {
 		read line
 	fi
 	sed_option=""
-	if [[ $line =~ "What is" ]] && [[ $line =~ "for" ]]; then
+	if [[ $line =~ "What is" ]] && [[ $line =~ "for\?" ]]; then
 		sed_option="-r"
 		sed_command='s/What is (.*) ([^ ]+) for\? (.*)/\1 is \2 for \3/'
 	elif [[ $line =~ "What is" ]]; then
@@ -261,6 +261,9 @@ get_statement_from_answer() {
 		sed_command='s/What does \(.*\) mean\? \(.*\)/\1 means \2/'
 	elif [[ $line =~ "What happens" ]]; then
 		sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
+	elif [[ $line =~ "When should" ]]; then
+		sed_option="-r"
+		sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
 	elif [[ $line =~ "Why is" ]] && [[ $line =~ "so" ]]; then
 		sed_command='s/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3/'
 	elif [[ $line =~ "Why is" ]]; then
@@ -272,8 +275,9 @@ get_statement_from_answer() {
 	elif [[ $line =~ "Why does" ]]; then
 		sed_option="-r"
 		sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
-	elif [[ $line =~ "Why should I" ]]; then
-		sed_command='s/Why should I \(.*\)\? \(.*\)/I should \1 because \2/'
+	elif [[ $line =~ "Why should" ]]; then
+		sed_option="-r"
+		sed_command='s/Why should ([^ ]+) (.*)\? (.*)/\1 should \2 because \3/'
 	elif [[ $line =~ "Why might" ]]; then
 		sed_option="-r"
 		sed_command='s/Why might ([^ ]+) (.*)\? (.*)/\1 might \2 because \3/'

@@ -6,3 +6,4 @@ Why might it be bad to rely on distributed storage?
 What is prometheus?
 What is a prometheus target?
 What is instrumentation?
+When should you use prometheus?

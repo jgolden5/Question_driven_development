@@ -1,3 +1,4 @@
 What is prometheus? an open-source systems monitering and alerting toolkit
 What is prometheus? a way to measure certain things in an application, which often differ widely from application to application
 What is instrumentation? the use of a library in an application's code base in order to expose and update metrics about it for a Prometheus instance to scrape
+When should you use prometheus? recording any purely numeric time series
