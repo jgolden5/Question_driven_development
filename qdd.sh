@@ -99,7 +99,7 @@ questions_from_input() {
 								break 2
 							;;
 						"l")
-							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
+							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, u - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
 							case $list_op in 
 							"a")
 								list answers
@@ -121,6 +121,9 @@ questions_from_input() {
 								;;
 							"t")
 								list_terms
+								;;
+							"u")
+								list_unanswered_questions
 								;;
 							"y")
 								list_libraries
