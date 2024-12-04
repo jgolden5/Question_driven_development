@@ -24,7 +24,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -53,6 +53,29 @@ questions_from_input() {
 								google "$search"
 							else
 								echo "invalid search request"
+								sleep 0.5
+							fi
+							;;
+						"G")
+							questions=()
+							index=0
+							while read question; do
+								questions+=("$question");
+								echo "$index - $question"
+								(( index++ ))
+							done <"Terms/$current_term/questions"
+							read -p "please choose which of the above questions to google and copy to clipboard: " q_ind <&3
+							if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
+								search="${questions[$q_ind]}"
+								if [[ -n $search ]]; then
+									echo "$search" | pbcopy
+									google "$search"
+								else
+									echo "invalid search request"
+									sleep 0.5
+								fi
+							else
+								echo "Invalid question index."
 								sleep 0.5
 							fi
 							;;
