@@ -161,6 +161,7 @@ questions_from_input() {
 						"w"|"W")
 							questions=()
 							index=0
+							[[ $input == "W" ]] && echo "UNANSWERED:"
 							while read question; do
 								if [[ "$input" == "W" ]]; then
 									grep -q "$question" "Terms/$current_term/answers" && continue
@@ -170,7 +171,8 @@ questions_from_input() {
 								(( index++ ))
 							done <"Terms/$current_term/questions"
 							if [[ ${#questions} -gt 0 ]]; then
-								read -p "please choose which of the above questions you would like to answer: " q_ind <&3
+								echo
+								read -p "Please choose which of the above questions you would like to answer: " q_ind <&3
 								if [[ -n $q_ind ]] && [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
 									tput cup 2 0
 									tput ed
