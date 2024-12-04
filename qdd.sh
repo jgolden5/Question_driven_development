@@ -26,7 +26,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g/G = google (q), j/J = jump (end), l = list, n = next, q = quit, r = restart, w/W = answer (unanswered), y = library"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j/J = jump (end), l = list, n = next, q = quit, r = restart, t = term, w/W = answer (unanswered), y = library"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -42,11 +42,6 @@ questions_from_input() {
 								echo "Cannot go back."
 								sleep 0.5
 							fi
-							;;
-						"c")
-							read -p "Change term $current_term to: " new_term <&3
-							change_term "$new_term"
-							sleep 0.75
 							;;
 						"g")
 							read -p "What do you want to look up?: " search <&3
@@ -157,6 +152,13 @@ questions_from_input() {
 								echo "$input_file" | questions_from_input
 								break 2;
 							fi
+							;;
+						"t")
+							list_terms
+							echo
+							read -p "Change term $current_term to: " new_term <&3
+							change_term "$new_term"
+							sleep 0.75
 							;;
 						"w"|"W")
 							questions=()
@@ -283,6 +285,8 @@ get_statement_from_answer() {
 	elif [[ $line =~ "Is it true that" ]]; then
 		sed_option="-r"
 		echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is not true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+). (.*)/It is true that \1 because \3/'
+	elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
+		echo "$line" | grep -qi "no," && sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\), \(.*\)/No, \1 does not have to \2 because \4/' || sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\)/Yes, \1 does have to \2 because \3/'
 	else
 		return
 	fi
