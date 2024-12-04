@@ -26,7 +26,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer, W = unanswered"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -155,30 +155,38 @@ questions_from_input() {
 								break 2;
 							fi
 							;;
-						"w")
+						"w"|"W")
 							questions=()
 							index=0
 							while read question; do
+								if [[ "$input" == "W" ]]; then
+									grep -q "$question" "Terms/$current_term/answers" && continue
+								fi
 								questions+=("$question");
 								echo "$index - $question"
 								(( index++ ))
 							done <"Terms/$current_term/questions"
-							read -p "please choose which of the above questions you would like to answer: " q_ind <&3
-							if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
-								tput cup 2 0
-								tput ed
-								echo "${questions[$q_ind]}"
-								if [[ "$(get_statement_from_answer "${questions[$q_ind]} ")" != "" ]]; then
-									question_prompt="$(get_statement_from_answer "${questions[$q_ind]} ") "
+							if [[ ${#questions} -gt 0 ]]; then
+								read -p "please choose which of the above questions you would like to answer: " q_ind <&3
+								if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
+									tput cup 2 0
+									tput ed
+									echo "${questions[$q_ind]}"
+									if [[ "$(get_statement_from_answer "${questions[$q_ind]} ")" != "" ]]; then
+										question_prompt="$(get_statement_from_answer "${questions[$q_ind]} ") "
+									else
+										question_prompt="WARNING: Statement not set up for current question. "
+									fi
+									read -p "$question_prompt" answer <&3
+									add_answer "${questions[$q_ind]}" "$answer" 
+									sleep 0.5
 								else
-									question_prompt="WARNING: Statement not set up for current question. "
+									echo "Invalid question index."
+									sleep 0.5
 								fi
-								read -p "$question_prompt" answer <&3
-								add_answer "${questions[$q_ind]}" "$answer" 
-								sleep 0.5
 							else
-								echo "Invalid question index."
-								sleep 0.5
+								[[ $input == 'w' ]] && echo "No questions found for $current_term." || echo "No unanswered questions found for $current_term."
+								sleep 1
 							fi
 							;;
 						*)
