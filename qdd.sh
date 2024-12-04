@@ -26,7 +26,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer, W = unanswered"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g/G = google (q), j/J = jump (end), l = list, n = next, q = quit, r = restart, w/W = answer (unanswered), y = library"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -187,6 +187,18 @@ questions_from_input() {
 							else
 								[[ $input == 'w' ]] && echo "No questions found for $current_term." || echo "No unanswered questions found for $current_term."
 								sleep 1
+							fi
+							;;
+						"y")
+							list_libraries
+							echo
+							read -p "which library do you want to change to? " library <&3
+							if [[ -d ../$library ]]; then
+								change_library $library
+								sleep 0.5
+							else
+								echo "Invalid library name."
+								sleep 0.5
 							fi
 							;;
 						*)
@@ -430,7 +442,7 @@ change_library() {
 			mkdir "../$1"
 			mkdir "../$1/Terms"
 			touch "../$1/research.txt"
-			echo "Added library \"$1\" with Terms and research.txt. View a list of all libraries with list_libraries or lt"
+			echo "Added library \"$1\" with Terms and research.txt. View a list of all libraries with list_libraries or ly"
 		fi
 		cd "../$1"
 		echo "changed current library to $1"
