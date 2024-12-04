@@ -503,10 +503,6 @@ update_qdd_prompt() {
 	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
 }
 
-vim_research() {
-	vi research.txt
-}
-
 alias qfi='questions_from_input'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
@@ -538,6 +534,7 @@ alias ly='list_libraries'
 alias ry='remove_library'
 
 alias qdd='source_qdd'
-alias vr='vim_research'
+alias cr='cat research.txt'
+alias vr='vi research.txt'
 
 update_qdd_prompt
