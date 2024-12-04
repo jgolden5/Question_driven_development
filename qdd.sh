@@ -46,7 +46,7 @@ questions_from_input() {
 						"c")
 							read -p "Change term $current_term to: " new_term <&3
 							change_term "$new_term"
-							sleep 1
+							sleep 0.75
 							;;
 						"g")
 							read -p "What do you want to look up?: " search <&3
@@ -67,7 +67,7 @@ questions_from_input() {
 								(( index++ ))
 							done <"Terms/$current_term/questions"
 							read -p "please choose which of the above questions to google and copy to clipboard: " q_ind <&3
-							if [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
+							if [[ -n $q_ind ]] && [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
 								search="${questions[$q_ind]}"
 								if [[ -n $search ]]; then
 									echo "$search" | pbcopy
@@ -171,7 +171,7 @@ questions_from_input() {
 							done <"Terms/$current_term/questions"
 							if [[ ${#questions} -gt 0 ]]; then
 								read -p "please choose which of the above questions you would like to answer: " q_ind <&3
-								if [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
+								if [[ -n $q_ind ]] && [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
 									tput cup 2 0
 									tput ed
 									echo "${questions[$q_ind]}"
