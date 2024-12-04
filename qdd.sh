@@ -16,15 +16,17 @@ questions_from_input() {
 			else
 				while : ; do
 					[[ $line_number -lt $line_start ]] && break
-					WHITE='\033[30;107m'
+					BLACK_FG='\033[38:5:0m'
+					GREY='\033[48:5:7m'
 					RED='\033[30;101m'
+					GOLD='\033[48:5:3m'
 					GREEN='\033[30;102m'
 					BLUE='\033[30;104m'
 					NC='\033[0m'
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, G = quoogle, j = jump, J = endjump, l = list, n = next, q = quit, r = restart, w = answer"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
