@@ -67,7 +67,7 @@ questions_from_input() {
 								(( index++ ))
 							done <"Terms/$current_term/questions"
 							read -p "please choose which of the above questions to google and copy to clipboard: " q_ind <&3
-							if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
+							if [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
 								search="${questions[$q_ind]}"
 								if [[ -n $search ]]; then
 									echo "$search" | pbcopy
@@ -168,7 +168,7 @@ questions_from_input() {
 							done <"Terms/$current_term/questions"
 							if [[ ${#questions} -gt 0 ]]; then
 								read -p "please choose which of the above questions you would like to answer: " q_ind <&3
-								if [[ -n $q_ind ]] && [[ -n ${questions[$q_ind]} ]]; then
+								if [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
 									tput cup 2 0
 									tput ed
 									echo "${questions[$q_ind]}"
@@ -492,8 +492,6 @@ vim_research() {
 alias qfi='questions_from_input'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
-alias afq='answers_from_questions'
-alias afqu='answers_from_questions u' #only unanswered questions
 alias sfa='statements_from_answers'
 
 alias aq='add_question'
