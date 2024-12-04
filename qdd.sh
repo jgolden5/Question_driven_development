@@ -26,7 +26,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j/J = jump (end), l = list, n = next, q = quit, r = restart, t = term, w/W = answer (unanswered), y = library"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j = jump, l = list, n = next, q = quit, t = term, w/W = answer (unanswered), y = library, 0 = beginning, $ = end"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -89,10 +89,6 @@ questions_from_input() {
 								break 2
 							fi
 							;;
-						"J")
-								echo "$input_file" | questions_from_input "$input_length"
-								break 2
-							;;
 						"l")
 							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, u - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
 							case $list_op in 
@@ -145,13 +141,6 @@ questions_from_input() {
 							;;
 						"q")
 							break 2
-							;;
-					  "r")
-							read -n1 -s -p "Really restart questions from input reading? " restart_reading <&3
-							if [[ $restart_reading == "y" ]]; then
-								echo "$input_file" | questions_from_input
-								break 2;
-							fi
 							;;
 						"t")
 							list_terms
@@ -207,6 +196,14 @@ questions_from_input() {
 								echo "Invalid library name."
 								sleep 0.5
 							fi
+							;;
+					  "0")
+							echo "$input_file" | questions_from_input
+							break 2;
+							;;
+						"$")
+							echo "$input_file" | questions_from_input "$input_length"
+							break 2
 							;;
 						*)
 							echo "Sorry, \"$input\" command not recognized."
