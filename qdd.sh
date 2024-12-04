@@ -24,7 +24,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, j = jump, J = endjump, l = list, n = next, q = quit, r = restart"$'\n'
+					echo -ne "${WHITE}line $line_number ${RED} ${percent}% ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, c = change, g = google, j = jump, J = endjump, l = list, n = next, q = quit, r = restart"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -45,6 +45,16 @@ questions_from_input() {
 							read -p "Change term $current_term to: " new_term <&3
 							change_term "$new_term"
 							sleep 1
+							;;
+						"g")
+							read -p "What do you want to look up?: " search <&3
+							if [[ -n $search ]]; then
+								echo "$search" | pbcopy
+								google "$search"
+							else
+								echo "invalid search request"
+								sleep 0.5
+							fi
 							;;
 						"j")
 							read -p "Jump to which line number? " user_line_start <&3
