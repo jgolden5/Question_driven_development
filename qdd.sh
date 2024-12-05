@@ -101,7 +101,7 @@ questions_from_input() {
 					else
 						echo "$line"
 					fi
-					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = goog/q, j = jump, l = list, n = next, q = quit, t = term, w/W = ans/un, y = lib, 0/$ = start/end, ^ = loog, / = find"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = bk, g/G = ggl/q, j = jmp, l = lst, n = nxt, q = quit, s = scn, t = trm, w/W = ans/un, y = lib, 0/$ = stt/end, ^ = lggl, / = fnd"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -222,6 +222,25 @@ questions_from_input() {
 							;;
 						"q")
 							break 2
+							;;
+						"s")
+							sections=()
+							index=0
+							while read section; do
+								section_line=$(echo "$section" | sed 's/\(.*\):.*/\1/')
+								section_display=$(echo "$section" | sed 's/.*\:\(.*\)/\1/')
+								sections+=("$section_line")
+								echo "$index - $section_display"
+								(( index++ ))
+							done < <(cat research.txt | sentencify | grep -nE "^[A-Z ]+$")
+							read -p "Please choose which of the above sections you would like to jump to: " s_ind <&3
+							if [[ $s_ind =~ [0-9] ]] && [[ $s_ind -lt "${#sections[@]}" ]]; then
+								echo "$input_file" | questions_from_input "${sections[$s_ind]}"
+								break 2
+							else
+								echo "Invalid section index."
+								sleep 0.5
+							fi
 							;;
 						"t")
 							list_terms
