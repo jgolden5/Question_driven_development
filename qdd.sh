@@ -112,15 +112,15 @@ questions_from_input() {
           else
             echo "$line"
           fi
-          echo -ne "${BLACK_FG}${GREY_BG}line $line_number of $input_length ${GOLD_BG} ${percent}% ${RED_BG} "$(pwd | sed 's/.*\///g')" ${GREEN_BG} ${current_term} ${BLUE_BG} ❓ ${NC} => a = ask, b = bk, g/G = ggl/q, j = jmp, l = lst, n = nxt, q = quit, s = scn, t = trm, w/W = ans/un, y = lib, 0/$ = stt/end, ^ = lggl, / = fnd"$'\n'
+          echo "${BLACK_FG}${GREY_BG}line $line_number of $input_length ${GOLD_BG} ${percent}% ${RED_BG} "$(pwd | sed 's/.*\///g')" ${GREEN_BG} ${current_term} ${BLUE_BG} ❓ ${NC}"
           read -n1 -r -s input <&3
           case $input in
-            "a")
+            a)
               read -p "Enter question here: " question <&3
               add_question "$question"
               sleep 1
               ;;
-            "b")
+            b)
               if [[ $line_number -gt 1 ]]; then
                 echo "$input_file" | questions_from_input "$(( $line_number - 1 ))"
                 break 2
@@ -129,7 +129,7 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            "g")
+            g)
               read -p "What do you want to look up?: " search <&3
               if [[ -n $search ]]; then
                 echo "$search" | pbcopy
@@ -139,7 +139,7 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            "G")
+            G)
               questions=()
               index=0
               while read question; do
@@ -162,7 +162,29 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            "j")
+						h)
+							help_log="QFR COMMAND HELP${NL}"
+							help_log+="a = [a]dd a question to current term's questions file${NL}"
+              help_log+="b = go [b]ack 1 input line${NL}" 
+              help_log+="g = [g]oogle user input${NL}" 
+              help_log+="G = [G]oogle one of current term's questions${NL}"
+							help_log+="h = display qfr command [h]elp${NL}"
+              help_log+="j = [j]ump to input line by number${NL}" 
+              help_log+="l = open [l]ist menu for questions, answers, statements, terms, libraries, sections, etc${NL}" 
+              help_log+="n = [n]ext input line${NL}" 
+              help_log+="q = [q]uit qfi${NL}" 
+              help_log+="s = [s]ection hopper${NL}" 
+              help_log+="t = list all [t]erms and change current term${NL}" 
+              help_log+="w = ans[w]er one of the current term's questions${NL}"
+              help_log+="W = ans[W]er one of the current term's unanswered questions${NL}" 
+              help_log+="y = list all libraries and change current librar[y]${NL}" 
+              help_log+="0 = go to beginning of input lines (works like vim's [0])${NL}"
+              help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
+              help_log+="^ = google current input line (shown above [^])${NL}" 
+              help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
+              echo "$help_log" | less -e -P "q or j to exit"
+							;;
+            j)
               read -p "Jump to which line number? " user_line_start <&3
               if [[ $user_line_start -gt $input_length ]]; then
                 echo "Sorry, there are only $input_length lines in total. Please jump to a smaller number."
@@ -175,46 +197,46 @@ questions_from_input() {
                 break 2
               fi
               ;;
-            "l")
+            l)
               read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, s - sections, t - terms, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
               case $list_op in 
-              "a")
+              a)
                 list answers
                 ;;
-              "A")
+              A)
                 list answers all
                 ;;
-              "l")
+              l)
                 list
                 ;;
-              "L")
+              L)
                 list all
                 ;;
-              "q")
+              q)
                 list questions
                 ;;
-              "Q")
+              Q)
                 list questions all
                 ;;
-              "s")
+              s)
                 cat research.txt | sentencify | grep -nE "^[A-Z ]+$"
                 ;;
-              "t")
+              t)
                 list_terms
                 ;;
-              "u")
+              u)
                 list_unanswered_questions
                 ;;
-              "U")
+              U)
                 list_unanswered_questions_all
                 ;;
-              "y")
+              y)
                 list_libraries
                 ;;
-              "z")
+              z)
                 list statements
                 ;;
-              "Z")
+              Z)
                 list statements all
                 ;;
               *)
