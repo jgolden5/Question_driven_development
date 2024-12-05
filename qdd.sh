@@ -288,8 +288,13 @@ questions_from_input() {
 							;;
 						"/")
 							read -p "Enter search target: " target <&3
-							match="$target"
-							break
+							if [[ -n "$target" ]]; then
+								match="$target"
+								break
+							else
+								echo "Invalid target"
+								sleep 0.5
+							fi
 							;;
 						*)
 							echo "Sorry, \"$input\" command not recognized."
