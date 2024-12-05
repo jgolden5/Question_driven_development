@@ -482,9 +482,13 @@ list_unanswered_questions() {
 			fi
 		done <"Terms/$current_term/questions"
 		unanswered_questions="${unanswered_questions%'\n'}"
-		number_of_unanswered_questions="$(echo -e $unanswered_questions | wc -l | sed 's/^[[:space:]]*//')"
-		echo -e "<-- $number_of_unanswered_questions unanswered questions about $current_term -->"
-		echo -e "$unanswered_questions"
+		if [[ -n $unanswered_questions ]]; then
+			number_of_unanswered_questions="$(echo -e $unanswered_questions | wc -l | sed 's/^[[:space:]]*//')"
+			echo -e "<-- $number_of_unanswered_questions unanswered questions about $current_term -->"
+			echo -e "$unanswered_questions"
+		else
+			echo -e "<-- 0 unanswered questions about $current_term -->"
+		fi
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
