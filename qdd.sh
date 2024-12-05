@@ -70,6 +70,7 @@ research_from_input() {
 
 questions_from_input() {
 	if [[ -n $current_term ]]; then
+		match=
 		line_number=1
 		input_file=$(cat)
 		input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
@@ -89,8 +90,18 @@ questions_from_input() {
 					NC='\033[0m'
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
-					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google/q, j = jump, l = list, n = next, q = quit, t = term, w/W = answer/un, y = library, 0/$ = start/end, ^ = loogle"$'\n'
+					if [[ -n $match ]]; then 
+						if [[ $(echo $line | grep "$match") != "" ]]; then
+							echo "Match \"$match\" found!" 
+							echo "$line"
+							unset match
+						else
+							break
+						fi
+					else
+						echo "$line"
+					fi
+					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = goog/q, j = jump, l = list, n = next, q = quit, t = term, w/W = ans/un, y = lib, 0/$ = start/end, ^ = loog, / = find"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -274,6 +285,10 @@ questions_from_input() {
 								echo "$line" | pbcopy
 								google "$line"
 							fi
+							;;
+						"/")
+							read -p "Enter search target: " target <&3
+							match="$target"
 							;;
 						*)
 							echo "Sorry, \"$input\" command not recognized."
