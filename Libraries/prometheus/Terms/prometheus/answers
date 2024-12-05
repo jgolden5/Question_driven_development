@@ -12,3 +12,4 @@ What is distributed storage? basically a way for storage to be stored and used a
 What is a prometheus target? a resource or endpoint that exposes metrics for data collection
 What does it mean to scrape data? extract structured data from publicly available websites or sources (what I'm doing)
 How does a prometheus target expose metrics for collection? it uses a special /metrics folder containing all available metrics
+What is prometheus? a time-series data collection tool

@@ -1,29 +1,38 @@
 #!/bin/bash
 #All functions and aliases relevant to question_driven_development project
 
+#set -u
+
 exec 3<&0
-current_term="$current_term"
+current_term="${current_term:-}"
+
+BLACK_FG=$'\033[38:5:0m'
+RED_FG=$'\033[30;31m'
+GREEN_FG=$'\033[30;32m'
+MAGENTA_FG=$'\033[30;35m'
+GOLD_BG=$'\033[48:5:3m'
+GREY_BG=$'\033[48:5:7m'
+RED_BG=$'\033[30;101m'
+GREEN_BG=$'\033[30;102m'
+BLUE_BG=$'\033[30;104m'
+NC=$'\033[0m'
+NL=$'\n'
 
 research_from_input() {
 	line_number=1
 	input_file=$(cat)
 	input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
-	[[ -n $1 ]] && line_start="$1" || line_start=1
-	echo "$input_file" | sentencify | while IFS= read -r line; do
+	[[ "${1:-}" ]] || line_start=1 && line_start="$1" 
+	while IFS= read -r line; do
 		if [[ $line == "" ]] || [[ $line == " " ]]; then
 			continue
 		else
-			while : ; do
-				[[ $line_number -lt $line_start ]] && break
-				BLACK_FG='\033[38:5:0m'
-				GREY='\033[48:5:7m'
-				GOLD='\033[48:5:3m'
-				BLUE='\033[30;104m'
-				NC='\033[0m'
-				percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
+			while true ; do
+				(( line_number < line_start )) && break
+				percent=$((line_number * 100 / input_length))
 				printf "\033c"
-				echo $line
-				echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${BLUE} research.txt ${NC} => y = keep, n = don't keep, j = jump, q = quit"$'\n'
+				echo "$line"
+				echo "${BLACK_FG}${GREY_BG}line $line_number of $input_length ${GOLD_BG} ${percent}% ${BLUE_BG} research.txt ${NC} => y = keep, n = don't keep, j = jump, q = quit"
 				read -n1 -r -s input <&3
 				case $input in
 					"j")
@@ -65,30 +74,23 @@ research_from_input() {
 			done
 		fi
 		line_number=$(($line_number + 1))
-	done
+	done < <(echo "$input_file" | sentencify)
 }
 
 questions_from_input() {
-	if [[ -n $current_term ]]; then
+	if [[ -n "$current_term" ]]; then
 		match=
 		line_number=1
 		input_file=$(cat)
 		input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
 		[[ -n $1 ]] && line_start="$1" || line_start=1
-		echo "$input_file" | sentencify | while IFS= read -r line; do
+		while IFS= read -r line; do
 			if [[ $line == "" ]] || [[ $line == " " ]]; then
 				continue
 			else
 				while : ; do
 					[[ $line_number -lt $line_start ]] && break
-					BLACK_FG='\033[38:5:0m'
-					GREY='\033[48:5:7m'
-					RED='\033[30;101m'
-					GOLD='\033[48:5:3m'
-					GREEN='\033[30;102m'
-					BLUE='\033[30;104m'
-					NC='\033[0m'
-					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
+					percent=$((line_number * 100 / input_length))
 					printf "\033c"
 					if [[ -n $match ]]; then 
 						if [[ $(echo $line | grep "$match") != "" ]]; then
@@ -101,7 +103,7 @@ questions_from_input() {
 					else
 						echo "$line"
 					fi
-					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = bk, g/G = ggl/q, j = jmp, l = lst, n = nxt, q = quit, s = scn, t = trm, w/W = ans/un, y = lib, 0/$ = stt/end, ^ = lggl, / = fnd"$'\n'
+					echo -ne "${BLACK_FG}${GREY_BG}line $line_number of $input_length ${GOLD_BG} ${percent}% ${RED_BG} "$(pwd | sed 's/.*\///g')" ${GREEN_BG} ${current_term} ${BLUE_BG} ❓ ${NC} => a = ask, b = bk, g/G = ggl/q, j = jmp, l = lst, n = nxt, q = quit, s = scn, t = trm, w/W = ans/un, y = lib, 0/$ = stt/end, ^ = lggl, / = fnd"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -330,7 +332,7 @@ questions_from_input() {
 				done
 			fi
 			line_number=$(($line_number + 1))
-		done
+		done < <(echo "$input_file" | sentencify)
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
@@ -449,7 +451,8 @@ capitalize_first_letter() {
 }
 
 list() {
-	if [[ "$1" == "questions" ]] || [[ "$1" == "answers" ]] || [[ "$1" == "statements" ]]; then
+	debug
+	if [[ "$1" == "questions" || "$1" == "answers" || "$1" == "statements" ]]; then
 		if [[ "$2" == "all" ]]; then
 			last_term="$(ls Terms | tail -1)"
 			for term in $(ls Terms); do
@@ -656,16 +659,12 @@ source_qdd() {
 }
 
 update_qdd_prompt() {
-	RED='\033[30;31m'
-	GREEN='\033[30;32m'
-	MAGENTA='\033[30;35m'
-	NC='\033[0m'
 	if [[ -n $current_term ]]; then
 		current_term_in_prompt="$current_term"
 	else
 		current_term_in_prompt="termless"
 	fi
-	PS1="${RED}\W ${GREEN}${current_term_in_prompt}${MAGENTA} ? ${NC}"
+	PS1="${RED_FG}\W ${GREEN_FG}${current_term_in_prompt}${MAGENTA_FG} ? ${NC}"
 }
 
 alias rfi='research_from_input'
