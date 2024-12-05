@@ -123,7 +123,7 @@ questions_from_input() {
               ;;
             b)
               if [[ $line_number -gt 1 ]]; then
-                echo "$input_file" | questions_from_input "$(( $line_number - 1 ))"
+                echo "$input_file" | questions_from_input $(( line_number - 1 ))
                 break 2
               else
                 echo "Cannot go back."
@@ -173,7 +173,8 @@ questions_from_input() {
               help_log+="j = [j]ump to input line by number${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, terms, libraries, sections, etc${NL}" 
               help_log+="n = [n]ext input line${NL}" 
-							help_log+="N = append current input line to [N]ext input line and show as one line${NL}"
+							help_log+="N = combi[N]e current line with next line and show as one line${NL}"
+							help_log+="o = view [o]riginal line (no combined inputs)${NL}"
               help_log+="q = [q]uit qfi${NL}" 
               help_log+="s = [s]ection hopper${NL}" 
               help_log+="t = list all [t]erms and change current term${NL}" 
@@ -258,6 +259,11 @@ questions_from_input() {
             N)
               prev_line="$line"
 							break;
+              ;;
+            o)
+              prev_line=
+							echo "$input_file" | questions_from_input "$line_number"
+							break 2
               ;;
             q)
               break 2
