@@ -175,6 +175,7 @@ questions_from_input() {
               help_log+="n = [n]ext input line${NL}" 
 							help_log+="N = combi[N]e current line with next line and show as one line${NL}"
 							help_log+="o = view [o]riginal line (no combined inputs)${NL}"
+              help_log+="p = a[p]pend current line to research.txt${NL}" 
               help_log+="q = [q]uit qfi${NL}" 
               help_log+="s = [s]ection hopper${NL}" 
               help_log+="t = list all [t]erms and change current term${NL}" 
@@ -264,6 +265,16 @@ questions_from_input() {
               prev_line=
 							echo "$input_file" | questions_from_input "$line_number"
 							break 2
+              ;;
+            p)
+              if [[ $(grep "$line" research.txt) != "" ]]; then
+								echo "❌ Line already exists in research.txt"
+								sleep 0.5
+              else
+                echo "$line" >>research.txt
+                echo "✅ Line added to research.txt"
+                sleep 0.5
+              fi
               ;;
             q)
               break 2
