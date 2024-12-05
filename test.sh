@@ -2,7 +2,6 @@
 source ~/bash/bash-debugger
 source ~/bash/Apps/question_driven_development/qdd.sh
 source ~/script-util/jutil
-debug
 cd Libraries/prometheus/
 change_term "prometheus"
 qfr

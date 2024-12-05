@@ -209,12 +209,6 @@ Scalar float values can be written as literal integer or floating-point numbers 
 )
 Examples:
 
-23
--2.43
-3.4e-9
-0x8f
--Inf
-NaN
 Additionally, underscores (_) can be used in between decimal or hexadecimal digits to improve readability.
 
 Examples:
