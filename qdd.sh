@@ -90,7 +90,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j = jump, l = list, n = next, q = quit, t = term, w/W = answer (unanswered), y = library, 0 = beginning, $ = end"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j = jump, l = list, n = next, q = quit, t = term, w/W = answer (unanswered), y = library, 0 = beginning, ^ = google list, $ = end"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
@@ -264,6 +264,12 @@ questions_from_input() {
 					  "0")
 							echo "$input_file" | questions_from_input
 							break 2;
+							;;
+						"^")
+							if [[ -n $line ]]; then
+								echo "$line" | pbcopy
+								google "$line"
+							fi
 							;;
 						"$")
 							echo "$input_file" | questions_from_input "$input_length"
