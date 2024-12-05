@@ -5,3 +5,7 @@ When should you use prometheus? recording any purely numeric time series
 When should you use prometheus? outages occur in your application and you need a system to quickly diagnose the problem
 When should you use prometheus? you don't want to set up extensive infrastructure to use it
 When should you use prometheus? you are not concerned about 100% accuracy in data that is detailed and complete
+What is systems monitoring? continuous observation and analysis of system resources
+What is a label in prometheus used for? literally a monitor for systems stuff (like cpu, ram, date display, and system ip address just to name a few)
+What is a multi-dimensional data model? a way of linking data together with multiple common themes--like a map which links an age to a name, as a 2-dimensional example, but this can be done with many dimensions in the multi-dimensional data model
+What is distributed storage? basically a way for storage to be stored and used across multiple servers to store and process it

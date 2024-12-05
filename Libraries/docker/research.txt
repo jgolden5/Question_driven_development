@@ -1,3 +1,20 @@
-Docker run
-The docker run command starts a new container, executes a command inside it, and pulls an image if required. It's a combination of the docker create and docker start commands, as it creates a new container and starts it immediately. The most basic form of the command is docker run [image]. For example, docker run hello-world runs a container based on the hello-world image. If the image is already available locally, the container will be created from that image. If it's not available locally, it will be pulled from the Quay.io cloud registry. The docker run command can be customized with options and commands. Options modify the container properties, while commands are executed inside the container. To name a container, pass the --name flag to the run command. This makes it easier to identify what's running in the container and what application or service it's associated with. Containers can be viewed with docker ps (add -a option to see all containers, including those not running). Images can be views with docker images.
 How do layers work when it comes to running docker commands in a dockerfile?
+What does it mean to pull a docker image?
+Under what circumstances does docker-run need to pull an image?
+What does it mean to push to a local docker registry?
+What is a docker container?
+Is it true that a docker container does not depend on hardware or operating system, not even Linux?
+Why does docker-run run a command in a new container as opposed to some other previously used or existing container?
+What does detached mode mean?
+What does it mean to expose a port in docker?
+What is a bridge network in docker?
+How do you connect a container to a user-defined bridge network?
+What happens when you connect a container to a user-defined bridge network?
+What is a cidfile in docker run?
+What is an environment variable in docker run?
+How do I load an environment variable from a file with docker run?
+Why might it be useful to load an environment variable from a file with docker run?
+What is a namespace?
+Is it true that a namespace is synonymous to a scope?
+What is a PID namespace in docker?
+What is a docker volume?

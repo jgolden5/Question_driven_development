@@ -72,6 +72,7 @@ questions_from_input() {
 	if [[ -n $current_term ]]; then
 		line_number=1
 		input_file=$(cat)
+		[[ -z $input_file ]] && input_file=$(echo "👂")
 		input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
 		[[ -n $1 ]] && line_start="$1" || line_start=1
 		echo "$input_file" | sentencify | while IFS= read -r line; do
@@ -90,7 +91,7 @@ questions_from_input() {
 					percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 					printf "\033c"
 					echo $line
-					echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google (q), j = jump, l = list, n = next, q = quit, t = term, w/W = answer (un), y = library, 0/$ = beginning/end, ^ = loogle"$'\n'
+					echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${RED} "$(pwd | sed 's/.*\///g')" ${GREEN} ${current_term} ${BLUE} ❓ ${NC} => a = ask, b = back, g/G = google/q, j = jump, l = list, n = next, q = quit, t = term, w/W = answer/un, y = library, 0/$ = start/end, ^ = loogle"$'\n'
 					read -n1 -r -s input <&3
 					case $input in
 						"a")
