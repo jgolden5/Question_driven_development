@@ -331,11 +331,20 @@ questions_from_statements() {
 }
 
 statements_from_answers() {
-  empty_file "Terms/$current_term/statements"
+	[[ -n "$1" ]] && term="$1" || term="$current_term"
+  empty_file "Terms/$term/statements"
   while read line; do
-		echo "$(get_statement_from_answer "$line")." >>"Terms/$current_term/statements"
-  done <"Terms/$current_term/answers"
-  list statements
+		echo "$(get_statement_from_answer "$line")." >>"Terms/$term/statements"
+  done <"Terms/$term/answers"
+	number="$(cat "Terms/$term/statements" | cat | wc -l | sed 's/ //g')"
+	echo "<-- $number statements about $term -->"
+	cat "Terms/$term/statements"
+}
+
+statements_from_answers_all() {
+	while read term; do
+		statements_from_answers "$term"
+	done < <(ls Terms)
 }
 
 get_statement_from_answer() {
@@ -643,6 +652,7 @@ alias qfq='questions_from_questions'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
 alias sfa='statements_from_answers'
+alias sfaa='statements_from_answers_all'
 
 alias aq='add_question'
 alias lq='list questions'
