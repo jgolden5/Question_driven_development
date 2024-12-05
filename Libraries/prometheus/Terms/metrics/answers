@@ -1,2 +1,3 @@
 What are metrics? a way of measuring something using numbers
 What are metrics? a way to understand why your application is working in a certain way--kind of like an analyzer/debugger assistant
+What type of information is stored in metrics by prometheus? time-series data, aka, data that is gathered and observed over time
