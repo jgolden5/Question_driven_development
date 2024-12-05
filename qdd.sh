@@ -474,24 +474,33 @@ add_question() {
 }
 
 list_unanswered_questions() {
-	if [[ -n $current_term ]]; then
+	[[ -n "$1" ]] && term="$1" || term="$current_term"
+	if [[ -n $term ]]; then
 		unanswered_questions=""
 		while read question; do
-			if [[ "$(grep "$question" "Terms/$current_term/answers")"	== "" ]]; then
+			if [[ "$(grep "$question" "Terms/$term/answers")"	== "" ]]; then
 				unanswered_questions+="$question\n"
 			fi
-		done <"Terms/$current_term/questions"
+		done <"Terms/$term/questions"
 		unanswered_questions="${unanswered_questions%'\n'}"
 		if [[ -n $unanswered_questions ]]; then
 			number_of_unanswered_questions="$(echo -e $unanswered_questions | wc -l | sed 's/^[[:space:]]*//')"
-			echo -e "<-- $number_of_unanswered_questions unanswered questions about $current_term -->"
+			echo -e "<-- $number_of_unanswered_questions unanswered questions about $term -->"
 			echo -e "$unanswered_questions"
 		else
-			echo -e "<-- 0 unanswered questions about $current_term -->"
+			echo -e "<-- 0 unanswered questions about $term -->"
 		fi
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
+}
+
+list_unanswered_questions_all() {
+	while read term; do
+		echo "[ $term unanswered questions ]"
+		list_unanswered_questions "$term"
+		echo
+	done < <(ls Terms)
 }
 
 vim_questions_current_term() {
@@ -627,6 +636,7 @@ alias sfa='statements_from_answers'
 alias aq='add_question'
 alias lq='list questions'
 alias luq='list_unanswered_questions'
+alias luqa='list_unanswered_questions_all'
 alias lqa='list questions all'
 alias vq='vim_questions_current_term'
 
