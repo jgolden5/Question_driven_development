@@ -282,8 +282,9 @@ questions_from_input() {
 							;;
 						"^")
 							if [[ -n $line ]]; then
-								echo "$line" | pbcopy
-								google "$line"
+								search_line=$(echo "$line" | sed 's/UNANSWERED: //')
+								echo $search_line | pbcopy
+								google "$search_line"
 							fi
 							;;
 						"/")
