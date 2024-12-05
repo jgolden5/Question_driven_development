@@ -79,3 +79,5 @@ Node exporters: These targets expose system-level metrics like CPU usage, memory
 Application-specific exporters: Specialized exporters for databases (e.g., MySQL, PostgreSQL) or message queues (e.g., RabbitMQ) provide detailed insights into these systems' performance.
 Custom application instrumentation: By adding Prometheus client libraries to your applications, you can expose custom metrics tailored to your specific needs.
 Cloud service provider integrations: Many cloud platforms offer Prometheus-compatible metric endpoints, allowing you to monitor cloud resources alongside your on-premises infrastructure.
+STATEMENTS
+Grafana is a way to visualize collected data.

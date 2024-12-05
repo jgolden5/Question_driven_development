@@ -1,1 +1,5 @@
 A time-series is the recording of changes in certain variable(s) over a period of time.
+To store metrics as time series data means to collect said metrics over a period of time--not just all at once.
+To scrape time series data means to collect data that is gathered over a period of time (not instantaneously, in other words).
+A pull model for time series collection is the philosophy of the server pulling data from sources as needed instead of sources automatically pushing all data to the server, which is useful for time series collection because it is done as needed over time.
+An intermediary gateway is a middle-ground network device that facilitates communication between two different networks by translating protocols and managing data flow between them.

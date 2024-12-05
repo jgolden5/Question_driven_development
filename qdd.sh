@@ -165,7 +165,7 @@ questions_from_input() {
 							fi
 							;;
 						"l")
-							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, u - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
+							read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, t - terms, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
 							case $list_op in 
 							"a")
 								list answers
@@ -190,6 +190,9 @@ questions_from_input() {
 								;;
 							"u")
 								list_unanswered_questions
+								;;
+							"U")
+								list_unanswered_questions_all
 								;;
 							"y")
 								list_libraries
@@ -396,9 +399,9 @@ get_statement_from_answer() {
 		sed_command='s/How can ([^ ]+) (.*)\? (.*)/\1 can \2 by \3/'
 	elif [[ $line =~ "Is it true that" ]]; then
 		sed_option="-r"
-		echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is not true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+). (.*)/It is true that \1 because \3/'
+		echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+). (.*)/It IS true that \1 because \3/'
 	elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
-		echo "$line" | grep -qi "no," && sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\), \(.*\)/No, \1 does not have to \2 because \4/' || sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\)/Yes, \1 does have to \2 because \3/'
+		echo "$line" | grep -qi "no," && sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\), \(.*\)/\1 does NOT have to \2 because \4/' || sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\)/\1 DOES have to \2 because \3/'
 	else
 		return
 	fi
