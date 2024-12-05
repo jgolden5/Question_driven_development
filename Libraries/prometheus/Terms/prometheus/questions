@@ -6,3 +6,5 @@ What is prometheus?
 What is a prometheus target?
 What is instrumentation?
 When should you use prometheus?
+How does a prometheus target expose metrics for collection?
+What does it mean to scrape data?

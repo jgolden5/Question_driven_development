@@ -9,3 +9,4 @@ What is systems monitoring? continuous observation and analysis of system resour
 What is a label in prometheus used for? literally a monitor for systems stuff (like cpu, ram, date display, and system ip address just to name a few)
 What is a multi-dimensional data model? a way of linking data together with multiple common themes--like a map which links an age to a name, as a 2-dimensional example, but this can be done with many dimensions in the multi-dimensional data model
 What is distributed storage? basically a way for storage to be stored and used across multiple servers to store and process it
+What is a prometheus target? a resource or endpoint that exposes metrics for data collection

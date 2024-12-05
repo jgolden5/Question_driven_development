@@ -289,6 +289,7 @@ questions_from_input() {
 						"/")
 							read -p "Enter search target: " target <&3
 							match="$target"
+							break
 							;;
 						*)
 							echo "Sorry, \"$input\" command not recognized."
@@ -302,6 +303,14 @@ questions_from_input() {
 	else
 		echo "You have not yet defined a current term. Please do so with change_term, then try again."
 	fi
+}
+
+questions_from_questions() {
+	questions=""
+	while read question; do
+		grep -q "$question" "Terms/$current_term/answers" && questions+="$question " || questions+="UNANSWERED: $question "
+	done < <(list questions | sed '1d')
+	echo $questions | questions_from_input "$1"
 }
 
 questions_from_research() {
@@ -600,6 +609,7 @@ update_qdd_prompt() {
 
 alias rfi='research_from_input'
 alias qfi='questions_from_input'
+alias qfq='questions_from_questions'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
 alias sfa='statements_from_answers'
