@@ -58,3 +58,19 @@ See also the best practices for monitoring batch jobs.
 Alternative strategies
 If an inbound firewall or NAT is preventing you from pulling metrics from targets, consider moving the Prometheus server behind the network barrier as well.
 We generally recommend running Prometheus servers on the same network as the monitored instances.
+Prometheus targets form the foundation of effective monitoring in the Prometheus ecosystem.
+These endpoints or resources expose metrics that Prometheus collects, analyzes, and stores.
+Understanding Prometheus targets is crucial for setting up a robust monitoring system.
+A Prometheus target is an endpoint or resource that exposes metrics for collection.
+These targets serve as the primary data sources for Prometheus monitoring, allowing it to gather valuable information about your systems and applications.
+In the Prometheus architecture, targets play a central role by providing the raw data that Prometheus scrapes at regular intervals.
+Prometheus targets come in various forms, including:
+Applications instrumented with Prometheus client libraries
+Servers exposing system-level metrics
+Databases offering performance statistics
+Third-party systems with Prometheus-compatible metric endpoints
+The flexibility of Prometheus targets enables you to monitor a wide range of components in your infrastructure, from custom applications to off-the-shelf software solutions.
+Prometheus uses two primary methods to discover targets:
+Static configuration: You manually specify target endpoints in the Prometheus configuration file.
+Dynamic service discovery: Prometheus automatically detects and adds new targets based on predefined rules.
+The file-based service discovery mechanism allows Prometheus to read target information from files on disk.

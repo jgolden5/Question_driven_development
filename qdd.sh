@@ -23,7 +23,7 @@ research_from_input() {
 				percent="$(perl -e "print int($line_number / $input_length * 100 + 0.5)")"
 				printf "\033c"
 				echo $line
-				echo -ne "${BLACK_FG}${GREY}line $line_number ${GOLD} ${percent}% ${BLUE} research.txt ${NC} => y = keep, n = don't keep, j = jump, q = quit"$'\n'
+				echo -ne "${BLACK_FG}${GREY}line $line_number of $input_length ${GOLD} ${percent}% ${BLUE} research.txt ${NC} => y = keep, n = don't keep, j = jump, q = quit"$'\n'
 				read -n1 -r -s input <&3
 				case $input in
 					"j")
@@ -72,7 +72,6 @@ questions_from_input() {
 	if [[ -n $current_term ]]; then
 		line_number=1
 		input_file=$(cat)
-		[[ -z $input_file ]] && input_file=$(echo "👂")
 		input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
 		[[ -n $1 ]] && line_start="$1" || line_start=1
 		echo "$input_file" | sentencify | while IFS= read -r line; do
