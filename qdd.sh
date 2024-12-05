@@ -92,12 +92,13 @@ questions_from_input() {
     line_number=1
     input_file=$(cat)
     input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
-    [[ -n $1 ]] && line_start="$1" || line_start=1
     while IFS= read -r line; do
       if [[ $line == "" ]] || [[ $line == " " ]]; then
         continue
       else
-        while : ; do
+        while true ; do
+					[[ $prev_line ]] && line="$prev_line $line" && prev_line=
+					[[ -n $1 ]] && line_start="$1" || line_start=1
           [[ $line_number -lt $line_start ]] && break
           percent=$((line_number * 100 / input_length))
           printf "\033c"
@@ -172,6 +173,7 @@ questions_from_input() {
               help_log+="j = [j]ump to input line by number${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, terms, libraries, sections, etc${NL}" 
               help_log+="n = [n]ext input line${NL}" 
+							help_log+="N = append current input line to [N]ext input line and show as one line${NL}"
               help_log+="q = [q]uit qfi${NL}" 
               help_log+="s = [s]ection hopper${NL}" 
               help_log+="t = list all [t]erms and change current term${NL}" 
@@ -250,13 +252,17 @@ questions_from_input() {
               read -s -n1 -p "*press any key to escape*" <&3
               tput cnorm
               ;;
-            "n" | "")
+            n | "")
               break;
               ;;
-            "q")
+            N)
+              prev_line="$line"
+							break;
+              ;;
+            q)
               break 2
               ;;
-            "s")
+            s)
               sections=()
               index=0
               while read section; do
@@ -275,14 +281,14 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            "t")
+            t)
               list_terms
               echo
               read -p "Change term $current_term to: " new_term <&3
               change_term "$new_term"
               sleep 0.75
               ;;
-            "w"|"W")
+            w|W)
               questions=()
               index=0
               [[ $input == "W" ]] && echo "UNANSWERED:"
@@ -318,7 +324,7 @@ questions_from_input() {
                 sleep 1
               fi
               ;;
-            "y")
+            y)
               list_libraries
               echo
               read -p "which library do you want to change to? " library <&3
@@ -330,7 +336,7 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            "0")
+            0)
               echo "$input_file" | questions_from_input
               break 2;
               ;;
