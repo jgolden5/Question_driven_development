@@ -1,0 +1,1 @@
+I can push to a local docker registry by using docker tag <image_name> <registry_address>:<port>/<image_name>.
