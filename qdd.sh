@@ -383,6 +383,9 @@ get_statement_from_answer() {
 	elif [[ $line =~ "Under what circumstances does" ]]; then
 		sed_option="-r"
 		sed_command='s/Under what circumstances does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 if \4/'
+	elif [[ $line =~ "Under what circumstances" ]]; then
+		sed_option="-r"
+		sed_command='s/Under what circumstances ([^ ]+) ([^ ]+) (.*)\? (.*)/\2 \1 \3 if \4/'
 	elif [[ $line =~ "How do" ]]; then
 		sed_command='s/How do \(.*\)\? \(.*\)/\1 by \2/'
 	elif [[ $line =~ "How can" ]]; then
