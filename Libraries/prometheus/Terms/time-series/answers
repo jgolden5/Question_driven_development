@@ -1,1 +1,5 @@
 What is a time-series? the recording of changes in certain variable(s) over a period of time
+What does it mean to store metrics as time series data? collect said metrics over a period of time--not just all at once
+What does it mean to scrape time series data? collect data that is gathered over a period of time (not instantaneously, in other words)
+What is a pull model for time series collection? the philosophy of the server pulling data from sources as needed instead of sources automatically pushing all data to the server, which is useful for time series collection because it is done as needed over time
+What is an intermediary gateway? a middle-ground network device that facilitates communication between two different networks by translating protocols and managing data flow between them
