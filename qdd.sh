@@ -52,7 +52,7 @@ research_from_input() {
 							echo "$line" >>research.txt
 							echo "✅"
 						else
-							echo "❌"
+							echo "⚠️"
 						fi
 						sleep 0.25
 						break
