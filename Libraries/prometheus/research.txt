@@ -40,6 +40,9 @@ To start Prometheus with your newly created configuration file, change to the di
 # Start Prometheus.
 # By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
 ./prometheus --config.file=prometheus.yml
+
+BOOKMARK
+
 Prometheus should start up. You should also be able to browse to a status page about itself at localhost:9090. Give it a couple of seconds to collect data about itself from its own HTTP metrics endpoint.
 
 You can also verify that Prometheus is serving metrics about itself by navigating to its metrics endpoint: localhost:9090/metrics

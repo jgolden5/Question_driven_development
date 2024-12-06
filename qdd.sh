@@ -5,6 +5,7 @@
 
 exec 3<&0
 current_term="${current_term:-}"
+match=
 
 BLACK_FG=$'\033[38:5:0m'
 RED_FG=$'\033[30;31m'
@@ -20,7 +21,6 @@ NL=$'\n'
 
 questions_from_input() {
   if [[ -n "$current_term" ]]; then
-    match=
     line_number=1
     input_file=$(cat)
     input_length="$(echo "$input_file" | sentencify | wc -l | sed 's/ //g')"
@@ -104,6 +104,7 @@ questions_from_input() {
 							help_log+="h = display qfi command [h]elp${NL}"
               help_log+="j = [j]ump to input line by number${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, terms, libraries, sections, etc${NL}" 
+              help_log+="m = go to book[m]ark${NL}" 
               help_log+="n = [n]ext input line${NL}" 
 							help_log+="N = combi[N]e current line with next line and show as one line${NL}"
 							help_log+="o = view [o]riginal line (no combined inputs)${NL}"
@@ -185,6 +186,11 @@ questions_from_input() {
               tput civis
               read -s -n1 -p "*press any key to escape*" <&3
               tput cnorm
+              ;;
+            m)
+              match="BOOKMARK"
+              echo "$input_file" | questions_from_input 1
+              break
               ;;
             n | "")
               break;
