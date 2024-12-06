@@ -96,12 +96,12 @@ questions_from_input() {
               fi
               ;;
 						h)
-							help_log="QFR COMMAND HELP${NL}"
+							help_log="COMMAND HELP${NL}"
 							help_log+="a = [a]dd a question to current term's questions file${NL}"
               help_log+="b = go [b]ack 1 input line${NL}" 
               help_log+="g = [g]oogle user input${NL}" 
               help_log+="G = [G]oogle one of current term's questions${NL}"
-							help_log+="h = display qfr command [h]elp${NL}"
+							help_log+="h = display qfi command [h]elp${NL}"
               help_log+="j = [j]ump to input line by number${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, terms, libraries, sections, etc${NL}" 
               help_log+="n = [n]ext input line${NL}" 
@@ -437,7 +437,6 @@ capitalize_first_letter() {
 }
 
 list() {
-  debug
   if [[ "$1" == "questions" || "$1" == "answers" || "$1" == "statements" ]]; then
     if [[ "$2" == "all" ]]; then
       last_term="$(ls Terms | tail -1)"

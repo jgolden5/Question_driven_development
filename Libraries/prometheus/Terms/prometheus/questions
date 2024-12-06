@@ -8,3 +8,7 @@ What is instrumentation?
 When should you use prometheus?
 How does a prometheus target expose metrics for collection?
 What does it mean to scrape data?
+How do I download and run Prometheus locally?
+How do I configure prometheus to scrape itself?
+What is a query?
+What is a rule (in prometheus)?
