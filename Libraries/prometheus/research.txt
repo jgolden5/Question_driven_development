@@ -1,4 +1,5 @@
 GETTING STARTED
+(Note that I can skip until where is says "prometheus should start up" if I run it in a docker container)
 This guide is a "Hello World"-style tutorial which shows how to install, configure, and use a simple Prometheus instance. You will download and run Prometheus locally, configure it to scrape itself and an example application, then work with queries, rules, and graphs to use collected time series data.
 
 Downloading and running Prometheus

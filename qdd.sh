@@ -189,7 +189,6 @@ questions_from_input() {
               ;;
             m)
               match="BOOKMARK"
-              echo "$input_file" | questions_from_input 1
               break
               ;;
             n | "")
