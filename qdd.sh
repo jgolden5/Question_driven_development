@@ -86,7 +86,7 @@ questions_from_input() {
                 questions+=("$question");
                 echo "$index - $question"
                 (( index++ ))
-              done <"Terms/$current_q_category/questions"
+              done <"Q_categories/$current_q_category/questions"
               read -p "please choose which of the above questions to google and copy to clipboard: " q_ind <&3
               if [[ -n $q_ind ]] && [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
                 search="${questions[$q_ind]}"
@@ -249,12 +249,12 @@ questions_from_input() {
               [[ $input == "W" ]] && echo "UNANSWERED:"
               while read question; do
                 if [[ "$input" == "W" ]]; then
-                  grep -q "$question" "Terms/$current_q_category/answers" && continue
+                  grep -q "$question" "Q_categories/$current_q_category/answers" && continue
                 fi
                 questions+=("$question");
                 echo "$index - $question"
                 (( index++ ))
-              done <"Terms/$current_q_category/questions"
+              done <"Q_categories/$current_q_category/questions"
               if [[ ${#questions} -gt 0 ]]; then
                 echo
                 read -p "Please choose which of the above questions you would like to answer: " q_ind <&3
@@ -341,7 +341,7 @@ questions_from_input() {
 questions_from_questions() {
   questions=""
   while read question; do
-    grep -q "$question" "Terms/$current_q_category/answers" && questions+="$question " || questions+="UNANSWERED: $question "
+    grep -q "$question" "Q_categories/$current_q_category/answers" && questions+="$question " || questions+="UNANSWERED: $question "
   done < <(list questions | sed '1d')
   echo $questions | questions_from_input "$1"
 }
@@ -351,24 +351,24 @@ questions_from_research() {
 }
 
 questions_from_statements() {
-  [[ -f "Terms/$current_q_category/statements" ]] && cat "Terms/$current_q_category/statements" | questions_from_input "$1"
+  [[ -f "Q_categories/$current_q_category/statements" ]] && cat "Q_categories/$current_q_category/statements" | questions_from_input "$1"
 }
 
 statements_from_answers() {
   [[ -n "$1" ]] && q_category="$1" || q_category="$current_q_category"
-  empty_file "Terms/$q_category/statements"
+  empty_file "Q_categories/$q_category/statements"
   while read line; do
-    echo "$(get_statement_from_answer "$line")." >>"Terms/$q_category/statements"
-  done <"Terms/$q_category/answers"
-  number="$(cat "Terms/$q_category/statements" | cat | wc -l | sed 's/ //g')"
+    echo "$(get_statement_from_answer "$line")." >>"Q_categories/$q_category/statements"
+  done <"Q_categories/$q_category/answers"
+  number="$(cat "Q_categories/$q_category/statements" | cat | wc -l | sed 's/ //g')"
   echo "<-- $number statements about $q_category -->"
-  cat "Terms/$q_category/statements"
+  cat "Q_categories/$q_category/statements"
 }
 
 statements_from_answers_all() {
   while read q_category; do
     statements_from_answers "$q_category"
-  done < <(ls Terms)
+  done < <(ls Q_categories)
 }
 
 get_statement_from_answer() {
@@ -453,20 +453,20 @@ capitalize_first_letter() {
 list() {
   if [[ "$1" == "questions" || "$1" == "answers" || "$1" == "statements" ]]; then
     if [[ "$2" == "all" ]]; then
-      last_q_category="$(ls Terms | tail -1)"
-      for q_category in $(ls Terms); do
+      last_q_category="$(ls Q_categories | tail -1)"
+      for q_category in $(ls Q_categories); do
         echo "[ $q_category ]"
-        number="$(cat "Terms/$q_category/$1" | cat | wc -l | sed 's/ //g')"
+        number="$(cat "Q_categories/$q_category/$1" | cat | wc -l | sed 's/ //g')"
         echo "<-- $number $1 about $q_category -->"
-        cat "Terms/$q_category/$1"
+        cat "Q_categories/$q_category/$1"
         if [[ $q_category != $last_q_category ]]; then
           echo
         fi
       done
     elif [[ -n $current_q_category ]]; then
-      number="$(cat "Terms/$current_q_category/$1" | cat | wc -l | sed 's/ //g')"
+      number="$(cat "Q_categories/$current_q_category/$1" | cat | wc -l | sed 's/ //g')"
       echo "<-- $number $1 about $current_q_category -->"
-      cat "Terms/$current_q_category/$1"
+      cat "Q_categories/$current_q_category/$1"
     else
       echo "You have not yet defined a current q_category. Please do so with change_q_category, then try again."
     fi
@@ -487,8 +487,8 @@ list() {
 add_answer() { #$1 = question, $2 = answer
   if [[ -n $current_q_category ]]; then
     if [[ "$1" =~ "?" ]] && [[ "$2" != "" ]]; then
-      grep -q "$1" "Terms/$current_q_category/questions" || add_question "$1"
-      echo "$1 $2" >>"Terms/$current_q_category/answers" && echo "answer was added to $current_q_category answers" || echo "ERROR: question was not added to $current_q_category answers."
+      grep -q "$1" "Q_categories/$current_q_category/questions" || add_question "$1"
+      echo "$1 $2" >>"Q_categories/$current_q_category/answers" && echo "answer was added to $current_q_category answers" || echo "ERROR: question was not added to $current_q_category answers."
     else
       echo "question and/or answer was invalid"
     fi
@@ -499,7 +499,7 @@ add_answer() { #$1 = question, $2 = answer
 
 vim_answers_current_q_category() {
   if [[ -n $current_q_category ]]; then
-    vi "Terms/$current_q_category/answers"
+    vi "Q_categories/$current_q_category/answers"
   else
     echo "You have not yet defined a current q_category. Please do so with change_q_category, then try again."
   fi
@@ -508,7 +508,7 @@ vim_answers_current_q_category() {
 add_question() {
   if [[ -n $current_q_category ]]; then
     if [[ $1 =~ "?" ]]; then
-      echo "$1" >>"Terms/$current_q_category/questions" && echo "question was added to $current_q_category questions" || echo "ERROR: question was not added to $current_q_category questions."
+      echo "$1" >>"Q_categories/$current_q_category/questions" && echo "question was added to $current_q_category questions" || echo "ERROR: question was not added to $current_q_category questions."
     else
       echo "Invalid question format."
     fi
@@ -522,10 +522,10 @@ list_unanswered_questions() {
   if [[ -n $q_category ]]; then
     unanswered_questions=""
     while read question; do
-      if [[ "$(grep "$question" "Terms/$q_category/answers")"  == "" ]]; then
+      if [[ "$(grep "$question" "Q_categories/$q_category/answers")"  == "" ]]; then
         unanswered_questions+="$question\n"
       fi
-    done <"Terms/$q_category/questions"
+    done <"Q_categories/$q_category/questions"
     unanswered_questions="${unanswered_questions%'\n'}"
     if [[ -n $unanswered_questions ]]; then
       number_of_unanswered_questions="$(echo -e $unanswered_questions | wc -l | sed 's/^[[:space:]]*//')"
@@ -544,12 +544,12 @@ list_unanswered_questions_all() {
     echo "[ $q_category unanswered questions ]"
     list_unanswered_questions "$q_category"
     echo
-  done < <(ls Terms)
+  done < <(ls Q_categories)
 }
 
 vim_questions_current_q_category() {
   if [[ -n $current_q_category ]]; then
-    vi "Terms/$current_q_category/questions"
+    vi "Q_categories/$current_q_category/questions"
   else
     echo "You have not yet defined a current q_category. Please do so with change_q_category, then try again."
   fi
@@ -557,7 +557,7 @@ vim_questions_current_q_category() {
 
 vim_statements_current_q_category() {
   if [[ -n $current_q_category ]]; then
-    vi "Terms/$current_q_category/statements"
+    vi "Q_categories/$current_q_category/statements"
   else
     echo "You have not yet defined a current q_category. Please do so with change_q_category, then try again."
   fi
@@ -565,10 +565,10 @@ vim_statements_current_q_category() {
 
 change_q_category() { 
   if [[ -n "$1" ]]; then
-    if [[ ! -d "Terms/$1" ]]; then
-      mkdir "Terms/$1"
-      touch "Terms/$1/answers" "Terms/$1/questions" "Terms/$1/statements"
-      echo "Added directory $1 to Terms, with answers, questions, and statements files. View a list of all q_categories with list_q_categories or lt"
+    if [[ ! -d "Q_categories/$1" ]]; then
+      mkdir "Q_categories/$1"
+      touch "Q_categories/$1/answers" "Q_categories/$1/questions" "Q_categories/$1/statements"
+      echo "Added directory $1 to Q_categories, with answers, questions, and statements files. View a list of all q_categories with list_q_categories or lt"
     fi
     current_q_category="$1"
     echo "changed current q_category to $current_q_category"
@@ -579,16 +579,16 @@ change_q_category() {
 }
 
 list_q_categories() {
-  number_of_q_categories="$(ls Terms | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
-  echo "<-- $number_of_q_categories Terms -->"
-  ls -1 Terms
+  number_of_q_categories="$(ls Q_categories | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+  echo "<-- $number_of_q_categories Q_categories -->"
+  ls -1 Q_categories
 }
 
 move_q_category() {
   if [[ -n "$1" ]]; then
-    mv "Terms/$current_q_category" "Terms/$1"
-    touch "Terms/$1/answers" "Terms/$1/questions" "Terms/$1/statements"
-    rm -rf "Terms/$current_q_category"
+    mv "Q_categories/$current_q_category" "Q_categories/$1"
+    touch "Q_categories/$1/answers" "Q_categories/$1/questions" "Q_categories/$1/statements"
+    rm -rf "Q_categories/$current_q_category"
     current_q_category="$1"
     echo "Moved $current_q_category to $1."
   else
@@ -598,7 +598,7 @@ move_q_category() {
 }
 
 remove_q_category() {
-  rm -r "Terms/$1"
+  rm -r "Q_categories/$1"
   echo "removed q_category $1"
   if [[ $current_q_category == "$1" ]]; then
     current_q_category="detached"
@@ -610,13 +610,13 @@ change_library() {
   if [[ -n "$1" ]]; then
     if [[ ! -d "../$1" ]]; then
       mkdir "../$1"
-      mkdir "../$1/Terms"
+      mkdir "../$1/Q_categories"
       touch "../$1/research.txt"
-      echo "Added library \"$1\" with Terms and research.txt. View a list of all libraries with list_libraries or ly"
+      echo "Added library \"$1\" with Q_categories and research.txt. View a list of all libraries with list_libraries or ly"
     fi
     cd "../$1"
     echo "changed current library to $1"
-    if [[ $(ls "Terms" | grep "$current_q_category" ) == "" ]]; then
+    if [[ $(ls "Q_categories" | grep "$current_q_category" ) == "" ]]; then
       current_q_category="detached"
     fi
   else

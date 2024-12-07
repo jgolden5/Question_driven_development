@@ -70,8 +70,6 @@ For example, enter the following expression to graph the per-second rate of chun
 rate(prometheus_tsdb_head_chunks_created_total[1m])
 Experiment with the graph range parameters and other settings.
 
-BOOKMARK
-
 Starting up some sample targets
 Let's add additional targets for Prometheus to scrape.
 
@@ -163,6 +161,7 @@ As mentioned in the configuration documentation a Prometheus instance can have i
 Shutting down your instance gracefully.
 While Prometheus does have recovery mechanisms in the case that there is an abrupt process failure it is recommend to use the SIGTERM signal to cleanly shutdown a Prometheus instance. If you're running on Linux this can be performed by using kill -s SIGTERM <PID>, replacing <PID> with your Prometheus process ID.
 
+BOOKMARK
 BASICS
 Prometheus provides a functional query language called PromQL (Prometheus Query Language) that lets the user select and aggregate time series data in real time.
 
