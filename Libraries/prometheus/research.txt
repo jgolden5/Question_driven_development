@@ -42,8 +42,6 @@ To start Prometheus with your newly created configuration file, change to the di
 # By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
 ./prometheus --config.file=prometheus.yml
 
-BOOKMARK
-
 Prometheus should start up. You should also be able to browse to a status page about itself at localhost:9090. Give it a couple of seconds to collect data about itself from its own HTTP metrics endpoint.
 
 You can also verify that Prometheus is serving metrics about itself by navigating to its metrics endpoint: localhost:9090/metrics
@@ -54,6 +52,7 @@ Let us explore data that Prometheus has collected about itself. To use Prometheu
 As you can gather from localhost:9090/metrics, one metric that Prometheus exports about itself is named prometheus_target_interval_length_seconds (the actual amount of time between target scrapes). Enter the below into the expression console and then click "Execute":
 
 prometheus_target_interval_length_seconds
+BOOKMARK
 This should return a number of different time series (along with the latest value recorded for each), each with the metric name prometheus_target_interval_length_seconds, but with different labels. These labels designate different latency percentiles and target group intervals.
 
 If we are interested only in 99th percentile latencies, we could use this query:

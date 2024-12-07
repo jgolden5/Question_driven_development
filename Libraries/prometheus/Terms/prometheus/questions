@@ -12,3 +12,4 @@ How do I download and run Prometheus locally?
 How do I configure prometheus to scrape itself?
 What is a query?
 What is a rule (in prometheus)?
+What does is the node exporter in prometheus?

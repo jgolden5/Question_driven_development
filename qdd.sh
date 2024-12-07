@@ -294,18 +294,26 @@ questions_from_input() {
               echo "$input_file" | questions_from_input
               break 2;
               ;;
-            "$")
+            $)
               echo "$input_file" | questions_from_input "$input_length"
               break 2
               ;;
-            "^")
+            ^)
               if [[ -n $line ]]; then
                 search_line=$(echo "$line" | sed 's/UNANSWERED: //')
                 echo $search_line | pbcopy
                 google "$search_line"
               fi
               ;;
-            "/")
+            "&")
+              if [[ -n $line ]]; then
+                line_to_copy=$(echo "$line" | sed 's/UNANSWERED: //')
+                echo $line_to_copy | pbcopy
+                echo "line copied to clipboard"
+                sleep 0.5
+              fi
+              ;;
+            /)
               read -p "Enter search target: " target <&3
               if [[ -n "$target" ]]; then
                 match="$target"
