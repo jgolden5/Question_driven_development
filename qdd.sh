@@ -29,7 +29,7 @@ questions_from_input() {
         continue
       else
         while true ; do
-					[[ $prev_line ]] && line="$prev_line $line" && prev_line=
+					[[ $prev_line ]] && line="${prev_line}${line}" && prev_line=
 					[[ -n $1 ]] && line_start="$1" || line_start=1
           [[ $line_number -lt $line_start ]] && break
           percent=$((line_number * 100 / input_length))
@@ -195,7 +195,7 @@ questions_from_input() {
               break;
               ;;
             N)
-              prev_line="$line"
+              prev_line="$line${NL}"
 							break;
               ;;
             o)
