@@ -226,7 +226,7 @@ questions_from_input() {
                 sections+=("$section_line")
                 echo "$index - $section_display"
                 (( index++ ))
-              done < <(echo "$input_file" | grep -nE "^[A-Z ]+$")
+              done < <(echo "$input_file" | sentencify | grep -nE "^[A-Z ]*$")
               read -p "Please choose which of the above sections you would like to jump to: " s_ind <&3
               if [[ $s_ind =~ [0-9] ]] && [[ $s_ind -lt "${#sections[@]}" ]]; then
                 echo "$input_file" | questions_from_input "${sections[$s_ind]}"
