@@ -117,7 +117,8 @@ questions_from_input() {
               help_log+="y = list all libraries and change current librar[y]${NL}" 
               help_log+="0 = go to beginning of input lines (works like vim's [0])${NL}"
               help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
-              help_log+="^ = google current input line (shown above [^])${NL}" 
+              help_log+="^ = google current input line and copy it to clipboard [^]${NL}" 
+              help_log+="& = copy current input line to clipboard [&]${NL}" 
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
               echo "$help_log" | less -e -P "q or j to exit"
 							;;

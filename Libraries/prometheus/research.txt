@@ -52,7 +52,6 @@ Let us explore data that Prometheus has collected about itself. To use Prometheu
 As you can gather from localhost:9090/metrics, one metric that Prometheus exports about itself is named prometheus_target_interval_length_seconds (the actual amount of time between target scrapes). Enter the below into the expression console and then click "Execute":
 
 prometheus_target_interval_length_seconds
-BOOKMARK
 This should return a number of different time series (along with the latest value recorded for each), each with the metric name prometheus_target_interval_length_seconds, but with different labels. These labels designate different latency percentiles and target group intervals.
 
 If we are interested only in 99th percentile latencies, we could use this query:
@@ -70,6 +69,8 @@ For example, enter the following expression to graph the per-second rate of chun
 
 rate(prometheus_tsdb_head_chunks_created_total[1m])
 Experiment with the graph range parameters and other settings.
+
+BOOKMARK
 
 Starting up some sample targets
 Let's add additional targets for Prometheus to scrape.
