@@ -396,6 +396,8 @@ get_statement_from_answer() {
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
   elif [[ $line =~ "What happens" ]]; then
     sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
+  elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
+    sed_command='s/What did \(.*\) do before \(.*\)\? \(.*\)/Before \2, \1 \3/'
   elif [[ $line =~ "What type of" ]] && [[ $line =~ "is stored in" ]]; then
     sed_option="-r"
     sed_command='s/What type of ([^ ]+) is stored in (.*)\? (.*)/\3 is stored in \2/'
