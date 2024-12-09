@@ -111,6 +111,7 @@ questions_from_input() {
               help_log+="G = [G]oogle one of current q_category's questions${NL}"
 							help_log+="h = display qfi command [h]elp${NL}"
               help_log+="j = [j]ump to input line by number${NL}" 
+              help_log+="k = open lin[k] by index from link file in new google tab${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, q_categories, libraries, sections, etc${NL}" 
               help_log+="m = go to book[m]ark${NL}" 
               help_log+="n = [n]ext input line${NL}" 
@@ -140,6 +141,30 @@ questions_from_input() {
               else
                 echo "$input_file" | questions_from_input "$user_line_start"
                 break 2
+              fi
+              ;;
+            k)
+              list_of_links=()
+              index=0
+              while read link; do
+                link_name=$(echo "$link" | sed 's/\(.*\): .*/\1/')
+                relevant_link=$(echo "$link" | sed 's/.*: \(.*\)/\1/')
+                list_of_links+=("$relevant_link")
+                echo "$index - $link_name"
+                (( index++ ))
+              done < links
+              read -p "Type the index of the link you want to open: " link_index <&3
+              if [[ "$link_index" ]] && [[ $link_index -lt "${#list_of_links}" ]]; then
+                if [[ $(grep "${list_of_links[$link_index]}" links) != "" ]]; then 
+                  echo "Going to link ${list_of_links[$link_index]}"
+                  open "${list_of_links[$link_index]}"
+                else
+                  echo "Link name not found"
+                  sleep 0.5
+                fi
+              else
+                echo "Invalid link index"
+                sleep 0.5
               fi
               ;;
             l)
