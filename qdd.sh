@@ -259,8 +259,7 @@ questions_from_input() {
                 echo
                 read -p "Please choose which of the above questions you would like to answer: " q_ind <&3
                 if [[ -n $q_ind ]] && [[ ! "$q_ind" =~ [a-zA-Z] ]] && [[ -n ${questions[$q_ind]} ]]; then
-                  tput cup 2 0
-                  tput ed
+                  echo
                   echo "${questions[$q_ind]}"
                   if [[ "$(get_statement_from_answer "${questions[$q_ind]} ")" != "" ]]; then
                     question_prompt="$(get_statement_from_answer "${questions[$q_ind]} ") "
