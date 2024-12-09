@@ -337,6 +337,10 @@ questions_from_input() {
   fi
 }
 
+questions_from_nothing() {
+	echo "nothing" | questions_from_input "$1"
+}
+
 questions_from_questions() {
   questions=""
   while read question; do
@@ -674,6 +678,7 @@ update_qdd_prompt() {
 
 alias rfi='research_from_input'
 alias qfi='questions_from_input'
+alias qfn='questions_from_nothing'
 alias qfq='questions_from_questions'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
