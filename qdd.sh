@@ -600,6 +600,17 @@ vim_statements_current_q_category() {
   fi
 }
 
+append_q_category() {
+  if [[ "$1" ]] && [[ $(ls Q_categories | grep "$1") != "" ]]; then 
+    cat Q_categories/$current_q_category/questions >>Q_categories/$1/questions
+    cat Q_categories/$current_q_category/answers >>Q_categories/$1/answers
+    cat Q_categories/$current_q_category/statements >>Q_categories/$1/statements
+    echo "appended current q category current_q_category to \""$1"\" category"
+  else
+    echo "Invalid q category"
+  fi
+}
+
 change_q_category() { 
   if [[ -n "$1" ]]; then
     if [[ ! -d "Q_categories/$1" ]]; then
@@ -613,6 +624,27 @@ change_q_category() {
     echo "q_category was invalid."
   fi
   update_qdd_prompt
+}
+
+empty_q_category() {
+	if [[ "$1" ]]; then
+		q_category_to_empty="$1"
+	else
+		q_category_to_empty="$current_q_category"
+	fi
+	if [[ -d "Q_categories/$q_category_to_empty" ]]; then
+		read -p "Are you sure you want to empty q category \"$current_q_category\"? " user_confirmation
+		if [[ $user_confirmation =~ y|Y ]]; then
+			empty_file Q_categories/$current_q_category/questions
+			empty_file Q_categories/$current_q_category/answers
+			empty_file Q_categories/$current_q_category/statements
+			echo "Emptied q category \"$current_q_category\""
+		else
+			echo "Ok, no emptying will take place"
+		fi
+	else
+	  echo "Invalid q category"
+	fi
 }
 
 list_q_categories() {
@@ -730,6 +762,8 @@ alias lza='list statements all'
 alias vz='vim_statements_current_q_category'
 
 alias qc='change_q_category'
+alias aqc='append_q_category'
+alias eqc='empty_q_category'
 alias lqc='list_q_categories'
 alias mqc='move_q_category'
 alias rqc='remove_q_category'

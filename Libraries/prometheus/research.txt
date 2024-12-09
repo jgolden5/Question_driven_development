@@ -322,7 +322,6 @@ In this example, we select all the values recorded less than 5m ago for all time
 
 http_requests_total{job="prometheus"}[5m]
 
-BOOKMARK
 Offset modifier
 The offset modifier allows changing the time offset for individual instant and range vectors in a query.
 
@@ -450,8 +449,6 @@ Comparison operators are defined between scalar/scalar, vector/scalar, and vecto
 Between two scalars, the bool modifier must be provided and these operators result in another scalar that is either 0 (false) or 1 (true), depending on the comparison result.
 
 Between an instant vector and a scalar, these operators are applied to the value of every data sample in the vector, and vector elements between which the comparison result is false get dropped from the result vector. If the bool modifier is provided, vector elements that would be dropped instead have the value 0 and vector elements that would be kept have the value 1. The metric name is dropped if the bool modifier is provided.
-
-BOOKMARK
 
 Between two instant vectors, these operators behave as a filter by default, applied to matching entries. Vector elements for which the expression is not true or which do not find a match on the other side of the expression get dropped from the result, while the others are propagated into a result vector with the grouping labels becoming the output label set. If the bool modifier is provided, vector elements that would have been dropped instead have the value 0 and vector elements that would be kept have the value 1, with the grouping labels again becoming the output label set. The metric name is dropped if the bool modifier is provided.
 
@@ -621,6 +618,7 @@ The binary * operator works between a native histogram and a float in any order,
 
 All other operators (and unmentioned cases for the above operators) do not behave in a meaningful way. They either treat the histogram sample as if it were a float sample of value 0, or (in case of arithmetic operations between a scalar and a vector) they leave the histogram sample unchanged. This behavior will change to a meaningful one before native histograms are a stable feature.
 
+BOOKMARK
 FUNCTIONS
 Some functions have default arguments, e.g. year(v=vector(time()) instant-vector). This means that there is one argument v which is an instant vector, which if not provided it will default to the value of the expression vector(time()).
 
