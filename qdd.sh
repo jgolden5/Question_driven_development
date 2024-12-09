@@ -391,6 +391,8 @@ get_statement_from_answer() {
     sed_command='s/What does it mean to \(.*\)\? \(.*\)/To \1 means to \2/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean" ]]; then
     sed_command='s/What does \(.*\) mean\? \(.*\)/\1 means \2/'
+  elif [[ $line =~ "What does" ]] && [[ $line =~ "stand for" ]]; then
+    sed_command='s/What does \(.*\) stand for\? \(.*\)/\1 stands for \2/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do" ]]; then
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
   elif [[ $line =~ "What happens" ]]; then
