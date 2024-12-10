@@ -443,8 +443,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
     sed_command='s/What did \(.*\) do before \(.*\)\? \(.*\)/Before \2, \1 did \3/'
   elif [[ $line =~ "What type of" ]] && [[ $line =~ "is stored in" ]]; then
-    sed_option="-r"
-    sed_command='s/What type of ([^ ]+) is stored in (.*)\? (.*)/\3 is stored in \2/'
+    sed_command='s/What type of \(.*\) is stored in \(.*\)\? \(.*\)/\3 is stored in \2/'
+  elif [[ $line =~ "What types of" ]] && [[ $line =~ "are stored in" ]]; then
+    sed_command='s/What types of \(.*\) are stored in \(.*\)\? \(.*\)/\3 \1 are stored in \2/'
   elif [[ $line =~ "When should" ]]; then
     sed_option="-r"
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
