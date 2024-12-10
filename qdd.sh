@@ -453,6 +453,8 @@ get_statement_from_answer() {
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
   elif [[ $line =~ "Which" ]] && [[ $line =~ "are" ]]; then
     sed_command='s/Which \(.*\) are \(.*\)? \(.*\)/The \1 which are \2 are \3/'
+  elif [[ $line =~ "Which" ]] && [[ $line =~ "is" ]]; then
+    sed_command='s/Which \(.*\) is \(.*\)? \(.*\)/The \1 which is \2 is \3/'
   elif [[ $line =~ "Which" ]] && [[ $line =~ "represents" ]]; then
     sed_command='s/Which \(.*\) represents \(.*\)? \(.*\)/The \1 which represents \2 is \3/'
   elif [[ $line =~ "Why is" ]] && [[ $line =~ "so" ]]; then
