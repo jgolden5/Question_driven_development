@@ -168,7 +168,7 @@ questions_from_input() {
               fi
               ;;
             l)
-              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - q_categories, l/L - answers, questions, and statements, q/Q - questions, s - sections, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current q_category; UPPERCASE = ALL q_categories."$'\n' list_op <&3
+              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - q_categories, l/L - answers, questions, and statements, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current q_category; UPPERCASE = ALL q_categories."$'\n' list_op <&3
               case $list_op in 
               a)
                 list answers
@@ -184,6 +184,17 @@ questions_from_input() {
                 ;;
               L)
                 list all
+                ;;
+              r)
+                tput cup 2 0
+                tput ed
+                echo "$line ..." | get_statement_from_answer
+                while read answer; do
+                  if [[ "$answer" =~ "$line" ]]; then
+                    echo -n "-"
+                    echo "$answer" | sed "s/$line \(.*\)/\1/"
+                  fi
+                done < "Q_categories/$current_q_category/answers"
                 ;;
               q)
                 list questions
