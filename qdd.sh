@@ -29,8 +29,8 @@ questions_from_input() {
         continue
       else
         while true ; do
-					[[ $prev_line ]] && line="${prev_line}${line}" && prev_line=
-					[[ -n $1 ]] && line_start="$1" || line_start=1
+          [[ $prev_line ]] && line="${prev_line}${line}" && prev_line=
+          [[ -n $1 ]] && line_start="$1" || line_start=1
           [[ $line_number -lt $line_start ]] && break
           percent=$((line_number * 100 / input_length))
           printf "\033c"
@@ -102,21 +102,21 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-						h)
-							help_log="COMMAND HELP${NL}"
-							help_log+="a = [a]dd a question to current q_category's questions file${NL}"
+            h)
+              help_log="COMMAND HELP${NL}"
+              help_log+="a = [a]dd a question to current q_category's questions file${NL}"
               help_log+="b = go [b]ack 1 input line${NL}" 
               help_log+="c = list and change current q_[c]ategory${NL}" 
               help_log+="g = [g]oogle user input${NL}" 
               help_log+="G = [G]oogle one of current q_category's questions${NL}"
-							help_log+="h = display qfi command [h]elp${NL}"
+              help_log+="h = display qfi command [h]elp${NL}"
               help_log+="j = [j]ump to input line by number${NL}" 
               help_log+="k = open lin[k] by index from link file in new google tab${NL}" 
               help_log+="l = open [l]ist menu for questions, answers, statements, q_categories, libraries, sections, etc${NL}" 
               help_log+="m = go to book[m]ark${NL}" 
               help_log+="n = [n]ext input line${NL}" 
-							help_log+="N = combi[N]e current line with next line and show as one line${NL}"
-							help_log+="o = view [o]riginal line (no combined inputs)${NL}"
+              help_log+="N = combi[N]e current line with next line and show as one line${NL}"
+              help_log+="o = view [o]riginal line (no combined inputs)${NL}"
               help_log+="p = a[p]pend current line to research.txt${NL}" 
               help_log+="q = [q]uit qfi${NL}" 
               help_log+="s = [s]ection hopper${NL}" 
@@ -129,7 +129,7 @@ questions_from_input() {
               help_log+="& = copy current input line to clipboard [&]${NL}" 
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
               echo "$help_log" | less -e -P "q or j to exit"
-							;;
+              ;;
             j)
               read -p "Jump to which line number? " user_line_start <&3
               if [[ $user_line_start -gt $input_length ]]; then
@@ -168,7 +168,7 @@ questions_from_input() {
               fi
               ;;
             l)
-              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - q_categories, l/L - answers, questions, and statements, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current q_category; UPPERCASE = ALL q_categories."$'\n' list_op <&3
+              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - q_categories, l/L - answers, questions, and statements, n - numbers, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current q_category; UPPERCASE = ALL q_categories."$'\n' list_op <&3
               case $list_op in 
               a)
                 list answers
@@ -184,6 +184,9 @@ questions_from_input() {
                 ;;
               L)
                 list all
+                ;;
+              n)
+                list_numbers
                 ;;
               r)
                 tput cup 2 0
@@ -240,17 +243,17 @@ questions_from_input() {
               ;;
             N)
               prev_line="$line${NL}"
-							break;
+              break;
               ;;
             o)
               prev_line=
-							echo "$input_file" | questions_from_input "$line_number"
-							break 2
+              echo "$input_file" | questions_from_input "$line_number"
+              break 2
               ;;
             p)
               if [[ $(grep "$line" research.txt) != "" ]]; then
-								echo "❌ Line already exists in research.txt"
-								sleep 0.5
+                echo "❌ Line already exists in research.txt"
+                sleep 0.5
               else
                 echo "$line" >>research.txt
                 echo "✅ Line added to research.txt"
@@ -375,7 +378,7 @@ questions_from_input() {
 }
 
 questions_from_nothing() {
-	echo "nothing" | questions_from_input "$1"
+  echo "nothing" | questions_from_input "$1"
 }
 
 questions_from_questions() {
@@ -577,6 +580,24 @@ add_question() {
   fi
 }
 
+list_numbers() { #lists the number of answered questions, unanswered questions, answers, and statements in the current q category, as well as the number of q categories in the current library
+  number_of_questions=$(cat "Q_categories/$current_q_category/questions" | wc -l | sed 's/ //g')
+  number_of_unanswered_questions=0
+  while read question; do
+    if [[ ! "$(grep "$question" "Q_categories/$current_q_category/answers")" ]]; then
+      (( number_of_unanswered_questions++ ))
+    fi
+  done <"Q_categories/$q_category/questions"
+  number_of_answers=$(cat "Q_categories/$current_q_category/answers" | wc -l | sed 's/ //g')
+  number_of_statements=$(cat "Q_categories/$current_q_category/statements" | wc -l | sed 's/ //g')
+  number_of_q_categories=$(ls -1 Q_categories | wc -l | sed 's/ //g')
+  echo "questions ----> $number_of_questions"
+  echo "unanswered questions ----> $number_of_unanswered_questions"
+  echo "answers ------> $number_of_answers"
+  echo "statements ---> $number_of_statements"
+  echo "q categories -> $number_of_q_categories"
+}
+
 list_unanswered_questions() {
   [[ -n "$1" ]] && q_category="$1" || q_category="$current_q_category"
   if [[ -n $q_category ]]; then
@@ -650,24 +671,24 @@ change_q_category() {
 }
 
 empty_q_category() {
-	if [[ "$1" ]]; then
-		q_category_to_empty="$1"
-	else
-		q_category_to_empty="$current_q_category"
-	fi
-	if [[ -d "Q_categories/$q_category_to_empty" ]]; then
-		read -p "Are you sure you want to empty q category \"$current_q_category\"? " user_confirmation
-		if [[ $user_confirmation =~ y|Y ]]; then
-			empty_file Q_categories/$current_q_category/questions
-			empty_file Q_categories/$current_q_category/answers
-			empty_file Q_categories/$current_q_category/statements
-			echo "Emptied q category \"$current_q_category\""
-		else
-			echo "Ok, no emptying will take place"
-		fi
-	else
-	  echo "Invalid q category"
-	fi
+  if [[ "$1" ]]; then
+    q_category_to_empty="$1"
+  else
+    q_category_to_empty="$current_q_category"
+  fi
+  if [[ -d "Q_categories/$q_category_to_empty" ]]; then
+    read -p "Are you sure you want to empty q category \"$current_q_category\"? " user_confirmation
+    if [[ $user_confirmation =~ y|Y ]]; then
+      empty_file Q_categories/$current_q_category/questions
+      empty_file Q_categories/$current_q_category/answers
+      empty_file Q_categories/$current_q_category/statements
+      echo "Emptied q category \"$current_q_category\""
+    else
+      echo "Ok, no emptying will take place"
+    fi
+  else
+    echo "Invalid q category"
+  fi
 }
 
 list_q_categories() {
