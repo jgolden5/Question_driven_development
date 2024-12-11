@@ -856,9 +856,10 @@ alias cy='change_library'
 alias ly='list_libraries'
 alias ry='remove_library'
 
-alias qdd='source_qdd'
 alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
+alias num='list_numbers'
+alias qdd='source_qdd'
 alias vr='vi research.txt'
 
 update_qdd_prompt
