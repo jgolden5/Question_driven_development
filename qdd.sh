@@ -566,7 +566,9 @@ vim_answers_current_q_category() {
 add_question() {
   if [[ -n $current_q_category ]]; then
     if [[ $1 =~ "?" ]]; then
-      echo "$1" >>"Q_categories/$current_q_category/questions" && echo "question was added to $current_q_category questions" || echo "ERROR: question was not added to $current_q_category questions."
+      echo -e "$1" >>"Q_categories/$current_q_category/questions" 
+      number_of_questions="$(cat Q_categories/$current_q_category/questions | wc -l | sed 's/ //g')"
+      echo "question was added to $current_q_category questions. $current_q_category now has $number_of_questions questions."
     else
       echo "Invalid question format."
     fi
