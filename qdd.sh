@@ -127,6 +127,7 @@ questions_from_input() {
               help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
               help_log+="^ = google current input line and copy it to clipboard [^]${NL}" 
               help_log+="& = copy current input line to clipboard [&]${NL}" 
+              help_log+=", = answer first unanswered question[.]${NL}"
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
               echo "$help_log" | less -e -P "q or j to exit"
               ;;
@@ -352,6 +353,24 @@ questions_from_input() {
                 echo "line copied to clipboard"
                 sleep 0.5
               fi
+              ;;
+            ,)
+              first_unanswered_question=""
+              while read question; do
+                if [[ $(grep "$question" "Q_categories/$current_q_category/answers") == "" ]]; then
+                  first_unanswered_question=("$question");
+                  break
+                fi
+              done <"Q_categories/$current_q_category/questions"
+              [[ "$first_unanswered_question" ]] && echo "$first_unanswered_question"
+              if [[ "$(get_statement_from_answer "$first_unanswered_question")" != "" ]]; then
+                question_prompt="$(get_statement_from_answer "$first_unanswered_question ") "
+              else
+                question_prompt="WARNING: Statement not set up for current question. "
+              fi
+              read -p "$question_prompt" answer <&3
+              add_answer "$first_unanswered_question" "$answer" 
+              sleep 0.5
               ;;
             /)
               read -p "Enter search target: " target <&3
