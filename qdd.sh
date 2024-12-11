@@ -345,7 +345,7 @@ questions_from_input() {
                 google "$search_line"
               fi
               ;;
-            "&")
+            \&)
               if [[ -n $line ]]; then
                 line_to_copy=$(echo "$line" | sed 's/UNANSWERED: //')
                 echo $line_to_copy | pbcopy
