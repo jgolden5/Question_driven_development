@@ -533,6 +533,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "How can" ]]; then
     sed_option="-r"
     sed_command='s/How can ([^ ]+) (.*)\? (.*)/\1 can \2 by \3/'
+  elif [[ $line =~ "How is a" ]] && [[ $line =~ "ed" ]]; then
+    sed_command='s/How is \(.*\) \(.*\)ed \(.*\)\? \(.*\)/\1 is \2ed \3 by \4/'
   elif [[ $line =~ "How would I " ]]; then
     sed_command='s/How would I \(.*\)\? \(.*\)/I would \1 by \2/'
   elif [[ $line =~ "Is it true that" ]]; then
