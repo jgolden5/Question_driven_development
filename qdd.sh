@@ -478,6 +478,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "When should" ]]; then
     sed_option="-r"
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
+  elif [[ $line =~ "What would cause" ]]; then
+    sed_command='s/What would cause \(.*\)\? \(.*\)/\2 would cause \1/'
   elif [[ $line =~ "Which" ]] && [[ $line =~ "are" ]]; then
     sed_command='s/Which \(.*\) are \(.*\)? \(.*\)/The \1 which are \2 are \3/'
   elif [[ $line =~ "Which" ]] && [[ $line =~ "is" ]]; then
