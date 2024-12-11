@@ -145,16 +145,16 @@ questions_from_input() {
               ;;
             k)
               list_of_links=()
-              index=0
+              i=0
               while read link; do
                 link_name=$(echo "$link" | sed 's/\(.*\): .*/\1/')
                 relevant_link=$(echo "$link" | sed 's/.*: \(.*\)/\1/')
                 list_of_links+=("$relevant_link")
-                echo "$index - $link_name"
-                (( index++ ))
+                echo "$i - $link_name"
+                (( i++ ))
               done < links
               read -p "Type the index of the link you want to open: " link_index <&3
-              if [[ "$link_index" ]] && [[ $link_index -lt "${#list_of_links}" ]]; then
+              if [[ "$link_index" ]] && [[ $link_index -lt "$i" ]] && [[ $link_index -ge 0 ]]; then
                 if [[ $(grep "${list_of_links[$link_index]}" links) != "" ]]; then 
                   echo "Going to link ${list_of_links[$link_index]}"
                   open "${list_of_links[$link_index]}"
