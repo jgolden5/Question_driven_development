@@ -845,12 +845,12 @@ alias lz='list statements'
 alias lza='list statements all'
 alias vz='vim_statements_current_term'
 
-alias at='append_term'
 alias ct='change_term'
 alias et='empty_term'
 alias lt='list_terms'
 alias mt='move_term'
 alias rt='remove_term'
+alias zt='append_term'
 
 alias cy='change_library'
 alias ly='list_libraries'
