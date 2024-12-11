@@ -475,6 +475,9 @@ get_statement_from_answer() {
     sed_command='s/What type of \(.*\) is stored in \(.*\)\? \(.*\)/\3 is stored in \2/'
   elif [[ $line =~ "What types of" ]] && [[ $line =~ "are stored in" ]]; then
     sed_command='s/What types of \(.*\) are stored in \(.*\)\? \(.*\)/\3 \1 are stored in \2/'
+  elif [[ $line =~ "What" ]] && [[ $line =~ " would " ]] && [[ $line =~ " use to " ]]; then
+    sed_option="-r"
+    sed_command='s/What (.*) would ([^ ]+) use to (.*)\?/\2 would use \1 to \3/'
   elif [[ $line =~ "When should" ]]; then
     sed_option="-r"
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
