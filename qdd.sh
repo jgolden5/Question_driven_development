@@ -412,6 +412,10 @@ questions_from_questions() {
   echo $questions | questions_from_input "$1"
 }
 
+questions_from_unanswered_questions() {
+  list_unanswered_questions | sed '1d' | qfi "$1"
+}
+
 questions_from_research() {
   cat research.txt | questions_from_input "$1"
 }
@@ -825,6 +829,7 @@ alias qfn='questions_from_nothing'
 alias qfq='questions_from_questions'
 alias qfr='questions_from_research'
 alias qfs='questions_from_statements'
+alias qfu='questions_from_unanswered_questions'
 alias sfa='statements_from_answers'
 alias sfaa='statements_from_answers_all'
 
