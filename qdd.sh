@@ -362,14 +362,18 @@ questions_from_input() {
                   break
                 fi
               done <"Q_categories/$current_q_category/questions"
-              [[ "$first_unanswered_question" ]] && echo "$first_unanswered_question"
-              if [[ "$(get_statement_from_answer "$first_unanswered_question")" != "" ]]; then
-                question_prompt="$(get_statement_from_answer "$first_unanswered_question ") "
+              if [[ -n "$first_unanswered_question" ]]; then 
+                echo "$first_unanswered_question"
+                if [[ "$(get_statement_from_answer "$first_unanswered_question")" != "" ]]; then
+                  question_prompt="$(get_statement_from_answer "$first_unanswered_question ") "
+                else
+                  question_prompt="WARNING: Statement not set up for current question. "
+                fi
+                read -p "$question_prompt" answer <&3
+                add_answer "$first_unanswered_question" "$answer" 
               else
-                question_prompt="WARNING: Statement not set up for current question. "
+                echo "No unanswered question exists"
               fi
-              read -p "$question_prompt" answer <&3
-              add_answer "$first_unanswered_question" "$answer" 
               sleep 0.5
               ;;
             /)
