@@ -858,7 +858,7 @@ alias ry='remove_library'
 
 alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
-alias num='list_numbers'
+alias l#='list_numbers'
 alias qdd='source_qdd'
 alias vr='vi research.txt'
 
