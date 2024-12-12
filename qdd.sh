@@ -122,7 +122,7 @@ questions_from_input() {
               help_log+="& = copy current input line to clipboard [&]${NL}" 
               help_log+=", = answer first unanswered question[.]${NL}"
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
-              echo "$help_log" | less -e -P "q or j to exit"
+              echo "$help_log" | more -P "q to exit"
               ;;
             j)
               read -p "Jump to which line number? " user_line_start <&3
