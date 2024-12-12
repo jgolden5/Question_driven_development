@@ -544,6 +544,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is it true that" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+). (.*)/It IS true that \1 because \3/'
+  elif [[ $line =~ "How " ]] && [[ $line =~ "ould you " ]]; then
+    sed_command='s/How \(.*ould\) you \(.*\)\? \(.*\)/You \1 \2 by \3/'
   elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
     echo "$line" | grep -qi "no," && sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\), \(.*\)/\1 does NOT have to \2 because \4/' || sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\)/\1 DOES have to \2 because \3/'
   else
