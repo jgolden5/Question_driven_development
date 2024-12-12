@@ -771,6 +771,22 @@ remove_term() {
   update_qdd_prompt
 }
 
+term_search() {
+  if [[ "$1" ]]; then
+    term=
+    if [[ "$2" ]]; then
+      term="$2"
+    else
+      term="$current_term"
+    fi
+    number_of_matches=$(grep -i "$1" "Terms/$term/statements" | wc -l | sed 's/ //g')
+    grep -i "$1" "Terms/$term/statements" | less -P "$number_of_matches $1 matches found for $term"
+    echo "Searched term $term's statements"
+  else
+    echo "please enter a term to search"
+  fi
+}
+
 change_library() {
   if [[ -n "$1" ]]; then
     if [[ ! -d "../$1" ]]; then
@@ -864,6 +880,8 @@ alias lt='list_terms'
 alias mt='move_term'
 alias rt='remove_term'
 alias zt='append_term'
+
+alias ts='term_search'
 
 alias cy='change_library'
 alias ly='list_libraries'
