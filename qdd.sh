@@ -544,6 +544,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is it possible to" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it possible to (.*)\? ([^ ]+), (.*)/It is NOT possible to \1 because \3/' || sed_command='s/Is it possible to (.*)\? ([^ ]+), (.*)/It IS possible to \1 because \3/'
+  elif [[ $line =~ "Is" ]] && [[ $line =~ "necessary for " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no," && sed_command='s/Is (.*) necessary for (.*)\? ([^ ]+), (.*)/\1 is NOT necessary for \2 because \4/' || sed_command='s/Is (.*) necessary for (.*)\? ([^ ]+), (.*)/\1 IS necessary for \2 because \4/'
   elif [[ $line =~ "Is it true that" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It IS true that \1 because \3/'
