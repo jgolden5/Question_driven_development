@@ -458,6 +458,8 @@ get_statement_from_answer() {
     sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2/'
   elif [[ $line =~ "What am" ]]; then
     sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2/'
+  elif [[ $line =~ "What can " ]] && [[ $line =~ "do" ]]; then
+    sed_command='s/What can \(.*\) do\(.*\)\? \(.*\)/Something that \1 can do\2 is \3/'
   elif [[ $line =~ "What difference does " ]] && [[ $line =~ " make" ]]; then
     sed_command='s/What difference does \(.*\) make\(.*\)\? \(.*\)/The difference that \1 makes\2 is \3/'
   elif [[ $line =~ "What does it mean if" ]]; then
