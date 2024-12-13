@@ -515,6 +515,9 @@ get_statement_from_answer() {
     sed_command='s/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3/'
   elif [[ $line =~ "Why am" ]]; then
     sed_command='s/Why am \(.*\) \(.*\)\? \(.*\)/\1 am \2 because \3/'
+  elif [[ $line =~ "Why doesn't " ]]; then
+    sed_option="-r"
+    sed_command="s/Why doesn't ([^ ]+) (.*)\? (.*)/\1 doesn't \2 because \3/"
   elif [[ $line =~ "Why does" ]]; then
     sed_option="-r"
     sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
