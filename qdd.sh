@@ -462,10 +462,10 @@ get_statement_from_answer() {
     sed_command='s/What can \(.*\) do\(.*\)\? \(.*\)/Something that \1 can do\2 is \3/'
   elif [[ $line =~ "What difference does " ]] && [[ $line =~ " make" ]]; then
     sed_command='s/What difference does \(.*\) make\(.*\)\? \(.*\)/The difference that \1 makes\2 is \3/'
-  elif [[ $line =~ "What does it mean if" ]]; then
-    sed_command='s/What does it mean if \(.*\)\? \(.*\)/If \1, it means that \2/'
   elif [[ $line =~ "What does it mean to" ]]; then
     sed_command='s/What does it mean to \(.*\)\? \(.*\)/To \1 means to \2/'
+  elif [[ $line =~ "What does it mean when" ]]; then
+    sed_command='s/What does it mean when \(.*\)\? \(.*\)/When \1, it means that \2/'
   elif [[ $line =~ "What does it mean for" ]] && [[ $line =~ "to be" ]]; then
     sed_command='s/What does it mean for \(.*\) to be \(.*\)\? \(.*\)/For \1 to be \2 means that \3/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean in" ]]; then
