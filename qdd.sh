@@ -536,6 +536,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Under what circumstances" ]]; then
     sed_option="-r"
     sed_command='s/Under what circumstances ([^ ]+) ([^ ]+) (.*)\? (.*)/\2 \1 \3 if \4/'
+  elif [[ $line =~ "How does" ]] && [[ $line =~ " a " ]]; then
+    sed_option="-r"
+    sed_command='s/How does a ([^ ]+) ([^ ]+)(.*)\? (.*)/A \1 \2s\3 by \4/'
   elif [[ $line =~ "How does" ]] && [[ $line =~ "work?" ]]; then
     sed_command='s/How does \(.*\) work\? \(.*\)/\1 works by \2/'
   elif [[ $line =~ "How does" ]]; then
