@@ -504,12 +504,14 @@ get_statement_from_answer() {
     sed_command='s/When \(.*\), what \(.*\) must \(.*\)\? \(.*\)/When \1, the \2 that \3 is \4/'
   elif [[ $line =~ "What would cause" ]]; then
     sed_command='s/What would cause \(.*\)\? \(.*\)/\2 would cause \1/'
-  elif [[ $line =~ "Which" ]] && [[ $line =~ "are" ]]; then
+  elif [[ $line =~ "Which " ]] && [[ $line =~ " are " ]]; then
     sed_command='s/Which \(.*\) are \(.*\)? \(.*\)/The \1 which are \2 are \3/'
-  elif [[ $line =~ "Which" ]] && [[ $line =~ "is" ]]; then
+  elif [[ $line =~ "Which " ]] && [[ $line =~ " is " ]]; then
     sed_command='s/Which \(.*\) is \(.*\)? \(.*\)/The \1 which is \2 is \3/'
-  elif [[ $line =~ "Which" ]] && [[ $line =~ "represents" ]]; then
-    sed_command='s/Which \(.*\) represents \(.*\)? \(.*\)/The \1 which represents \2 is \3/'
+  elif [[ $line =~ "Which " ]] && [[ $line =~ "represents" ]]; then
+    sed_command='s/Which \(.*\) represents \(.*\)\? \(.*\)/The \1 which represents \2 is \3/'
+  elif [[ $line =~ "Which" ]] && [[ $line =~ "turns" ]]; then
+    sed_command='s/Which \(.*\) turns \(.*\)\? \(.*\)/The \1 that turns \2 is \3/'
   elif [[ $line =~ "Why is" ]] && [[ $line =~ "so" ]]; then
     sed_command='s/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3/'
   elif [[ $line =~ "Why is" ]]; then
