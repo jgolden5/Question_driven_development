@@ -482,6 +482,8 @@ get_statement_from_answer() {
     sed_command='s/What does (.*) do ([^ ]+) (.*)\? (.*)/\2 \3, \1 \4/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do?" ]]; then
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
+  elif [[ $line =~ "What do" ]] && [[ $line =~ "mean " ]]; then
+    sed_command='s/What do \(.*\) mean \(.*\)\? \(.*\)/\2, \1 mean \3/'
   elif [[ $line =~ "What happens" ]]; then
     sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
   elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
@@ -512,8 +514,11 @@ get_statement_from_answer() {
     sed_command='s/Which \(.*\) represents \(.*\)\? \(.*\)/The \1 which represents \2 is \3/'
   elif [[ $line =~ "Which" ]] && [[ $line =~ "turns" ]]; then
     sed_command='s/Which \(.*\) turns \(.*\)\? \(.*\)/The \1 that turns \2 is \3/'
-  elif [[ $line =~ "Why is" ]] && [[ $line =~ "so" ]]; then
+  elif [[ $line =~ "Why is" ]] && [[ $line =~ " so " ]]; then
     sed_command='s/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3/'
+  elif [[ $line =~ "Why is" ]] && [[ $line =~ " in" ]]; then
+    sed_option='-r'
+    sed_command='s/Why is (.*) ([^ ]+) in (.*)\? (.*)/\1 is \2 in \3 because \4/'
   elif [[ $line =~ "Why is" ]]; then
     sed_command='s/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3/'
   elif [[ $line =~ "Why are" ]]; then
