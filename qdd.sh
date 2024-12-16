@@ -546,6 +546,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Under what circumstances" ]]; then
     sed_option="-r"
     sed_command='s/Under what circumstances ([^ ]+) ([^ ]+) (.*)\? (.*)/\2 \1 \3 if \4/'
+  elif [[ $line =~ "Should I " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no, " && sed_command='s/Should I ([^ ]+) (.*)\? ([^ ]+) (.*)/No, I should NOT \1 \2, because \4/' || sed_command='s/Should I ([^ ]+) (.*)\? ([^ ]+) (.*)/Yes, I SHOULD \1 \2, because \4/' 
   elif [[ $line =~ "How does" ]] && [[ $line =~ " a " ]]; then
     sed_option="-r"
     sed_command='s/How does a ([^ ]+) ([^ ]+)(.*)\? (.*)/A \1 \2s\3 by \4/'
