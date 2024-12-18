@@ -376,6 +376,28 @@ questions_from_input() {
               fi
               sleep 0.5
               ;;
+            \.)
+              last_unanswered_question=""
+              while read question; do
+                if [[ $(grep "$question" "Terms/$current_term/answers") == "" ]]; then
+                  last_unanswered_question=("$question");
+                  break
+                fi
+              done < <(tail -r "Terms/$current_term/questions")
+              if [[ -n "$last_unanswered_question" ]]; then 
+                echo "$last_unanswered_question"
+                if [[ "$(get_statement_from_answer "$last_unanswered_question")" != "" ]]; then
+                  question_prompt="$(get_statement_from_answer "$last_unanswered_question ") "
+                else
+                  question_prompt="WARNING: Statement not set up for current question. "
+                fi
+                read -p "$question_prompt" answer <&3
+                add_answer "$last_unanswered_question" "$answer" 
+              else
+                echo "No unanswered question exists"
+              fi
+              sleep 0.5
+              ;;
             /)
               read -p "Enter search target: " target <&3
               if [[ -n "$target" ]]; then
