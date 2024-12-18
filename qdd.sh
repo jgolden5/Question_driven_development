@@ -7,16 +7,16 @@ exec 3<&0
 current_term="${current_term:-}"
 match=
 
-BLACK_FG=$'\033[38:5:0m'
-RED_FG=$'\033[30;31m'
-GREEN_FG=$'\033[30;32m'
-MAGENTA_FG=$'\033[30;35m'
-GOLD_BG=$'\033[48:5:3m'
-GREY_BG=$'\033[48:5:7m'
-RED_BG=$'\033[30;101m'
-GREEN_BG=$'\033[30;102m'
-BLUE_BG=$'\033[30;104m'
-NC=$'\033[0m'
+BLACK_FG=$'\[\e[38:5:0m\]'
+RED_FG=$'\[\e[30;31m\]'
+GREEN_FG=$'\[\e[30;32m\]'
+MAGENTA_FG=$'\[\e[30;35m\]'
+GOLD_BG=$'\[\e[48:5:3m\]'
+GREY_BG=$'\[\e[48:5:7m\]'
+RED_BG=$'\[\e[30;101m\]'
+GREEN_BG=$'\[\e[30;102m\]'
+BLUE_BG=$'\[\e[30;104m\]'
+NC=$'\[\e[0m\]'
 NL=$'\n'
 
 questions_from_input() {
@@ -483,7 +483,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do?" ]]; then
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
   elif [[ $line =~ "What do" ]] && [[ $line =~ "mean " ]]; then
-    sed_command='s/What do \(.*\) mean \(.*\)\? \(.*\)/\2, \1 mean \3/'
+    sed_command='s/What do \(.*\) mean\(.*\)\? \(.*\)/\2, \1 mean \3/'
+  elif [[ $line =~ "What do" ]] && [[ $line =~ "mean" ]]; then
+    sed_command='s/What do \(.*\) mean\? \(.*\)/\1 mean \2/'
   elif [[ $line =~ "What happens" ]]; then
     sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
   elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
@@ -904,6 +906,8 @@ alias laa='list answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
+alias gz='lz | grep "\." | grep'
+alias gza='lza | grep "\." | grep'
 alias lz='list statements'
 alias lza='list statements all'
 alias vz='vim_statements_current_term'
