@@ -7,16 +7,16 @@ exec 3<&0
 current_term="${current_term:-}"
 match=
 
-BLACK_FG=$'\[\e[38:5:0m\]'
+BLACK_FG=$'\033[38:5:0m'
 RED_FG=$'\[\e[30;31m\]'
 GREEN_FG=$'\[\e[30;32m\]'
 MAGENTA_FG=$'\[\e[30;35m\]'
-GOLD_BG=$'\[\e[48:5:3m\]'
-GREY_BG=$'\[\e[48:5:7m\]'
-RED_BG=$'\[\e[30;101m\]'
-GREEN_BG=$'\[\e[30;102m\]'
-BLUE_BG=$'\[\e[30;104m\]'
-NC=$'\[\e[0m\]'
+GOLD_BG=$'\033[48:5:3m'
+GREY_BG=$'\033[48:5:7m'
+RED_BG=$'\033[30;101m'
+GREEN_BG=$'\033[30;102m'
+BLUE_BG=$'\033[30;104m'
+NC=$'\e[0m'
 NL=$'\n'
 
 questions_from_input() {
@@ -880,7 +880,7 @@ update_qdd_prompt() {
   else
     current_term_in_prompt="detached"
   fi
-  PS1="${RED_FG}\W ${GREEN_FG}${current_term_in_prompt}${MAGENTA_FG} ? ${NC}"
+  PS1="${RED_FG}\W ${GREEN_FG}${current_term_in_prompt}${MAGENTA_FG} ? \[${NC}\]"
 }
 
 alias rfi='research_from_input'
