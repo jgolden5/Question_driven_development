@@ -574,6 +574,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "Should I " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no, " && sed_command='s/Should I ([^ ]+) (.*)\? ([^ ]+) (.*)/No, I should NOT \1 \2, because \4/' || sed_command='s/Should I ([^ ]+) (.*)\? ([^ ]+) (.*)/Yes, I SHOULD \1 \2, because \4/' 
+  elif [[ $line =~ "How are" ]] && [[ $line =~ " made to " ]]; then
+    sed_command='s/How are \(.*\) made to \(.*\)\? \(.*\)/\1 are made to \2 by \3/'
   elif [[ $line =~ "How does" ]] && [[ $line =~ " a " ]]; then
     sed_option="-r"
     sed_command='s/How does a ([^ ]+) ([^ ]+)(.*)\? (.*)/A \1 \2s\3 by \4/'
