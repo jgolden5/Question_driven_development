@@ -478,6 +478,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
     sed_option="-r"
     sed_command='s/According to (.*), what ([^ ]+) (.*)\? (.*)/According to \1, \3 \2 \4/'
+  elif [[ $line =~ "What is so " ]] && [[ $line =~ " about " ]]; then
+    sed_command='s/What is so \(.*\) about \(.*\)\? \(.*\)/Something that is so \1 about \2 is \3/'
   elif [[ $line =~ "What is" ]]; then
     sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
   elif [[ $line =~ "What are" ]]; then
