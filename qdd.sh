@@ -829,12 +829,16 @@ move_term() {
 }
 
 remove_term() {
-  rm -r "Terms/$1"
-  echo "removed term $1"
-  if [[ $current_term == "$1" ]]; then
-    current_term="detached"
+  if [[ "$1" ]] && [[ -d "Terms/$1" ]]; then
+    rm -r "Terms/$1/"
+    echo "removed term $1"
+    if [[ $current_term == "$1" ]]; then
+      current_term="detached"
+    fi
+    update_qdd_prompt
+  else
+    echo "Term was not found, so no removal took place"
   fi
-  update_qdd_prompt
 }
 
 term_search() {
