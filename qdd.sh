@@ -116,6 +116,7 @@ questions_from_input() {
               help_log+="w = ans[w]er one of the current term's questions${NL}"
               help_log+="W = ans[W]er one of the current term's unanswered questions${NL}" 
               help_log+="y = list all libraries and change current librar[y]${NL}" 
+              help_log+="z = append current term to selected term [z]${NL}"
               help_log+="0 = go to beginning of input lines (works like vim's [0])${NL}"
               help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
               help_log+="^ = google current input line and copy it to clipboard [^]${NL}" 
@@ -331,6 +332,12 @@ questions_from_input() {
                 echo "Invalid library name."
                 sleep 0.5
               fi
+              ;;
+            z)
+              list_terms
+              read -p "Which term would you like to append $current_term to?: " term_to_append <&3
+              append_term "$term_to_append"
+              sleep 0.75
               ;;
             0)
               echo "$input_file" | questions_from_input
