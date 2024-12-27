@@ -164,7 +164,7 @@ questions_from_input() {
               fi
               ;;
             l)
-              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - terms, l/L - answers, questions, and statements, n - numbers, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
+              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - terms, l/L - answers, questions, and statements, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements, # - numbers. lowercase = current term; UPPERCASE = ALL terms."$'\n' list_op <&3
               case $list_op in 
               a)
                 list answers
@@ -180,9 +180,6 @@ questions_from_input() {
                 ;;
               L)
                 list all
-                ;;
-              n)
-                list_numbers
                 ;;
               r)
                 tput cup 2 0
@@ -218,6 +215,9 @@ questions_from_input() {
                 ;;
               Z)
                 list statements all
+                ;;
+              \#)
+                list_numbers
                 ;;
               *)
                 echo "Input not recognized. Please refer to the prompt for commands."
@@ -712,7 +712,7 @@ list_numbers() { #lists the number of answered questions, unanswered questions, 
     if [[ ! "$(grep "$question" "Terms/$current_term/answers")" ]]; then
       (( number_of_unanswered_questions++ ))
     fi
-  done <"Terms/$term/questions"
+  done <"Terms/$current_term/questions"
   number_of_answers=$(cat "Terms/$current_term/answers" | wc -l | sed 's/ //g')
   number_of_statements=$(cat "Terms/$current_term/statements" | wc -l | sed 's/ //g')
   number_of_terms=$(ls -1 Terms | wc -l | sed 's/ //g')
