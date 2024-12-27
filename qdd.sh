@@ -950,6 +950,12 @@ source_qdd() {
   echo "qdd.sh was sourced successfully"
 }
 
+gac_qdd_from_anywhere() {
+  local message=$*;
+  git add /Users/jgolden1/bash/Apps/question_driven_development/.;
+  git commit -m "$message"
+}
+
 update_qdd_prompt() {
   if [[ -n $current_term ]]; then
     current_term_in_prompt="$current_term"
@@ -1005,7 +1011,8 @@ alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
 alias l#='list_numbers'
 alias qdd='source_qdd'
-alias vqdd='vi /Users/jgolden1/bash/Apps/question_driven_development/qdd.sh'
+alias qgg='gac_qdd_from_anywhere'
+alias qvv='vi /Users/jgolden1/bash/Apps/question_driven_development/qdd.sh'
 alias vr='vi research.txt'
 
 update_qdd_prompt
