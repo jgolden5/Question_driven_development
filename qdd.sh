@@ -123,6 +123,8 @@ questions_from_input() {
               help_log+="& = copy current input line to clipboard [&]${NL}" 
               help_log+=", = answer first unanswered question[.]${NL}"
               help_log+=". = answer last unanswered question [,]${NL}"
+              help_log+="< = answer first question (whether answered or not) [<]${NL}"
+              help_log+="> = answer last question (whether answered or not) [>]${NL}"
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
               echo "$help_log" | more -P "q to exit"
               ;;
@@ -401,6 +403,38 @@ questions_from_input() {
                 fi
                 read -p "$question_prompt" answer <&3
                 add_answer "$last_unanswered_question" "$answer" 
+              else
+                echo "No unanswered question exists"
+              fi
+              sleep 0.5
+              ;;
+            \<)
+              first_question=$(cat Terms/$current_term/questions | head -1)
+              if [[ "$first_question" ]]; then 
+                echo "$first_question"
+                if [[ "$(get_statement_from_answer "$first_question")" != "" ]]; then
+                  question_prompt="$(get_statement_from_answer "$first_question ") "
+                else
+                  question_prompt="WARNING: Statement not set up for current question. "
+                fi
+                read -p "$question_prompt" answer <&3
+                add_answer "$first_question" "$answer" 
+              else
+                echo "No unanswered question exists"
+              fi
+              sleep 0.5
+              ;;
+            \>)
+              last_question=$(cat Terms/$current_term/questions | tail -1)
+              if [[ "$last_question" ]]; then 
+                echo "$last_question"
+                if [[ "$(get_statement_from_answer "$last_question")" != "" ]]; then
+                  question_prompt="$(get_statement_from_answer "$last_question ") "
+                else
+                  question_prompt="WARNING: Statement not set up for current question. "
+                fi
+                read -p "$question_prompt" answer <&3
+                add_answer "$last_question" "$answer" 
               else
                 echo "No unanswered question exists"
               fi
