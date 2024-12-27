@@ -1005,6 +1005,7 @@ alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
 alias l#='list_numbers'
 alias qdd='source_qdd'
+alias vqdd='vi /Users/jgolden1/bash/Apps/question_driven_development/qdd.sh'
 alias vr='vi research.txt'
 
 update_qdd_prompt
