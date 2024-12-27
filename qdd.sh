@@ -277,7 +277,7 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
-            c)
+            t)
               list_terms
               echo
               read -p "Change term $current_term to: " new_term <&3
