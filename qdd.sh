@@ -501,8 +501,8 @@ get_statement_from_answer() {
     sed_command='s/What does it mean to \(.*\)\? \(.*\)/To \1 means to \2/'
   elif [[ $line =~ "What does it mean when" ]]; then
     sed_command='s/What does it mean when \(.*\)\? \(.*\)/When \1, it means that \2/'
-  elif [[ $line =~ "What does it mean for" ]] && [[ $line =~ "to be" ]]; then
-    sed_command='s/What does it mean for \(.*\) to be \(.*\)\? \(.*\)/For \1 to be \2 means that \3/'
+  elif [[ $line =~ "What does it mean for" ]] && [[ $line =~ "to " ]]; then
+    sed_command='s/What does it mean for \(.*\) to \(.*\)\? \(.*\)/For \1 to \2 means that \3/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean in" ]]; then
     sed_command='s/What does \(.*\) mean in \(.*\)\? \(.*\)/In \2, \1 means \3/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean" ]]; then
