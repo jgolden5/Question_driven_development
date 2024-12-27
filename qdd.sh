@@ -166,16 +166,13 @@ questions_from_input() {
               fi
               ;;
             l)
-              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, c - terms, l/L - answers, questions, and statements, q/Q - questions, r - relevant answers (to current line), s - sections, u/U - unanswered, y - libraries, z/Z - statements, # - numbers. lowercase = current term; UPPERCASE = ALL terms in library."$'\n' list_op <&3
+              read -s -n1 -p "What would you like to list?"$'\n'"a/A - answers, l/L - answers, questions, and statements, q/Q - questions, r - relevant answers (to current line), s - sections, t - terms, u/U - unanswered, y - libraries, z/Z - statements, # - numbers. lowercase = current term; UPPERCASE = ALL terms in library."$'\n' list_op <&3
               case $list_op in 
               a)
                 list answers
                 ;;
               A)
                 list answers all
-                ;;
-              c)
-                list_terms
                 ;;
               l)
                 list
@@ -202,6 +199,9 @@ questions_from_input() {
                 ;;
               s)
                 cat research.txt | sentencify | grep -nE "^[A-Z ]+$"
+                ;;
+              t)
+                list_terms
                 ;;
               u)
                 list_unanswered_questions
