@@ -646,6 +646,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is it true that" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It IS true that \1 because \3/'
+  elif [[ $line =~ "Is " ]] && [[ $line =~ " a " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no," && sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/no, \1 is NOT a \2 because \4/' || sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/Yes, \1 IS a \2 because \4/'
   elif [[ $line =~ "How " ]] && [[ $line =~ "ould you " ]]; then
     sed_command='s/How \(.*ould\) you \(.*\)\? \(.*\)/You \1 \2 by \3/'
   elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
@@ -1007,12 +1010,14 @@ alias cy='change_library'
 alias ly='list_libraries'
 alias ry='remove_library'
 
+alias l#='list_numbers'
+
 alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
-alias l#='list_numbers'
+alias vr='vi research.txt'
+
 alias qdd='source_qdd'
 alias qgg='gac_qdd_from_anywhere'
 alias qvv='vi /Users/jgolden1/bash/Apps/question_driven_development/qdd.sh'
-alias vr='vi research.txt'
 
 update_qdd_prompt
