@@ -524,8 +524,9 @@ get_statement_from_answer() {
     read line
   fi
   sed_option=""
-  if [[ $line =~ "What is" ]] && [[ $line =~ "responsible for?" ]]; then
-    sed_command='s/What is \(.*\) responsible for\? \(.*\)/\1 is responsible for \2/'
+  if [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
+    sed_option="-r"
+    sed_command='s/What is (.*) ([^ ]+) for\? (.*)/\1 is \2 for \3/'
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
     sed_option="-r"
     sed_command='s/According to (.*), what ([^ ]+) (.*)\? (.*)/According to \1, \3 \2 \4/'
