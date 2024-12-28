@@ -62,6 +62,16 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
+            e)
+              read -p "bash $ " commands <&3
+              if [[ $commands ]]; then
+                eval "$commands"
+                read -s -n1 -p "Type any key to continue" any_key <&3
+              else
+                echo "no command was entered"
+                sleep 0.5
+              fi
+              ;;
             g)
               read -p "What do you want to look up?: " search <&3
               if [[ -n $search ]]; then
@@ -99,6 +109,7 @@ questions_from_input() {
               help_log="COMMAND HELP${NL}"
               help_log+="a = [a]dd a question to current term's questions file${NL}"
               help_log+="b = go [b]ack 1 input line${NL}" 
+              help_log+="e = [e]valuate string as though typing on command line${NL}" 
               help_log+="g = [g]oogle user input${NL}" 
               help_log+="G = [G]oogle one of current term's questions${NL}"
               help_log+="h = display qfi command [h]elp${NL}"
