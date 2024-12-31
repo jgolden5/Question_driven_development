@@ -1035,6 +1035,8 @@ alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
 alias vr='vi research.txt'
 
+alias vl='vi links'
+
 alias qdd='source_qdd'
 alias qgg='gac_qdd_from_anywhere'
 alias qvv='vi /Users/jgolden1/bash/Apps/question_driven_development/qdd.sh'
