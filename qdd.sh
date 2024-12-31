@@ -137,6 +137,7 @@ questions_from_input() {
               help_log+="< = answer first question (whether answered or not) [<]${NL}"
               help_log+="> = answer last question (whether answered or not) [>]${NL}"
               help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
+              help_log+="? = search for a string in statements (same as gz) [?]"
               echo "$help_log" | more -P "q to exit"
               ;;
             j)
@@ -461,6 +462,11 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
+            \?)
+              read -p "gz " target <&3
+              grep_statements "$target"
+              read -n1 -p "press any key to continue" any_key <&3
+              ;;
             *)
               echo "Sorry, \"$input\" command not recognized."
               sleep 0.5
@@ -508,6 +514,17 @@ statements_from_answers() {
   number="$(cat "Terms/$term/statements" | cat | wc -l | sed 's/ //g')"
   echo "<-- $number statements about $term -->"
   cat "Terms/$term/statements"
+}
+
+grep_statements() {
+  if [[ "$1" ]]; then
+    res=$(lz | grep "\." | grep "$1")
+    line_count=$(echo "$res" | wc -l | sed 's/ //g')
+    echo "$line_count lines found"
+    echo "$res"
+  else
+    echo "invalid search request"
+  fi
 }
 
 statements_from_answers_all() {
@@ -1010,7 +1027,7 @@ alias laa='list answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
-alias gz='lz | grep "\." | grep'
+alias gz='grep_statements' 
 alias gza='lza | grep "\." | grep'
 alias lz='list statements'
 alias lza='list statements all'
