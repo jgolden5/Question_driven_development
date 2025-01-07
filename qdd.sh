@@ -541,11 +541,12 @@ get_statement_from_answer() {
     read line
   fi
   sed_option=""
-  if [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
-    sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
+  if [[ $line =~ "What is" ]] && [[ $line =~ " used for in " ]]; then
+    sed_command='s/What is \(.*\) used for in \(.*\)\? (.*)/\1 is used for \3 in \2/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for in " ]]; then
-    sed_option="-r"
-    sed_command='s/What is (.*) ([^ ]+) for in (.*)\? (.*)/\1 is \2 for \4 in \3/'
+    sed_command='s/What is \(.*\) for in \(.*\)\? \(.*\)/In \2, \1 is for \3/'
+  elif [[ $line =~ "What is" ]] && [[ $line =~ " for" ]]; then
+    sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
     sed_option="-r"
     sed_command='s/According to (.*), what ([^ ]+) (.*)\? (.*)/According to \1, \3 \2 \4/'
