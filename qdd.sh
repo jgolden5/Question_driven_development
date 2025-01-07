@@ -542,7 +542,7 @@ get_statement_from_answer() {
   fi
   sed_option=""
   if [[ $line =~ "What is" ]] && [[ $line =~ " used for in " ]]; then
-    sed_command='s/What is \(.*\) used for in \(.*\)\? (.*)/\1 is used for \3 in \2/'
+    sed_command='s/What is \(.*\) used for in \(.*\)\? \(.*\)/\1 is used for \3 in \2/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for in " ]]; then
     sed_command='s/What is \(.*\) for in \(.*\)\? \(.*\)/In \2, \1 is for \3/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for" ]]; then
@@ -613,6 +613,10 @@ get_statement_from_answer() {
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
   elif [[ $line =~ "When" ]] && [[ $line =~ "what" ]] && [[ $line =~ "must" ]]; then
     sed_command='s/When \(.*\), what \(.*\) must \(.*\)\? \(.*\)/When \1, the \2 that \3 is \4/'
+  elif [[ $line =~ "When does " ]] && [[ $line =~ start ]]; then
+    sed_command='s/When does \(.*\) start \(.*\)\? \(.*\)/\1 starts \2 when \3/'
+  elif [[ $line =~ "When does " ]] && [[ $line =~ stop ]]; then
+    sed_command='s/When does \(.*\) stop \(.*\)\? \(.*\)/\1 stops \2 when \3/'
   elif [[ $line =~ "What would cause" ]]; then
     sed_command='s/What would cause \(.*\)\? \(.*\)/\2 would cause \1/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ "represents" ]]; then
