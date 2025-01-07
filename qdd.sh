@@ -648,6 +648,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "Why might" ]]; then
     sed_option="-r"
     sed_command='s/Why might ([^ ]+) (.*)\? (.*)/\1 might \2 because \3/'
+  elif [[ $line =~ "Why can " ]] && [[ $line =~ " be " ]]; then
+    sed_command='s/Why can \(.*\) be \(.*\)\? \(.*\)/\1 can be \2 because \3/'
   elif [[ $line =~ "In what circumstance would" ]] && [[ $line =~ "use" ]]; then
     sed_option="-r"
     sed_command='s/In what circumstance would ([^ ]+) use (.*)\? (.*)/\1 would use \2 if \3/'
