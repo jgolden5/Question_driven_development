@@ -542,8 +542,7 @@ get_statement_from_answer() {
   fi
   sed_option=""
   if [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
-    sed_option="-r"
-    sed_command='s/What is (.*) ([^ ]+) for\? (.*)/\1 is \2 for \3/'
+    sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for in " ]]; then
     sed_option="-r"
     sed_command='s/What is (.*) ([^ ]+) for in (.*)\? (.*)/\1 is \2 for \4 in \3/'
