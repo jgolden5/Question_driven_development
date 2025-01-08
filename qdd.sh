@@ -465,7 +465,7 @@ questions_from_input() {
             \?)
               read -p "gz " target <&3
               grep_statements "$target"
-              read -n1 -p "press any key to continue" any_key <&3
+              read -n1 -p "*press any key to escape*" any_key <&3
               ;;
             *)
               echo "Sorry, \"$input\" command not recognized."
