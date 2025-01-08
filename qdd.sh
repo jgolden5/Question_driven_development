@@ -585,6 +585,9 @@ get_statement_from_answer() {
     sed_command='s/What does (.*) do ([^ ]+) (.*)\? (.*)/\2 \3, \1 \4/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do?" ]]; then
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
+  elif [[ $line =~ "What does" ]] && [[ $line =~ " that " ]] && [[ $line =~ " does not?" ]]; then
+    sed_option='-r'
+    sed_command='s/What does (.*) ([^ ]+) that (.*) does not\? (.*)/What \1 \2s that \3 does not is \4/'
   elif [[ $line =~ "What do" ]] && [[ $line =~ "mean " ]]; then
     sed_command='s/What do \(.*\) mean\(.*\)\? \(.*\)/\2, \1 mean \3/'
   elif [[ $line =~ "What do" ]] && [[ $line =~ "mean" ]]; then
