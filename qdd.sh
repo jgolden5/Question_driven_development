@@ -625,6 +625,8 @@ get_statement_from_answer() {
     sed_command='s/Which \(.*\) turns \(.*\)\? \(.*\)/The \1 that turns \2 is \3/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ "breaks" ]]; then
     sed_command='s/Which \(.*\) breaks \(.*\)\? \(.*\)/The \1 which breaks \2 is \3/'
+  elif [[ $line =~ "Which " ]] && [[ $line =~ "lists" ]]; then
+    sed_command='s/Which \(.*\) lists \(.*\)\? \(.*\)/The \1 which lists \2 is \3/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ " are " ]]; then
     sed_command='s/Which \(.*\) are \(.*\)? \(.*\)/The \1 which are \2 are \3/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ " is " ]]; then
