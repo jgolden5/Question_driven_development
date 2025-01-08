@@ -136,7 +136,7 @@ questions_from_input() {
               help_log+=". = answer last unanswered question [,]${NL}"
               help_log+="< = answer first question (whether answered or not) [<]${NL}"
               help_log+="> = answer last question (whether answered or not) [>]${NL}"
-              help_log+="/ = search for a string in input lines (from current location, works like vim's [/])"
+              help_log+="/ = search for a string in input lines (from current location, works like vim's [/])${NL}"
               help_log+="? = search for a string in statements (same as gz) [?]"
               echo "$help_log" | more -P "q to exit"
               ;;
