@@ -634,6 +634,8 @@ get_statement_from_answer() {
     sed_command='s/Which \(.*\) are \(.*\)? \(.*\)/The \1 which are \2 are \3/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ " is " ]]; then
     sed_command='s/Which \(.*\) is \(.*\)? \(.*\)/The \1 which is \2 is \3/'
+  elif [[ $line =~ "Which " ]] && [[ $line =~ " converts " ]] && [[ $line =~ " to " ]]; then
+    sed_command='s/Which \(.*\) converts \(.*\) to \(.*\)? \(.*\)/The \1 that converts \2 to \3 is \4/'
   elif [[ $line =~ "Why is" ]] && [[ $line =~ " so " ]]; then
     sed_command='s/Why is \(.*\) so \(.*\)\? \(.*\)/\1 is so \2 because \3/'
   elif [[ $line =~ "Why is" ]] && [[ $line =~ " in" ]]; then
