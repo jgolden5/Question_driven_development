@@ -982,7 +982,7 @@ change_library() {
 }
 
 list_libraries() {
-  number_of_libraries="$(ls .. | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+  number_of_libraries="$(ls .. | cat | wc -l | sed 's/ //g')"
   echo "<-- $number_of_libraries Libraries -->"
   ls -1 ..
 }
