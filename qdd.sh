@@ -655,6 +655,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "Why does" ]]; then
     sed_option="-r"
     sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
+  elif [[ $line =~ "Why did " ]] && [[ $line =~ "wear" ]]; then
+    sed_command='s/Why did \(.*\) wear \(.*\)\? \(.*\)/\1 wore \2 because \3/'
   elif [[ $line =~ "Why should" ]]; then
     sed_option="-r"
     sed_command='s/Why should ([^ ]+) (.*)\? (.*)/\1 should \2 because \3/'
@@ -709,6 +711,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is " ]] && [[ $line =~ " a " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/no, \1 is NOT a \2 because \4/' || sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/Yes, \1 IS a \2 because \4/'
+  elif [[ $line =~ "Was " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no," && sed_command='s/Was (.*) ([^ ]+)\? ([^ ]+), (.*)/\1 was NOT \2 because \4/' || sed_command='s/Was (.*) ([^ ]+)\? ([^ ]+), (.*)/\1 WAS \2 because \4/'
   elif [[ $line =~ "How " ]] && [[ $line =~ "ould you " ]]; then
     sed_command='s/How \(.*ould\) you \(.*\)\? \(.*\)/You \1 \2 by \3/'
   elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
