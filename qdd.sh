@@ -657,6 +657,10 @@ get_statement_from_answer() {
     sed_command='s/Why does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 because \4/'
   elif [[ $line =~ "Why did " ]] && [[ $line =~ "wear" ]]; then
     sed_command='s/Why did \(.*\) wear \(.*\)\? \(.*\)/\1 wore \2 because \3/'
+  elif [[ $line =~ "Why did " ]] && [[ $line =~ "own" ]]; then
+    sed_command='s/Why did \(.*\) own \(.*\)\? \(.*\)/\1 owned \2 because \3/'
+  elif [[ $line =~ "Why did " ]] && [[ $line =~ " respect " ]]; then
+    sed_command='s/Why did \(.*\) respect \(.*\)\? \(.*\)/\1 respected \2 because \3/'
   elif [[ $line =~ "Why should" ]]; then
     sed_option="-r"
     sed_command='s/Why should ([^ ]+) (.*)\? (.*)/\1 should \2 because \3/'
