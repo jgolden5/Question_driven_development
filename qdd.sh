@@ -577,7 +577,7 @@ statements_from_answers() {
 
 grep_statements() {
   if [[ "$1" ]]; then
-    res=$(lz | grep "\." | grep "$1")
+    res=$(cat "Terms/$current_term/statements" | grep "$1")
     line_count=$(echo "$res" | wc -l | sed 's/ //g')
     echo "$line_count lines found"
     echo "$res"
