@@ -132,6 +132,8 @@ questions_from_input() {
               help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
               help_log+="^ = google current input line and copy it to clipboard [^]${NL}" 
               help_log+="& = copy current input line to clipboard [&]${NL}" 
+              help_log+="[ = google first unanswered question${NL}"
+              help_log+="] = google last unanswered question${NL}"
               help_log+=", = answer first unanswered question[.]${NL}"
               help_log+=". = answer last unanswered question [,]${NL}"
               help_log+="< = answer first question (whether answered or not) [<]${NL}"
@@ -375,6 +377,22 @@ questions_from_input() {
                 echo "line copied to clipboard"
                 sleep 0.5
               fi
+              ;;
+            \[)
+              while read question; do
+                if [[ $(grep "$question" "Terms/$current_term/answers") == "" ]]; then
+                  first_unanswered_question=("$question");
+                  break
+                fi
+              done <"Terms/$current_term/questions"
+              if [[ "$first_unanswered_question" ]]; then
+                echo "$first_unanswered_question" | pbcopy
+                google "$first_unanswered_question"
+                echo "copied and googled \"$first_unanswered_question\""
+              else
+                echo "No unanswered question exists, so nothing was searched or copied to clipboard"
+              fi
+              sleep 0.75
               ;;
             ,)
               first_unanswered_question=""
