@@ -394,6 +394,22 @@ questions_from_input() {
               fi
               sleep 0.75
               ;;
+            \])
+              last_unanswered_question=""
+              while read question; do
+                if [[ $(grep "$question" "Terms/$current_term/answers") == "" ]]; then
+                  last_unanswered_question=("$question");
+                  break
+                fi
+              done < <(tail -r "Terms/$current_term/questions")
+              if [[ "$last_unanswered_question" ]]; then
+                echo "$last_unanswered_question" | pbcopy
+                google "$last_unanswered_question"
+                echo "copied and googled \"$last_unanswered_question\""
+              else
+                echo "No unanswered question exists, so nothing was searched or copied to clipboard"
+              fi
+              ;;
             ,)
               first_unanswered_question=""
               while read question; do
