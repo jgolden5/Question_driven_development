@@ -134,6 +134,8 @@ questions_from_input() {
               help_log+="& = copy current input line to clipboard [&]${NL}" 
               help_log+="[ = google first unanswered question${NL}"
               help_log+="] = google last unanswered question${NL}"
+              help_log+="{ = google first question (whether answered or unanswered)${NL}"
+              help_log+="} = google last question(whether answered or unanswered)${NL}"
               help_log+=", = answer first unanswered question[.]${NL}"
               help_log+=". = answer last unanswered question [,]${NL}"
               help_log+="< = answer first question (whether answered or not) [<]${NL}"
@@ -408,6 +410,26 @@ questions_from_input() {
                 echo "copied and googled \"$last_unanswered_question\""
               else
                 echo "No unanswered question exists, so nothing was searched or copied to clipboard"
+              fi
+              ;;
+            {)
+              first_question=$(head -1 "Terms/$current_term/questions")
+              if [[ "$first_question" ]]; then
+                echo "$first_question" | pbcopy
+                google "$first_question"
+                echo "copied and googled \"$first_question\""
+              else
+                echo "No question exists, so nothing was searched or copied to clipboard"
+              fi
+              ;;
+            \})
+              last_question=$(tail -1 "Terms/$current_term/questions")
+              if [[ "$last_question" ]]; then
+                echo "$last_question" | pbcopy
+                google "$last_question"
+                echo "copied and googled \"$last_question\""
+              else
+                echo "No question exists, so nothing was searched or copied to clipboard"
               fi
               ;;
             ,)
