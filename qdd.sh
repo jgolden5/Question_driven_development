@@ -545,7 +545,7 @@ get_statement_from_answer() {
     sed_command='s/What is \(.*\) used for in \(.*\)\? \(.*\)/\1 is used for \3 in \2/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for in " ]]; then
     sed_command='s/What is \(.*\) for in \(.*\)\? \(.*\)/In \2, \1 is for \3/'
-  elif [[ $line =~ "What is" ]] && [[ $line =~ " for" ]]; then
+  elif [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
     sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
     sed_option="-r"
