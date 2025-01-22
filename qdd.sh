@@ -411,6 +411,7 @@ questions_from_input() {
               else
                 echo "No unanswered question exists, so nothing was searched or copied to clipboard"
               fi
+              sleep 0.75
               ;;
             {)
               first_question=$(head -1 "Terms/$current_term/questions")
@@ -421,6 +422,7 @@ questions_from_input() {
               else
                 echo "No question exists, so nothing was searched or copied to clipboard"
               fi
+              sleep 0.75
               ;;
             \})
               last_question=$(tail -1 "Terms/$current_term/questions")
@@ -431,6 +433,7 @@ questions_from_input() {
               else
                 echo "No question exists, so nothing was searched or copied to clipboard"
               fi
+              sleep 0.75
               ;;
             ,)
               first_unanswered_question=""
