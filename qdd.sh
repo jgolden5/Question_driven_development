@@ -523,7 +523,7 @@ questions_from_input() {
               ;;
             \?)
               read -p "gz " target <&3
-              grep_statements "$target"
+              grep_statements_case_insensitive "$target"
               read -n1 -p "*press any key to escape*" any_key <&3
               ;;
             *)
@@ -575,15 +575,31 @@ statements_from_answers() {
   cat "Terms/$term/statements"
 }
 
+case_sensitive=${case_sensitive:-true} #default
+
 grep_statements() {
   if [[ "$1" ]]; then
-    res=$(cat "Terms/$current_term/statements" | grep "$1")
+    if [[ $case_sensitive == true ]]; then
+      res=$(cat "Terms/$current_term/statements" | grep "$1")
+    else
+      res=$(cat "Terms/$current_term/statements" | grep -i "$1")
+    fi
     line_count=$(echo "$res" | wc -l | sed 's/ //g')
-    echo "$line_count lines found"
+    echo "$line_count lines found matching \"$1\""
     echo "$res"
   else
     echo "invalid search request"
   fi
+}
+
+grep_statements_case_sensitive() {
+  case_sensitive=true
+  grep_statements "$1"
+}
+
+grep_statements_case_insensitive() {
+  case_sensitive=false
+  grep_statements "$1"
 }
 
 statements_from_answers_all() {
@@ -1125,7 +1141,8 @@ alias laa='list answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
-alias gz='grep_statements' 
+alias gz='grep_statements_case_insensitive' 
+alias gzi='grep_statements_case_sensitive' 
 alias gza='lza | grep "\." | grep'
 alias lz='list statements'
 alias lza='list statements all'
