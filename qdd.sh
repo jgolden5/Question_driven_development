@@ -72,6 +72,10 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
+            f)
+              flashcards
+              sleep 1
+              ;;
             g)
               read -p "What do you want to look up?: " search <&3
               if [[ -n $search ]]; then
@@ -110,6 +114,7 @@ questions_from_input() {
               help_log+="a = [a]dd a question to current term's questions file${NL}"
               help_log+="b = go [b]ack 1 input line${NL}" 
               help_log+="e = [e]valuate string as though typing on command line${NL}" 
+              help_log+="f = [f]lashcards (for becoming more familiar with recently answered questions)${NL}" 
               help_log+="g = [g]oogle user input${NL}" 
               help_log+="G = [G]oogle one of current term's questions${NL}"
               help_log+="h = display qfi command [h]elp${NL}"
@@ -858,6 +863,68 @@ list() {
   else
     echo "First parameter was incorrect. After list, please type \"questions\", \"answers\", or \"statements\". Calling list with no parameters lists questions, answers, and statements for current term. Calling list all lists questions, answers, and statements for ALL terms in current library."
   fi
+}
+
+flashcards() {
+  i=1
+  printf "\033c"
+  hide_q=false
+  hide_a=true
+  questions_length=$(cat "Terms/$current_term/questions" | wc -l)
+  while [[ $i -lt $questions_length ]]; do
+    current_question=$(cat "Terms/$current_term/questions" | sed -n "${i}p")
+    current_answers=$(cat "Terms/$current_term/answers" | grep "$current_question")
+    echo "Flashcards"
+    if [[ $hide_q == false ]]; then
+      echo "Q - $current_question"
+    else
+      echo "*hidden* (press w to reveal)"
+    fi
+    if [[ $hide_a == false ]]; then
+      j=1
+      while read answer; do
+        echo "A${j} - $answer"
+        (( j++ ))
+      done < <(cat "Terms/$current_term/answers" | grep "$current_question" | sed 's/\(.*\?\) \(.*\)/\2/')
+    else
+      echo "*hidden* (press a to reveal)"
+    fi
+    read -n1 -s -p "a = hide/reveal answer; b = back to previous flashcard; n = next flashcard; q = quit; w = hide/reveal question: ${NL}" key <&3
+    case $key in
+      a)
+        if [[ $hide_a == "true" ]]; then
+          hide_a=false
+        else
+          hide_a=true
+        fi
+        ;;
+      b)
+        if [[ $i -gt 1 ]]; then
+          (( i-- ))
+        else
+          echo "can't go any further back"
+          sleep 0.5
+        fi
+        ;;
+      n)
+        (( i++ ))
+        ;;
+      q)
+        break 2
+        ;;
+      w)
+        if [[ $hide_q == "true" ]]; then
+          hide_q=false
+        else
+          hide_q=true
+        fi
+        ;;
+      *)
+        echo "key not recognized."
+        ;;
+    esac
+    printf "\033c"
+  done
 }
 
 add_answer() { #$1 = question, $2 = answer
