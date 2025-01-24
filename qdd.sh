@@ -867,11 +867,11 @@ list() {
 
 flashcards() {
   i=1
-  printf "\033c"
   hide_q=false
   hide_a=true
   questions_length=$(cat "Terms/$current_term/questions" | wc -l | sed 's/ //g')
   while [[ $i -le $questions_length ]]; do
+    printf "\033c"
     current_question=$(cat "Terms/$current_term/questions" | sed -n "${i}p")
     current_answers=$(cat "Terms/$current_term/answers" | grep "$current_question")
     echo "Flashcard ${i}/${questions_length}"
@@ -912,10 +912,10 @@ flashcards() {
           echo "flashcard number is too high, jumping to last flashcard"
           sleep 0.5
           i=$questions_length
-        elif [[ $fc_number -lt 0 ]]; then
+        elif [[ $fc_number -lt 1 ]]; then
           echo "flashcard number is too low, jumping to first flashcard"
           sleep 0.5
-          i=0
+          i=1
         else
           i=$fc_number
         fi
@@ -937,7 +937,6 @@ flashcards() {
         echo "key not recognized."
         ;;
     esac
-    printf "\033c"
   done
 }
 
@@ -1224,8 +1223,8 @@ alias laa='list answers all'
 alias va='vim_answers_current_term'
 
 alias gsfa='get_statement_from_answer'
-alias gz='grep_statements_case_insensitive' 
-alias gzi='grep_statements_case_sensitive' 
+alias gz='grep_statements_case_sensitive' 
+alias gzi='grep_statements_case_insensitive' 
 alias gza='lza | grep "\." | grep'
 alias lz='list statements'
 alias lza='list statements all'
