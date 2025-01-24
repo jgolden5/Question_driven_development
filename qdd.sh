@@ -870,11 +870,11 @@ flashcards() {
   printf "\033c"
   hide_q=false
   hide_a=true
-  questions_length=$(cat "Terms/$current_term/questions" | wc -l)
-  while [[ $i -lt $questions_length ]]; do
+  questions_length=$(cat "Terms/$current_term/questions" | wc -l | sed 's/ //g')
+  while [[ $i -le $questions_length ]]; do
     current_question=$(cat "Terms/$current_term/questions" | sed -n "${i}p")
     current_answers=$(cat "Terms/$current_term/answers" | grep "$current_question")
-    echo "Flashcards"
+    echo "Flashcard ${i}/${questions_length}"
     if [[ $hide_q == false ]]; then
       echo "Q - $current_question"
     else
@@ -889,7 +889,7 @@ flashcards() {
     else
       echo "*hidden* (press a to reveal)"
     fi
-    read -n1 -s -p "a = hide/reveal answer; b = back to previous flashcard; n = next flashcard; q = quit; w = hide/reveal question: ${NL}" key <&3
+    read -n1 -s -p "a = hide/reveal answer; b = back to previous flashcard; j = jump to flashcard; n = next flashcard; q = quit; w = hide/reveal question: ${NL}" key <&3
     case $key in
       a)
         if [[ $hide_a == "true" ]]; then
@@ -904,6 +904,20 @@ flashcards() {
         else
           echo "can't go any further back"
           sleep 0.5
+        fi
+        ;;
+      j)
+        read -p "Jump to flashcard #" fc_number
+        if [[ $fc_number -gt $questions_length ]]; then
+          echo "flashcard number is too high, jumping to last flashcard"
+          sleep 0.5
+          i=$questions_length
+        elif [[ $fc_number -lt 0 ]]; then
+          echo "flashcard number is too low, jumping to first flashcard"
+          sleep 0.5
+          i=0
+        else
+          i=$fc_number
         fi
         ;;
       n)
