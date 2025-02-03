@@ -790,6 +790,8 @@ get_statement_from_answer() {
     sed_command='s/How is \(.*\) \(.*\)ed \(.*\)\? \(.*\)/\1 is \2ed \3 by \4/'
   elif [[ $line =~ "How would I " ]]; then
     sed_command='s/How would I \(.*\)\? \(.*\)/I would \1 by \2/'
+  elif [[ $line =~ "How has " ]]; then
+    sed_command='s/How has \(.*\) blessed \(.*\)\? \(.*\)/\1 has blessed \2 by \3/'
   elif [[ $line =~ "Is it possible to" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it possible to (.*)\? ([^ ]+), (.*)/It is NOT possible to \1 because \3/' || sed_command='s/Is it possible to (.*)\? ([^ ]+), (.*)/It IS possible to \1 because \3/'
