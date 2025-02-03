@@ -712,6 +712,8 @@ get_statement_from_answer() {
     sed_command='s/When does \(.*\) start \(.*\)\? \(.*\)/\1 starts \2 when \3/'
   elif [[ $line =~ "When does " ]] && [[ $line =~ stop ]]; then
     sed_command='s/When does \(.*\) stop \(.*\)\? \(.*\)/\1 stops \2 when \3/'
+  elif [[ $line =~ "When might " ]]; then
+    sed_command='s/When might \(.*\)\? \(.*\)/I might \1 \2/'
   elif [[ $line =~ "What would cause" ]]; then
     sed_command='s/What would cause \(.*\)\? \(.*\)/\2 would cause \1/'
   elif [[ $line =~ "Which " ]] && [[ $line =~ "represents" ]]; then
