@@ -815,6 +815,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is" ]] && [[ $line =~ "necessary for " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is (.*) necessary for (.*)\? ([^ ]+), (.*)/\1 is NOT necessary for \2 because \4/' || sed_command='s/Is (.*) necessary for (.*)\? ([^ ]+), (.*)/\1 IS necessary for \2 because \4/'
+  elif [[ $line =~ "Is" ]] && [[ $line =~ " needed in the context of " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no," && sed_command='s/Is (.*) needed in the context of (.*)\? ([^ ]+), (.*)/\1 is NOT needed in the context of \2 because \4/' || sed_command='s/Is (.*) needed in the context of (.*)\? ([^ ]+), (.*)/\1 IS needed in the context of \2 because \4/'
   elif [[ $line =~ "Is it true that" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It IS true that \1 because \3/'
