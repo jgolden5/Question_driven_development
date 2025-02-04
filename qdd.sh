@@ -832,6 +832,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Can" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no, " && sed_command="s/Can ([^ ]+) (.*)\? ([^ ]+) (.*)/No, \1 CAN'T \2--\4/" || sed_command="s/Can ([^ ]+) (.*)\? ([^ ]+) (.*)/Yes, \1 CAN \2--\4/"
+  elif [[ $line =~ "Are " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no," && sed_command='s/Are (.*)s (.*)\? ([^ ]+), (.*)/no, \1s are NOT \2 because \4/' || sed_command='s/Are (.*)s (.*)\? ([^ ]+), (.*)/yes, \1s ARE \2 because \4/'
   else
     return
   fi
