@@ -713,6 +713,8 @@ get_statement_from_answer() {
     sed_command='s/Where is \(.*\) stored\? \(.*\)/\1 is stored \2/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " located?" ]]; then
     sed_command='s/Where is \(.*\) located\? \(.*\)/\1 is located \2/'
+  elif [[ $line =~ "Where do " ]] && [[ $line =~ " get " ]] && [[ $line =~ "ed?" ]]; then
+    sed_command='s/Where do \(.*\) get \(.*\)ed\? \(.*\)/\1 get \2ed \3/'
   elif [[ $line =~ "When should" ]]; then
     sed_option="-r"
     sed_command='s/When should ([^ ]+) (.*)\? (.*)/\1 should \2 when \3/'
