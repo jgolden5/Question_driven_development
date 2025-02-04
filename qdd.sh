@@ -690,6 +690,8 @@ get_statement_from_answer() {
     sed_command='s/What do \(.*\) mean\? \(.*\)/\1 mean \2/'
   elif [[ $line =~ "What do" ]] && [[ $line =~ " that " ]]; then
     sed_command='s/What do \(.*\) do that \(.*\)\? \(.*\)/What \1 do that \2 is \3/'
+  elif [[ $line =~ "What do" ]] && [[ $line =~ " do in " ]]; then
+    sed_command='s/What do \(.*\) do in \(.*\)\? \(.*\)/In \2, \1 \3/'
   elif [[ $line =~ "What happens" ]]; then
     sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
   elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
