@@ -134,6 +134,7 @@ questions_from_input() {
               help_log+="y = list all libraries and change current librar[y]${NL}" 
               help_log+="z = append current term to selected term [z]${NL}"
               help_log+="0 = go to beginning of input lines (works like vim's [0])${NL}"
+              help_log+="# = hotkey for l[#], which lists basic question, answer, statement, and term stats${NL}" 
               help_log+="$ = go to end of input lines (works like vim's [$])${NL}" 
               help_log+="^ = google current input line and copy it to clipboard [^]${NL}" 
               help_log+="& = copy current input line to clipboard [&]${NL}" 
@@ -365,6 +366,13 @@ questions_from_input() {
             0)
               echo "$input_file" | questions_from_input
               break 2;
+              ;;
+            \#)
+              list_numbers
+              echo
+              tput civis
+              read -s -n1 -p "*press any key to escape*" <&3
+              tput cnorm
               ;;
             $)
               echo "$input_file" | questions_from_input "$input_length"
