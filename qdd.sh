@@ -648,6 +648,8 @@ get_statement_from_answer() {
     sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
   elif [[ ! $line =~ "What is" ]] && [[ $line =~ "What " ]] && [[ $line =~ " is " ]]; then
     sed_command='s/What \(.*\) is \(.*\)\? \(.*\)/The \1 that is \2 is \3/'
+  elif [[ $line =~ "What are " ]] && [[ $line =~ " used for with " ]]; then
+    sed_command='s/What are \(.*\) used for with \(.*\)\? \(.*\)/With \2, \1 are used for \3/'
   elif [[ $line =~ "What are" ]]; then
     sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2/'
   elif [[ $line =~ "What am" ]]; then
