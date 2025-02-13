@@ -683,6 +683,8 @@ get_statement_from_answer() {
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do " ]]; then
     sed_option="-r"
     sed_command='s/What does (.*) do ([^ ]+) (.*)\? (.*)/\2 \3, \1 \4/'
+  elif [[ $line =~ "What exactly does " ]] && [[ $line =~ " do?" ]]; then
+    sed_command='s/What exactly does \(.*\) do\? \(.*\)/\1 \2/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "do?" ]]; then
     sed_command='s/What does \(.*\) do\? \(.*\)/\1 \2/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ " that " ]] && [[ $line =~ " does not?" ]]; then
