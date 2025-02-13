@@ -650,6 +650,8 @@ get_statement_from_answer() {
     sed_command='s/What is so \(.*\) about \(.*\)\? \(.*\)/Something that is so \1 about \2 is \3/'
   elif [[ $line =~ "What is" ]]; then
     sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
+  elif [[ $line =~ "What was" ]]; then
+    sed_command='s/What was \(.*\)\? \(.*\)/\1 was \2/'
   elif [[ ! $line =~ "What is" ]] && [[ $line =~ "What " ]] && [[ $line =~ " is " ]]; then
     sed_command='s/What \(.*\) is \(.*\)\? \(.*\)/The \1 that is \2 is \3/'
   elif [[ $line =~ "What are " ]] && [[ $line =~ " used for with " ]]; then
