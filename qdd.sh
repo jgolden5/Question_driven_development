@@ -765,6 +765,9 @@ get_statement_from_answer() {
     sed_command='s/Why is (.*) ([^ ]+) in (.*)\? (.*)/\1 is \2 in \3 because \4/'
   elif [[ $line =~ "Why is" ]]; then
     sed_command='s/Why is \(.*\) \(.*\)\? \(.*\)/\1 is \2 because \3/'
+  elif [[ $line =~ "Why are" ]] && [[ $line =~ "ed " ]]; then
+    sed_option='-r'
+    sed_command='s/Why are (.*) ([^ ]+)ed (.*)\? (.*)/\1 are \2ed \3 because \4/'
   elif [[ $line =~ "Why are" ]]; then
     sed_command='s/Why are \(.*\) \(.*\)\? \(.*\)/\1 are \2 because \3/'
   elif [[ $line =~ "Why am" ]]; then
