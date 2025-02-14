@@ -856,6 +856,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Does" ]] && [[ $line =~ "only " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no, " && sed_command='s/Does (.*) only (.*)\? ([^ ]+) (.*)/No, \1 does NOT only \2 because \4/' || sed_command='s/Does (.*) only (.*)\? ([^ ]+) (.*)/Yes, \1 DOES only \2 because \4/' 
+  elif [[ $line =~ "Do" ]] && [[ $line =~ " always " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no, " && sed_command='s/Do (.*) always (.*)\? ([^ ]+) (.*)/No, \1 do NOT always \2 because \4/' || sed_command='s/Do (.*) always (.*)\? ([^ ]+) (.*)/Yes, \1 DO always \2 because \4/' 
   elif [[ $line =~ "Can" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no, " && sed_command="s/Can ([^ ]+) (.*)\? ([^ ]+) (.*)/No, \1 CAN'T \2--\4/" || sed_command="s/Can ([^ ]+) (.*)\? ([^ ]+) (.*)/Yes, \1 CAN \2--\4/"
