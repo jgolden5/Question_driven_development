@@ -574,7 +574,7 @@ questions_from_research() {
 }
 
 questions_from_statements() {
-  [[ -f "Terms/$current_term/statements" ]] && cat "Terms/$current_term/statements" | questions_from_input "$1"
+  list statements | sed '1d' | questions_from_input "$@"
 }
 
 statements_from_answers() {
@@ -1263,8 +1263,8 @@ alias qfi='questions_from_input'
 alias qfn='questions_from_nothing'
 alias qfq='questions_from_questions'
 alias qfr='questions_from_research'
-alias qfs='questions_from_statements'
 alias qfu='questions_from_unanswered_questions'
+alias qfz='questions_from_statements'
 alias sfa='statements_from_answers'
 alias sfaa='statements_from_answers_all'
 

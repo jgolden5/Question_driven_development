@@ -1,0 +1,5 @@
+cdc => 
+  a) defines inner dcb calculations
+  b) defines dcb relationships
+  c) provides the requiredSetValues field and 
+  d) declares inners based on what's in DCHolder
