@@ -129,6 +129,7 @@ questions_from_input() {
               help_log+="q = [q]uit qfi${NL}" 
               help_log+="s = [s]ection hopper${NL}" 
               help_log+="t = list and change current [t]erm${NL}" 
+              help_log+="v = [v]im into questions, answers, research, or links${NL}"
               help_log+="w = ans[w]er one of the current term's questions${NL}"
               help_log+="W = ans[W]er one of the current term's unanswered questions${NL}" 
               help_log+="y = list all libraries and change current librar[y]${NL}" 
@@ -308,6 +309,29 @@ questions_from_input() {
               read -p "Change term $current_term to: " new_term <&3
               change_term "$new_term"
               sleep 0.75
+              ;;
+            v)
+              echo "a = current term's questions"
+              echo "l = links"
+              echo "q = current term's questions"
+              echo "r = research.txt"
+              read -n1 -p "Which of the above would you like to vim into? " vim_choice <&3
+              exec 4<&3
+              case $vim_choice in
+                a)
+                  eval vim_answers_current_term <&4
+                ;;
+                l)
+                  eval vi links <&4
+                ;;
+                q)
+                  eval vim_questions_current_term <&4
+                ;;
+                r)
+                  eval vi research.txt <&4
+                ;;
+              esac
+              exec 4<&-
               ;;
             w|W)
               questions=()
@@ -1305,9 +1329,9 @@ alias l#='list_numbers'
 
 alias cr='cat research.txt'
 alias lr='less -P "%f %P\%" research.txt'
-alias vr='vi research.txt'
+alias vr='vim research.txt'
 
-alias vl='vi links'
+alias vl='vim links'
 
 alias qdd='source_qdd'
 alias qgg='gac_qdd_from_anywhere'
