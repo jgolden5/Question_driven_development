@@ -1256,7 +1256,7 @@ remove_library() {
   fi
 }
 
-remove_wikipedia_citations() {
+wikipedia_citation_removal() {
   cat research.txt | sed 's/\[.*\]//g' >backup
   cp backup research.txt
   rm backup
