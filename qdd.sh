@@ -1173,7 +1173,7 @@ empty_term() {
 }
 
 list_terms() {
-  number_of_terms="$(ls Terms | cat | wc -l | sed 's/.*\([0-9]\)/\1/')"
+  number_of_terms="$(ls Terms | cat | wc -l | sed 's/.*\([0-9]+\).*/\1/' | sed 's/ //g')"
   echo "<-- $number_of_terms Terms -->"
   ls -1 Terms
 }
