@@ -662,9 +662,11 @@ get_statement_from_answer() {
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
     sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
   elif [[ $line =~ "What makes a " ]]; then
-    sed_command='s/\(What makes a .*\)\? \(.*\)/\1 is \2/'
+    sed_command='s/What makes a \(.*\)\? \(.*\)/\1 is \2/'
   elif [[ $line =~ "What " ]] && [[ $line =~ " makes " ]] && [[ $line =~ " get treated " ]]; then
     sed_command='s/What \(.*\) makes \(.*\) get treated \(.*\)\? \(.*\)/The \1 that makes \2 get treated \3 is \4/'
+  elif [[ $line =~ "What makes " ]]; then
+    sed_command='s/What makes \(.*\)\? \(.*\)/What makes \1 is \2/'
   elif [[ $line =~ "What causes" ]]; then
     sed_command='s/What causes \(.*\)\? \(.*\)/Something that causes \1 is \2/'
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
