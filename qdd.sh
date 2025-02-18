@@ -311,7 +311,7 @@ questions_from_input() {
               sleep 0.75
               ;;
             v)
-              echo "a = current term's questions"
+              echo "a = current term's answers"
               echo "l = links"
               echo "q = current term's questions"
               echo "r = research.txt"
@@ -669,6 +669,8 @@ get_statement_from_answer() {
     sed_command='s/What makes \(.*\)\? \(.*\)/What makes \1 is \2/'
   elif [[ $line =~ "What causes" ]]; then
     sed_command='s/What causes \(.*\)\? \(.*\)/Something that causes \1 is \2/'
+  elif [[ $line =~ "What occurs in " ]]; then
+    sed_command='s/What occurs in \(.*\)\? \(.*\)/In \1, what occurs is \2/'
   elif [[ $line =~ "According to " ]] && [[ $line =~ "what " ]] && [[ $line =~ is|are|am ]]; then
     sed_option="-r"
     sed_command='s/According to (.*), what ([^ ]+) (.*)\? (.*)/According to \1, \3 \2 \4/'
