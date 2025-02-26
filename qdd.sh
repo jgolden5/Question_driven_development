@@ -702,6 +702,8 @@ get_statement_from_answer() {
     sed_command='s/What difference does \(.*\) make\(.*\)\? \(.*\)/The difference that \1 makes\2 is \3/'
   elif [[ $line =~ "What do I need in order to " ]]; then
     sed_command='s/What do I need in order to \(.*\)\? \(.*\)/In order to \1, I need \2/'
+  elif [[ $line =~ "What do " ]] && [[ $line =~ " do for " ]]; then
+    sed_command='s/What do \(.*\) do for \(.*\)\? \(.*\)/What \1 do for \2 is \3/'
   elif [[ $line =~ "What does it mean to" ]]; then
     sed_command='s/What does it mean to \(.*\)\? \(.*\)/To \1 means to \2/'
   elif [[ $line =~ "What does it mean when" ]]; then
