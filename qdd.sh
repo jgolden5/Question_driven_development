@@ -4,6 +4,8 @@
 #set -u
 
 exec 3<&0
+chat_flippity_path="/Users/jgolden1/bash/apps/chat_flippity/chat_flippity.sh"
+source $chat_flippity_path
 current_term="${current_term:-}"
 match=
 
@@ -62,6 +64,10 @@ questions_from_input() {
                 sleep 0.5
               fi
               ;;
+            c)
+              chat_flippity <&3 #see flippity_prompt for overridden method
+              sleep 0.75
+              ;;
             e)
               read -p "bash $ " commands <&3
               if [[ $commands ]]; then
@@ -113,6 +119,7 @@ questions_from_input() {
               help_log="COMMAND HELP${NL}"
               help_log+="a = [a]dd a question to current term's questions file${NL}"
               help_log+="b = go [b]ack 1 input line${NL}" 
+              help_log+="c = use [c]hat flippity program to generate a question for chatGPT (note - this depends on chat_flippity.sh file)${NL}" 
               help_log+="e = [e]valuate string as though typing on command line${NL}" 
               help_log+="f = [f]lashcards (for becoming more familiar with recently answered questions)${NL}" 
               help_log+="g = [g]oogle user input${NL}" 
@@ -1286,6 +1293,41 @@ update_qdd_prompt() {
     current_term_in_prompt="detached"
   fi
   PS1="${RED_FG}\W ${GREEN_FG}${current_term_in_prompt}${MAGENTA_FG} ? \[${NC}\]"
+}
+
+flippity_prompt() { #overriden function to apply chat_flippity to qdd
+  index=0
+  echo "Prompt options:"
+  echo "_ - custom prompt"
+  echo "^ - copy input line at the top of the screen"
+  unset questions
+  while read question; do
+    echo "$index - $question"
+    questions+=("$question")
+    (( index++ ))
+  done <"Terms/$current_term/questions"
+  echo
+  read -p "Please choose which of the above prompt options you would like to ask chat gippity: " prompt_option <&3
+  if [[ $prompt_option =~ [0-9] ]] && [[ ${questions[$prompt_option]} ]]; then
+    full_prompt+=${questions[$prompt_option]}
+  elif [[ $prompt_option == "^" ]]; then
+    full_prompt+="$line"
+  else
+    read -p "enter custom prompt here: " prompt
+    full_prompt+=$prompt
+  fi
+  echo "Current prompt so far = \"${full_prompt}\""
+  read -n1 -p "Ready to use prompt? " end_prompt
+    echo
+    if [[ $end_prompt == "y" ]]; then
+      number_of_words=$(echo $full_prompt | wc -w)
+      echo "$number_of_words words successfully copied into clipboard"
+      echo $full_prompt | pbcopy
+      return 0
+  else
+    full_prompt+=$'\n'
+    return 1
+  fi
 }
 
 alias rfi='research_from_input'
