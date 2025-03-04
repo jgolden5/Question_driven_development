@@ -899,7 +899,10 @@ get_statement_from_answer() {
     sed_command='s/How \(.*ould\) you \(.*\)\? \(.*\)/You \1 \2 by \3/'
   elif [[ $line =~ "Does" ]] && [[ $line =~ "have to" ]]; then
     echo "$line" | grep -qi "no," && sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\), \(.*\)/\1 does NOT have to \2 because \4/' || sed_command='s/Does \(.*\) have to \(.*\)\? \(.*\)/\1 DOES have to \2 because \3/'
-  elif [[ $line =~ "Does" ]] && [[ $line =~ "only " ]]; then
+  elif [[ $line =~ "Does" ]] && [[ $line =~ " cause " ]]; then
+    sed_option="-r"
+    echo "$line" | grep -qi "no, " && sed_command='s/Does (.*) cause (.*)\? ([^ ]+) (.*)/No, \1 does NOT cause \2 because \4/' || sed_command='s/Does (.*) cause (.*)\? ([^ ]+) (.*)/Yes, \1 DOES cause \2 because \4/' 
+  elif [[ $line =~ "Does" ]] && [[ $line =~ " only " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no, " && sed_command='s/Does (.*) only (.*)\? ([^ ]+) (.*)/No, \1 does NOT only \2 because \4/' || sed_command='s/Does (.*) only (.*)\? ([^ ]+) (.*)/Yes, \1 DOES only \2 because \4/' 
   elif [[ $line =~ "Do" ]] && [[ $line =~ " always " ]]; then
