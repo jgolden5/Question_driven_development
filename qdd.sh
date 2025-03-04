@@ -1301,7 +1301,7 @@ update_qdd_prompt() {
 flippity_prompt() { #overriden function to apply chat_flippity to qdd
   index=0
   echo "Prompt options:"
-  echo "_ - custom prompt"
+  echo "Enter - custom prompt"
   echo "^ - copy input line at the top of the screen"
   unset questions
   while read question; do
