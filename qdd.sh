@@ -765,7 +765,7 @@ get_statement_from_answer() {
     sed_option="-r"
     sed_command='s/What (.*) would ([^ ]+) use to (.*)\?/\2 would use \1 to \3/'
   elif [[ $line =~ "What " ]] && [[ $line =~ " are " ]]; then
-    sed_command='s/What \(.*\)s are \(.*\)\? \(.*\)/Some \1s that are \2 include \3/'
+    sed_command='s/What \(.*\)s\(.*\) are \(.*\)\? \(.*\)/Some \1s that are \3 include \4/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " stored?" ]]; then
     sed_command='s/Where is \(.*\) stored\? \(.*\)/\1 is stored \2/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " located?" ]]; then
