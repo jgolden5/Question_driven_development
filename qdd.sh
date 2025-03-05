@@ -891,6 +891,9 @@ get_statement_from_answer() {
   elif [[ $line =~ "Is it true that" ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It is NOT true that \1 because \3/' || sed_command='s/Is it true that (.*)\? ([^ ]+), (.*)/It IS true that \1 because \3/'
+  elif [[ $line =~ "Is " ]] && [[ $line =~ " or " ]]; then
+    sed_option="-r"
+    sed_command='s/Is (.*) ([^ ]+) or (.*)\? (.*)/\1 is \4/'
   elif [[ $line =~ "Is " ]] && [[ $line =~ " a " ]]; then
     sed_option="-r"
     echo "$line" | grep -qi "no," && sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/no, \1 is NOT a \2 because \4/' || sed_command='s/Is (.*) a (.*)\? ([^ ]+), (.*)/Yes, \1 IS a \2 because \4/'
