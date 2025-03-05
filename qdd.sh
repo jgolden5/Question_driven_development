@@ -668,6 +668,8 @@ get_statement_from_answer() {
     sed_command='s/What is \(.*\) used for\? \(.*\)/\1 is used for \2/'
   elif [[ $line =~ "What is" ]] && [[ $line =~ " for?" ]]; then
     sed_command='s/What is \(.*\) for\? \(.*\)/\1 is for \2/'
+  elif [[ $line =~ "What would happen if " ]]; then
+    sed_command='s/What would happen if \(.*\)\? \(.*\)/If \1, then \2/'
   elif [[ $line =~ "What makes a " ]]; then
     sed_command='s/What makes a \(.*\)\? \(.*\)/\1 is \2/'
   elif [[ $line =~ "What " ]] && [[ $line =~ " makes " ]] && [[ $line =~ " get treated " ]]; then
