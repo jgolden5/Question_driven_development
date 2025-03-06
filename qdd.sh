@@ -685,28 +685,6 @@ get_statement_from_answer() {
     sed_command='s/According to (.*), what ([^ ]+) (.*)\? (.*)/According to \1, \3 \2 \4/'
   elif [[ $line =~ "What is so " ]] && [[ $line =~ " about " ]]; then
     sed_command='s/What is so \(.*\) about \(.*\)\? \(.*\)/Something that is so \1 about \2 is \3/'
-  elif [[ $line =~ "What is" ]]; then
-    sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
-  elif [[ $line =~ "What was" ]]; then
-    sed_command='s/What was \(.*\)\? \(.*\)/\1 was \2/'
-  elif [[ ! $line =~ "What is" ]] && [[ $line =~ "What " ]] && [[ $line =~ " is " ]]; then
-    sed_command='s/What \(.*\) is \(.*\)\? \(.*\)/The \1 that is \2 is \3/'
-  elif [[ $line =~ "What are " ]] && [[ $line =~ " used for with " ]]; then
-    sed_command='s/What are \(.*\) used for with \(.*\)\? \(.*\)/With \2, \1 are used for \3/'
-  elif [[ $line =~ "What are" ]] && [[ $line =~ " used for in " ]]; then
-    sed_command='s/What are \(.*\) used for in \(.*\)\? \(.*\)/\1 are used for \3 in \2/'
-  elif [[ $line =~ "What are " ]] && [[ $line =~ " used for?" ]]; then
-    sed_command='s/What are \(.*\) used for\? \(.*\)/\1 are used for \2/'
-  elif [[ $line =~ "What are " ]] && [[ $line =~ " for?" ]]; then
-    sed_command='s/What are \(.*\) for\? \(.*\)/\1 are for \2/'
-  elif [[ $line =~ "What are" ]]; then
-    sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2/'
-  elif [[ $line =~ "What am" ]]; then
-    sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2/'
-  elif [[ $line =~ "What can " ]] && [[ $line =~ "do" ]]; then
-    sed_command='s/What can \(.*\) do\(.*\)\? \(.*\)/Something that \1 can do\2 is \3/'
-  elif [[ $line =~ "What's" ]]; then
-    sed_command="s/What's \(.*\)\? \(.*\)/\1 is \2/"
   elif [[ $line =~ "What difference does " ]] && [[ $line =~ " make" ]]; then
     sed_command='s/What difference does \(.*\) make\(.*\)\? \(.*\)/The difference that \1 makes\2 is \3/'
   elif [[ $line =~ "What do I need in order to " ]]; then
@@ -719,6 +697,8 @@ get_statement_from_answer() {
     sed_command='s/What does it mean when \(.*\)\? \(.*\)/When \1, it means that \2/'
   elif [[ $line =~ "What does it mean for" ]] && [[ $line =~ "to " ]]; then
     sed_command='s/What does it mean for \(.*\) to \(.*\)\? \(.*\)/For \1 to \2 means that \3/'
+  elif [[ $line =~ "What does it mean if" ]]; then
+    sed_command='s/What does it mean if \(.*\)\? \(.*\)/If \1, it means that \2/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean in" ]]; then
     sed_command='s/What does \(.*\) mean in \(.*\)\? \(.*\)/In \2, \1 means \3/'
   elif [[ $line =~ "What does" ]] && [[ $line =~ "mean" ]]; then
@@ -764,6 +744,28 @@ get_statement_from_answer() {
   elif [[ $line =~ "What" ]] && [[ $line =~ " would " ]] && [[ $line =~ " use to " ]]; then
     sed_option="-r"
     sed_command='s/What (.*) would ([^ ]+) use to (.*)\?/\2 would use \1 to \3/'
+  elif [[ $line =~ "What is" ]]; then
+    sed_command='s/What is \(.*\)\? \(.*\)/\1 is \2/'
+  elif [[ $line =~ "What was" ]]; then
+    sed_command='s/What was \(.*\)\? \(.*\)/\1 was \2/'
+  elif [[ ! $line =~ "What is" ]] && [[ $line =~ "What " ]] && [[ $line =~ " is " ]]; then
+    sed_command='s/What \(.*\) is \(.*\)\? \(.*\)/The \1 that is \2 is \3/'
+  elif [[ $line =~ "What are " ]] && [[ $line =~ " used for with " ]]; then
+    sed_command='s/What are \(.*\) used for with \(.*\)\? \(.*\)/With \2, \1 are used for \3/'
+  elif [[ $line =~ "What are" ]] && [[ $line =~ " used for in " ]]; then
+    sed_command='s/What are \(.*\) used for in \(.*\)\? \(.*\)/\1 are used for \3 in \2/'
+  elif [[ $line =~ "What are " ]] && [[ $line =~ " used for?" ]]; then
+    sed_command='s/What are \(.*\) used for\? \(.*\)/\1 are used for \2/'
+  elif [[ $line =~ "What are " ]] && [[ $line =~ " for?" ]]; then
+    sed_command='s/What are \(.*\) for\? \(.*\)/\1 are for \2/'
+  elif [[ $line =~ "What are" ]]; then
+    sed_command='s/What are \(.*\)\? \(.*\)/\1 are \2/'
+  elif [[ $line =~ "What am" ]]; then
+    sed_command='s/What am \(.*\)\? \(.*\)/\1 am \2/'
+  elif [[ $line =~ "What can " ]] && [[ $line =~ "do" ]]; then
+    sed_command='s/What can \(.*\) do\(.*\)\? \(.*\)/Something that \1 can do\2 is \3/'
+  elif [[ $line =~ "What's" ]]; then
+    sed_command="s/What's \(.*\)\? \(.*\)/\1 is \2/"
   elif [[ $line =~ "What " ]] && [[ $line =~ " are " ]]; then
     sed_command='s/What \(.*\)s\(.*\) are \(.*\)\? \(.*\)/Some \1s that are \3 include \4/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " stored?" ]]; then
