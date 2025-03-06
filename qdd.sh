@@ -871,6 +871,8 @@ get_statement_from_answer() {
     sed_command='s/How does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 by \4/'
   elif [[ $line =~ "How do" ]]; then
     sed_command='s/How do \(.*\)\? \(.*\)/\1 by \2/'
+  elif [[ $line =~ "How can " ]] && [[ $line =~ " be " ]]; then
+    sed_command='s/How can \(.*\) be \(.*\)\? \(.*\)/\1 can be \2 by \3/'
   elif [[ $line =~ "How can" ]]; then
     sed_option="-r"
     sed_command='s/How can ([^ ]+) (.*)\? (.*)/\1 can \2 by \3/'
