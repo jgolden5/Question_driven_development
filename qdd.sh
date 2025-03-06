@@ -861,11 +861,13 @@ get_statement_from_answer() {
     sed_command='s/How much \(.*\) does \(.*\) have\? \(.*\)/The amount of \1 that \2 has is \3/'
   elif [[ $line =~ "How are" ]] && [[ $line =~ " made to " ]]; then
     sed_command='s/How are \(.*\) made to \(.*\)\? \(.*\)/\1 are made to \2 by \3/'
+  elif [[ $line =~ "How does" ]] && [[ $line =~ "work?" ]]; then
+    sed_command='s/How does \(.*\) work\? \(.*\)/\1 works by \2/'
+  elif [[ $line =~ "How does" ]] && [[ $line =~ " work " ]] && [[ $line =~ " on " ]]; then
+    sed_command='s/How does \(.*\) work on \(.*\)\? \(.*\)/\1 works on \2 by \3/'
   elif [[ $line =~ "How does" ]] && [[ $line =~ " a " ]]; then
     sed_option="-r"
     sed_command='s/How does a ([^ ]+) ([^ ]+)(.*)\? (.*)/A \1 \2s\3 by \4/'
-  elif [[ $line =~ "How does" ]] && [[ $line =~ "work?" ]]; then
-    sed_command='s/How does \(.*\) work\? \(.*\)/\1 works by \2/'
   elif [[ $line =~ "How does" ]]; then
     sed_option="-r"
     sed_command='s/How does ([^ ]+) ([^ ]+) (.*)\? (.*)/\1 \2s \3 by \4/'
