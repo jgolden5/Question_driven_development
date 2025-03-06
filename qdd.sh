@@ -884,6 +884,8 @@ get_statement_from_answer() {
     sed_command='s/How is a \(.*\) \(.*\)ed\(.*\)\? \(.*\)/A \1 is \2ed\3 \4/'
   elif [[ $line =~ "How would I " ]]; then
     sed_command='s/How would I \(.*\)\? \(.*\)/I would \1 by \2/'
+  elif [[ $line =~ "How might " ]] && [[ $line =~ " be " ]]; then
+    sed_command='s/How might \(.*\) be \(.*\)\? \(.*\)/\1 might be \2 by \3/'
   elif [[ $line =~ "How has " ]]; then
     sed_command='s/How has \(.*\) blessed \(.*\)\? \(.*\)/\1 has blessed \2 by \3/'
   elif [[ $line =~ "Is it possible to" ]]; then
