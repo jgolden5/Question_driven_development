@@ -1012,7 +1012,7 @@ flashcards() {
         fi
         ;;
       j)
-        read -p "Jump to flashcard #" fc_number
+        read -p "Jump to flashcard #" fc_number <&3
         if [[ $fc_number -gt $questions_length ]]; then
           echo "flashcard number is too high, jumping to last flashcard"
           sleep 0.5
