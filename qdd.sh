@@ -737,6 +737,8 @@ get_statement_from_answer() {
     sed_command='s/What did \(.*\) do before \(.*\)\? \(.*\)/Before \2, \1 did \3/'
   elif [[ $line =~ "What role does" ]] && [[ $line =~ "play in" ]]; then
     sed_command='s/What role does \(.*\) play in \(.*\)\? \(.*\)/In \2, \1 plays the role of \3/'
+  elif [[ $line =~ "What role do " ]] && [[ $line =~ "play in" ]]; then
+    sed_command='s/What role do \(.*\) play in \(.*\)\? \(.*\)/In \2, \1 play the role of \3/'
   elif [[ $line =~ "What type of" ]] && [[ $line =~ "is stored in" ]]; then
     sed_command='s/What type of \(.*\) is stored in \(.*\)\? \(.*\)/\3 is stored in \2/'
   elif [[ $line =~ "What types of" ]] && [[ $line =~ "are stored in" ]]; then
