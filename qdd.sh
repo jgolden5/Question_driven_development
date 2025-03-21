@@ -736,6 +736,10 @@ get_statement_from_answer() {
     sed_command='s/What happens \(.*\)\? \(.*\)/\1, \2/'
   elif [[ $line =~ "What did" ]] && [[ $line =~ "do before" ]]; then
     sed_command='s/What did \(.*\) do before \(.*\)\? \(.*\)/Before \2, \1 did \3/'
+  elif [[ $line =~ "What role can" ]] && [[ $line =~ "play in" ]]; then
+    sed_command='s/What role can \(.*\) play in \(.*\)\? \(.*\)/In \2, \1 plays the role of \3/'
+  elif [[ $line =~ "What role can" ]] && [[ $line =~ "play with" ]]; then
+    sed_command='s/What role can \(.*\) play with \(.*\)\? \(.*\)/With \2, \1 plays the role of \3/'
   elif [[ $line =~ "What role does" ]] && [[ $line =~ "play in" ]]; then
     sed_command='s/What role does \(.*\) play in \(.*\)\? \(.*\)/In \2, \1 plays the role of \3/'
   elif [[ $line =~ "What role do " ]] && [[ $line =~ "play in" ]]; then
