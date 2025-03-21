@@ -258,9 +258,7 @@ questions_from_input() {
                 ;;
               esac
               echo ""
-              tput civis
-              read -s -n1 -p "*press any key to escape*" <&3
-              tput cnorm
+              press_any_key_to_escape <&3
               ;;
             m)
               match="BOOKMARK"
@@ -394,6 +392,11 @@ questions_from_input() {
               append_term "$term_to_append"
               sleep 0.75
               ;;
+            Z)
+              statements=$(statements_from_answers <&3)
+              echo "${statements}${NL}"
+              press_any_key_to_escape <&3
+              ;;
             0)
               echo "$input_file" | questions_from_input
               break 2;
@@ -401,9 +404,7 @@ questions_from_input() {
             \#)
               list_numbers
               echo
-              tput civis
-              read -s -n1 -p "*press any key to escape*" <&3
-              tput cnorm
+              press_any_key_to_escape <&3
               ;;
             $)
               echo "$input_file" | questions_from_input "$input_length"
@@ -568,7 +569,7 @@ questions_from_input() {
             \?)
               read -p "gz " target <&3
               grep_statements_case_insensitive "$target"
-              read -n1 -p "*press any key to escape*" any_key <&3
+              press_any_key_to_escape <&3
               ;;
             *)
               echo "Sorry, \"$input\" command not recognized."
@@ -1258,6 +1259,12 @@ term_search() {
   else
     echo "please enter a term to search"
   fi
+}
+
+press_any_key_to_escape() {
+  tput civis
+  read -s -n1 -p "*press any key to escape*"
+  tput cnorm
 }
 
 change_library() {
