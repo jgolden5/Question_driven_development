@@ -1340,27 +1340,31 @@ update_qdd_prompt() {
   PS1="${RED_FG}\W ${GREEN_FG}${current_term_in_prompt}${MAGENTA_FG} ? \[${NC}\]"
 }
 
-flippity_prompt() { #overriden function to apply chat_flippity to qdd
-  index=0
-  echo "Prompt options:"
-  echo "Enter - custom prompt"
-  echo "^ - copy input line at the top of the screen"
-  echo "- - do not add anything to prompt"
-  unset questions
-  while read question; do
-    echo "$index - $question"
-    questions+=("$question")
-    (( index++ ))
-  done <"Terms/$current_term/questions"
-  echo
-  read -p "Please choose which of the above prompt options you would like to ask chat gippity: " prompt_option <&3
-  if [[ $prompt_option =~ [0-9] ]] && [[ ${questions[$prompt_option]} ]]; then
-    full_prompt+=${questions[$prompt_option]}
-  elif [[ $prompt_option == "^" ]]; then
-    full_prompt+="$line"
-  elif [[ $prompt_option != "-" ]]; then
-    read -p "enter custom prompt here: " prompt
-    full_prompt+=$prompt
+#functions between here and aliases are overridden from chat_flippity project
+
+flippity_prompt() {
+  if [[ "$1" != "-q" ]]; then #-q is used when no additional prompt from user is desired
+    index=0
+    echo "Prompt options:"
+    echo "Enter - custom prompt"
+    echo "^ - copy input line at the top of the screen"
+    echo "- - do not add anything to prompt"
+    unset questions
+    while read question; do
+      echo "$index - $question"
+      questions+=("$question")
+      (( index++ ))
+    done <"Terms/$current_term/questions"
+    echo
+    read -p "Please choose which of the above prompt options you would like to ask chat gippity: " prompt_option <&3
+    if [[ $prompt_option =~ [0-9] ]] && [[ ${questions[$prompt_option]} ]]; then
+      full_prompt+=${questions[$prompt_option]}
+    elif [[ $prompt_option == "^" ]]; then
+      full_prompt+="$line"
+    elif [[ $prompt_option != "-" ]]; then
+      read -p "enter custom prompt here: " prompt
+      full_prompt+=$prompt
+    fi
   fi
   echo "Current prompt so far = \"${full_prompt}\""
   read -n1 -p "Ready to use prompt? " end_prompt
@@ -1374,6 +1378,42 @@ flippity_prompt() { #overriden function to apply chat_flippity to qdd
     full_prompt+=" "
     return 1
   fi
+}
+
+verify_question_and_answer() {
+  index=0
+  echo "Answer options:"
+  unset answers
+  while read answer; do
+    echo "$index - $answer"
+    answers+=("$answer")
+    (( index++ ))
+  done <"Terms/$current_term/answers"
+  echo ". - copy most recently added answer"
+  echo "^ - copy input line at the top of the screen"
+  echo "Enter - custom answer"
+  echo
+  if [[ "$1" == "-q" ]]; then
+    start_prompt="Please rate how accurate the following answer(s) are to the following question(s) on a scale of 1-5, 1 being completely inaccurate, and 5 being completely accurate, and provide no explanation as to why."
+  else
+    start_prompt="Please rate how accurate the following answer(s) are to the following question(s) on a scale of 1-5, 1 being completely inaccurate, and 5 being completely accurate. Then, verify if the following question and answer represent an answer that accurately answers the question, and add any clarification if needed."
+  fi
+  read -p "Please choose which of the above answer options you would like chat gippity to verify: " prompt_option <&3
+  if [[ $prompt_option =~ [0-9] ]] && [[ ${answers[$prompt_option]} ]]; then
+    question_and_answer="${answers[$prompt_option]}"
+    echo "Got it. Will verify answer at index $prompt_option."
+  elif [[ $prompt_option == "^" ]]; then
+    question_and_answer="$line"
+    echo "Got it. Will attempt to verify the line above in question/answer form."
+  elif [[ $prompt_option == "." ]]; then
+    question_and_answer="${answers[-1]}"
+    echo "Got it. Will verify most recently added answer."
+  else
+    read -p "Please enter the question(s) AND answer(s) you want chat gippity to verify (in the form: Question? answer. Question n? answer n.) " question_and_answer
+    echo "Got it. Will verify custom answer \"$question_and_answer\"."
+  fi
+  echo
+  full_prompt+="$start_prompt $question_and_answer"
 }
 
 alias rfi='research_from_input'
