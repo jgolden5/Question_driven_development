@@ -1367,7 +1367,7 @@ flippity_prompt() { #overriden function to apply chat_flippity to qdd
       echo $full_prompt | pbcopy
       return 0
   else
-    full_prompt+=$'\n'
+    full_prompt+=" "
     return 1
   fi
 }
