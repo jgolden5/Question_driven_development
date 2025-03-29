@@ -777,6 +777,9 @@ get_statement_from_answer() {
     sed_command="s/What's \(.*\)\? \(.*\)/\1 is \2/"
   elif [[ $line =~ "What " ]] && [[ $line =~ " are " ]]; then
     sed_command='s/What \(.*\)s\(.*\) are \(.*\)\? \(.*\)/Some \1s that are \3 include \4/'
+  elif [[ $line =~ "Would " ]] && [[ $line =~ " be " ]] && [[ $line =~ " if " ]]; then
+    sed_command='s/Would \(.*\) be \(.*\) if \(.*\)\? \(.*\)/When \1, the \2 that \3 is \4/'
+    echo "$line" | grep -qi "no," && sed_command='s/Would \(.*\) be \(.*\) if \(.*\)\? \(.*\), \(.*\)/No, \1 would NOT be \2 if \3, because \4/' || sed_command='s/Would \(.*\) be \(.*\) if \(.*\)\? \(.*\), \(.*\)/Yes, \1 WOULD be \2 if \3, because \4/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " stored?" ]]; then
     sed_command='s/Where is \(.*\) stored\? \(.*\)/\1 is stored \2/'
   elif [[ $line =~ "Where is " ]] && [[ $line =~ " located?" ]]; then
