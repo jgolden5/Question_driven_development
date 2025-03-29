@@ -1382,15 +1382,11 @@ flippity_prompt() {
 
 verify_question_and_answer() {
   index=0
-  echo "Answer options:"
   unset answers
-  while read answer; do
-    echo "$index - $answer"
-    answers+=("$answer")
-    (( index++ ))
-  done <"Terms/$current_term/answers"
+  echo "Answer options:"
   echo ". - copy most recently added answer"
   echo "^ - copy input line at the top of the screen"
+  echo "0 - print array of answers to verify from by index"
   echo "Enter - custom answer"
   echo
   if [[ "$1" == "-q" ]]; then
@@ -1398,16 +1394,28 @@ verify_question_and_answer() {
   else
     start_prompt="Please rate how accurate the following answer(s) are to the following question(s) on a scale of 1-5, 1 being completely inaccurate, and 5 being completely accurate. Then, verify if the following question and answer represent an answer that accurately answers the question, and add any clarification if needed."
   fi
-  read -p "Please choose which of the above answer options you would like chat gippity to verify: " prompt_option <&3
-  if [[ $prompt_option =~ [0-9] ]] && [[ ${answers[$prompt_option]} ]]; then
-    question_and_answer="${answers[$prompt_option]}"
-    echo "Got it. Will verify answer at index $prompt_option."
-  elif [[ $prompt_option == "^" ]]; then
+  read -n1 -p "Please choose which of the above answer options you would like chat gippity to verify: " prompt_option <&3
+  echo
+  if [[ $prompt_option == "^" ]]; then
     question_and_answer="$line"
     echo "Got it. Will attempt to verify the line above in question/answer form."
   elif [[ $prompt_option == "." ]]; then
-    question_and_answer="${answers[-1]}"
+    question_and_answer="$(tail -1 "Terms/$current_term/answers")"
     echo "Got it. Will verify most recently added answer."
+  elif [[ $prompt_option == "0" ]]; then
+    while read answer; do
+      echo "$index - $answer"
+      answers+=("$answer")
+      (( index++ ))
+    done <"Terms/$current_term/answers"
+    read -p "Choose the index of the answer you would like chat gippity to verify: " answer_index <&3
+    if [[ "$answer_index" =~ [0-9] && $answer_index -ge 0 && "${answers[$answer_index]}" ]]; then
+      question_and_answer="${answers[$answer_index]}"
+      echo "Got it. Will verify answer at index $answer_index."
+    else
+      echo "Question index not recognized, sorry :("
+      sleep 0.5
+    fi
   else
     read -p "Please enter the question(s) AND answer(s) you want chat gippity to verify (in the form: Question? answer. Question n? answer n.) " question_and_answer
     echo "Got it. Will verify custom answer \"$question_and_answer\"."
