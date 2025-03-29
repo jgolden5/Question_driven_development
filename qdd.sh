@@ -1342,6 +1342,7 @@ flippity_prompt() { #overriden function to apply chat_flippity to qdd
   echo "Prompt options:"
   echo "Enter - custom prompt"
   echo "^ - copy input line at the top of the screen"
+  echo "- - do not add anything to prompt"
   unset questions
   while read question; do
     echo "$index - $question"
@@ -1354,7 +1355,7 @@ flippity_prompt() { #overriden function to apply chat_flippity to qdd
     full_prompt+=${questions[$prompt_option]}
   elif [[ $prompt_option == "^" ]]; then
     full_prompt+="$line"
-  else
+  elif [[ $prompt_option != "-" ]]; then
     read -p "enter custom prompt here: " prompt
     full_prompt+=$prompt
   fi
