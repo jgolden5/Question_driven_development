@@ -17,10 +17,10 @@ main() {
     read -n1 mode
     echo
     case "$mode" in
-      a)
-        ask_mode
-        ;;
       q)
+        question_mode
+        ;;
+      Q)
         break
         ;;
       t)
@@ -38,11 +38,14 @@ main() {
 
 #modes
 
-ask_mode() {
+question_mode() {
   if [[ "$library" && "$term" ]]; then
     echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$index${YELLOW}] ${NC}$ "
     read command
     case "$command" in 
+      \')
+        list_questions
+        ;;
       *)
         ask_question "$command"
         ;;
@@ -195,8 +198,7 @@ get_library_to_remove_by_name() {
 list_libraries() {
   i=0
   for lib in Libraries/*; do
-    lib_cut="${lib##*/}"
-    echo "$i - $lib_cut"
+    echo "$i - ${lib##*/}"
     (( i++ ))
   done
 }
@@ -208,7 +210,7 @@ set_default_term() {
 
 set_term_by_name() {
   local new_term="$1"
-  if [[ "$new_term" ]]; then
+  if [[ "$new_term" && ! $new_term =~ " " ]]; then
     if [[ -d "Libraries/$library/$new_term" ]]; then
       term="$new_term"
       echo "changed term to $new_term"
@@ -218,6 +220,8 @@ set_term_by_name() {
       term="$new_term"
       echo "term added"
     fi
+  else
+    echo "invalid term"
   fi
 }
 
@@ -318,4 +322,12 @@ ask_question() {
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
     fi
   fi
+}
+
+list_questions() {
+  local i=0
+  while read q; do
+    echo "$i - ${q##*/}"
+    (( i++ ))
+  done < <(cat Libraries/$library/$term/answers)
 }
