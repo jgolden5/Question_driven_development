@@ -34,10 +34,18 @@ ask_mode() {
 }
 
 library_mode() {
-  index="$(get_index_from_library)"
-  echo -ne "${RED}QDD $library ${NC}[$index] $ "
+  library_index="$(get_index_from_library)"
+  echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read command
   case "$command" in
+    \')
+      i=0
+      for lib in Libraries/*; do
+        lib_cut="${lib#*/}"
+        echo "$i - $lib_cut"
+        (( i++ ))
+      done
+      ;;
     *)
       if [[ -d "Libraries/$command" ]]; then
         library="$command"
