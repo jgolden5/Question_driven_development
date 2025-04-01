@@ -67,6 +67,9 @@ term_mode() {
     \')
       list_terms
       ;;
+    \-*)
+      remove_term $command
+      ;;
     *)
       set_term_by_name "$command"
       ;;
@@ -111,7 +114,7 @@ set_library_by_index() {
   done
 }
 
-get_library_from_index() {
+get_library_by_index() {
   local index_from_input="$1"
   local i=0
   for lib in Libraries/*; do
@@ -151,7 +154,7 @@ remove_library() {
     if [[ "$2" =~ [a-zA-Z] ]]; then
       library_to_remove="$(get_library_to_remove_by_name "$2")"
     else
-      library_to_remove="$(get_library_from_index "$2")"
+      library_to_remove="$(get_library_by_index "$2")"
     fi
   else
     library_to_remove="$library"
@@ -196,16 +199,10 @@ set_term_by_name() {
       term="$new_term"
       echo "changed term to $new_term"
     else
-      read -n1 -p "term $new_term not recognized. Would you like to add it? " add_term_confirmation
-      echo
-      if [[ "$add_term_confirmation" =~ y|Y ]]; then
-        mkdir Libraries/$library/$new_term
-        touch Libraries/$library/$new_term/answers
-        term="$new_term"
-        echo "term added"
-      else
-        echo "Ok. Back to business, then."
-      fi
+      mkdir Libraries/$library/$new_term
+      touch Libraries/$library/$new_term/answers
+      term="$new_term"
+      echo "term added"
     fi
   fi
 }
@@ -244,4 +241,50 @@ list_terms() {
   else
     echo "Library $library does not have any terms yet. You can add some if you'd like!"
   fi
+}
+
+remove_term() {
+  local term_to_remove=
+  if [[ "$2" ]]; then
+    if [[ "$2" =~ [a-zA-Z] ]]; then
+      term_to_remove="$(get_term_to_remove_by_name "$2")"
+    else
+      term_to_remove="$(get_term_by_index "$2")"
+    fi
+  else
+    term_to_remove="$term"
+  fi
+  read -n1 -p "Are you sure you want to remove term $term_to_remove? " confirmation
+  echo
+  if [[ $confirmation == "y" ]]; then
+    rm -r Libraries/$library/$term_to_remove
+    if [[ "$term" == "$term_to_remove" ]]; then
+      term=-
+    fi
+  else
+    echo "Ok. Library $term_to_remove is here to stay."
+  fi
+}
+
+get_term_to_remove_by_name() {
+  if [[ -d Libraries/$library/"$1" ]]; then
+    echo "$1"
+  else
+    echo ""
+    echo "Term $1 does not exist in library $library" >&2
+    return 1
+  fi
+}
+
+get_term_by_index() {
+  local index_from_input="$1"
+  local i=0
+  for t in Libraries/$library/*; do
+    if [[ "$i" == "$index_from_input" ]]; then
+      echo "${t##*/}"
+      break
+    else
+      (( i++ ))
+    fi
+  done
 }
