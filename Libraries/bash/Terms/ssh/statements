@@ -1,0 +1,7 @@
+A user proves their identity to a remote machine in order to use ssh by having an ssh key pair, which consists of a private (only the user sees it) and public key.
+Some of the most useful ssh options are -p, which connects to a particular port; -i, which allows you to use a particular private key for authentication and is helpful if you have multiple ssh keys; and -l, which lets you specify a username instead of user@hostname, user hostname.
+How does tcp forwarding work? acting as a redirector on a network device, where incoming connections on a specific port are automatically directed to a different IP address and port, allowing access to a device on a private network from the outside by basically masking its location with the public ip address of the forwarding device.
+When standard input gets redirected to come from /dev/null (-n option), it means that the terminal will expect no input.
+OpenSSH is an open source implementation of ssh, so openSSH is to ssh kind of like the GNU project is to gnu.
+An ssh tunnel is a secure method for transporting data over an encrypted connection between 2 hosts on a private network (aka, via port forwarding).
+Rsa and dsa keys are encryption algorithms that use public and private keys to secure data and digital signatures; specifically, rsa is used for secure data and encryption, and dsa is used for checking the authenticity of the message by generating and verifying signatures.

@@ -1,0 +1,12 @@
+What is a fork in a system?
+What is a slab in memory?
+What is a memory buffer?
+What is an interrupt per second?
+What is a context switch in a system?
+What is a page (according to mac's vm_stat command)?
+What is a vm compressor?
+What is auxiliary storage?
+How would I get dynamic memory info every 2 seconds 3 times using vmstat?
+How would I display the idle cpu usage every second 20 times while running other commands in between?
+What do the headers in vmstat mean?
+What is a cpu?

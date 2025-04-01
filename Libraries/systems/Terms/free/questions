@@ -1,0 +1,6 @@
+Why doesn't mac have the free command?
+What can free do that vmstat cannot?
+What is disk caching?
+How would I only display available memory output from free command?
+How would I track my memory usage, update it every 2 seconds, repeated 5 times?
+How do I only display total memory usage?

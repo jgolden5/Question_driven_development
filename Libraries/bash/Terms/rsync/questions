@@ -1,0 +1,8 @@
+Is it possible to use rsync to copy a local filesystem to another local filesystem?
+What is an openSSH server?
+What is a mirror directory in the context of rsync?
+What does the --archive (-a) option do for the rsync command?
+Is the --archive (-a) option necessary for the assignment of backup files to a particular directory using --link-dest when running rsync?
+What difference does the -z option make on rsync output?
+What is a cron job?
+What is a PPP connection?

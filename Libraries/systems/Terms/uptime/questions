@@ -1,0 +1,7 @@
+What does the w command do?
+Why might the uptime command be important enough for Dad to want me to learn it, despite it being very simple and basic?
+What does uptime do BESIDES tell how long the system has been running?
+What does it mean for a process to be in an uninterruptible state?
+How would I only show the system's uptime (without load averages or anything like that)?
+How would I extract only the system's average load?
+How do I determine whether a system's load status average has exceeded a certain point?

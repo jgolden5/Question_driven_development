@@ -1,0 +1,5 @@
+How would I figure out which file in a directory is consuming the most space using the du command?
+How would I summarize disk usage for a directory without showing subdirectory details?
+How do I exclude specific files or directories from du output?
+How do I display disk usage for files only?
+How would I get disk usage of subdirectories WITHOUT getting file disk usage?

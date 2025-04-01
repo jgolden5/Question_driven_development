@@ -1,0 +1,7 @@
+Where do docker containers in docker compose file get named?
+Are all services in the docker compose file required to run as docker containers?
+Where do environment variables listed in docker compose file get used?
+What is a target in docker compose file?
+What does the depends_on field in docker compose file mean?
+What does the condition field under the depends_on field in docker compose file mean?
+What is the difference between args and environment fields in docker compose file?

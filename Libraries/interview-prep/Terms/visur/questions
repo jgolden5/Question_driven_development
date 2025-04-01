@@ -1,0 +1,35 @@
+What does @Nullable do in java?
+What happens if I remove inbound/outbound permitted from sockjsBridge?
+What does the AbstractVerticle class do in Vertx?
+What is the purpose of rxjava3 in vertx?
+What is the purpose of SharedData in vertx?
+What exactly does vertx rxjava's Router do?
+What is sockjs?
+What does java BufferedReader do?
+What does java InputStream do?
+What is java Collectors class used for?
+What code makes MainVerticle get treated as main class?
+What does it mean for vertx to deploy a verticle?
+What is vertx variable inside of AbstractVerticle?
+Is SockJSBridge native to vertx?
+What is a SockJSHandler?
+What are the try and catch blocks in java used for?
+What is a Thread class in java?
+What is a lock in asynchronous programming?
+What is a counter in asynchronous programming?
+What is a consumer in an event bus?
+What is the point of a jsonObject?
+What is the rxjava Message class used for?
+Why do I always get multiple thread blocked errors when running my vertx app?
+How do hashmaps work?
+What are BrickVisurVars used for in visur?
+What is the purpose of LocalMap in vertx?
+What was the purpose of implementing EditorContentService and EditorModelCoupler separately?
+How does LocalMap relate with SharedData in vertx?
+What is emc.getStrToMatch() used for in visur?
+Do event buses in vertx always listen at the url address /eventbus?
+Why are initializerInsertKeymap and InsertModeHandler separated with insertNewline being a function only in InsertModeHandler?
+What is the time complexity of the InsertCharOp in visur?
+Why is InsertNewlineOp a longer function than InsertCharOp even though the actual newline is specified explicitly so in theory InsertNewlineOp should be shorter?
+What is a stream?
+What does observable mean?

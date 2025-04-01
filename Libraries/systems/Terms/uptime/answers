@@ -1,0 +1,7 @@
+What does the w command do? displays who is logged in and what they are doing, aka, displays uptime, and then processes that are running including specific amounts of time they have been idle, along with the name of the user the terminal is logged on for for said processes
+Why might the uptime command be important enough for Dad to want me to learn it, despite it being very simple and basic? systems-level debugging requires some time-series-type data scraping, which can be done with the uptime command letting me see how long certain the system has been running
+What does uptime do BESIDES tell how long the system has been running? tells how many users are currently logged on, and the system load averages for the last 1, 5, and 15 minutes
+What does it mean for a process to be in an uninterruptible state? it's sleeping (in other words, it's waiting for a resource that's not available yet), and in this state it cannot be interrupted by signals
+How would I only show the system's uptime (without load averages or anything like that)? running: uptime -p OR uptime | sed -E 's/[^ ]+ ([^ ]+ [^ ]+ [^ ]+ [^ ]+) .*/1/'
+How would I extract only the system's average load? running: uptime | sed 's/.*, (.*)/1/'
+How do I determine whether a system's load status average has exceeded a certain point? running: if [[ $(echo "$la < $limit" | bc -l) == 0 ]]; then echo "$limit was exceeded"; else echo "$limit was not exceeded"; fi; where $la = system load average, and $limit = whatever max limit I choose for load average

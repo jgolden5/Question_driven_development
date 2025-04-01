@@ -1,0 +1,8 @@
+In the ps table, the TTY heading means the terminal (device that manages reading and writing data to and from the system) that is running said process, and in the case of ps command, these are usually virtual terminals.
+The nice value of a process is a numerical value which indicates the priority of a process on a system.
+In ps -l table, S+ status means a combination of S (which means the process is sleeping and waiting to be interrupted), and + (which indicates that the process is in the foreground process group and is therefore associated with the current terminal session and can receive input directly from the user).
+I view processes that get set by a flag which sorts by system usage (like -r for cpu usage) by using ps for a static snapshot or top for a dynamic process view.
+I would only list processes started by user $user by running: ps -u $user.
+I would find all processes that include a certain command name by running: ps | grep command.
+I would find all processes that include a certain command name by running: ps -C command.
+I print processes and only include the columns pid and time by running: ps -o pid,time.

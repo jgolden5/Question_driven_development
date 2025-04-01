@@ -1,0 +1,1 @@
+You set a limit on how many directories deep the find command searches in bash by running find ~/dir_path_to_search -name "$pattern" -maxdepth $depth.

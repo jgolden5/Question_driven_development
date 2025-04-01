@@ -1,0 +1,8 @@
+What are 1-3 keywords that should come to mind when I think of df?
+What does the df command do?
+Does the df command only check disk space on mounted devices?
+How would I show ONLY the filesystem names and their mountpoints using the df command?
+How would I write a one-liner df command to display the available disk space on all mounted file systems in gigabytes, sorted by size?
+How would I check disk usage across ALL partitions using the df command?
+How would I check the disk usage for only one specific mount point?
+What is an inode?

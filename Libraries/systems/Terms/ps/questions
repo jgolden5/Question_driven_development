@@ -1,0 +1,8 @@
+What does the TTY heading mean in the ps table?
+What is the nice value of a process?
+What does S+ status mean in ps -l table?
+How do I view processes that get set by a flag which sorts by system usage (like -r for cpu usage)?
+How would I only list processes started by user \$user?
+How would I only list processes started by user $user?
+How would I find all processes that include a certain command name?
+How do I print processes and only include the columns pid and time?

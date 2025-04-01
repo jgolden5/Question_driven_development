@@ -1,0 +1,5 @@
+I would figure out which file in a directory is consuming the most space using the du command by running: du -h /path/to/directory/* | sort -hr.
+I would summarize disk usage for a directory without showing subdirectory details by running: du /path/to/directory -hs.
+I exclude specific files or directories from du output by running: du | grep -v exclude/this/path.
+I display disk usage for files only by running: find /path/to/search/dir -type f -exec du -h {} +.
+I would get disk usage of subdirectories WITHOUT getting file disk usage by running: find /path/to/directory -type d -exec du -h {} +.

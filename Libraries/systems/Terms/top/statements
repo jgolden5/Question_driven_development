@@ -1,0 +1,20 @@
+A child process is a process that was started by another process.
+User space is the amount of space not being used directly by kernel processes in a program.
+Up time is the length of time the system has been running.
+Load average is a measurement of computational work being performed by the system.
+A running task is a unit of execution that is currently being executed or actively processed by a system, meaning it has started and has not yet finished.
+A sleeping task is a unit of execution that is waiting for some resource in order to execute.
+A stopped task is a unit of execution that has been intentionally halted and is therefore no longer running.
+A process is a bundle of instructions/programs being executed (basically a group of tasks, or just a bigger task--fairly synonymous with task, but may be on a bigger scale).
+A zombie task is a child process that has already executed, but is not yet removed from the process table so that its parent process can read its child's exit status, so it doesn't get "reaped" (actually stopped) until the parent process has received the exit status it needs from the child process once the parent process is ready for it.
+Threads (in mac top) are single, independent units of execution within a process.
+Kernel space is the part of a system's memory that the kernel uses to run and provide services.
+The nice value of a process in linux is a numerical representation of a process' priority, where a higher number indicates a lower priority.
+The top command that turns off the first few lines of top interactively is l, t, t, t, m, m, m.
+Cumulative mode in top is a setting where cpu time displayed for each process includes the cpu time used by its dead children (terminated child processes).
+In macos top, the SharedLibs fields mean resident sizes of code and data segments, and link editor memory usage.
+Delta mode in top is a mode where only changes since the last time top was refreshed are displayed for system statistics.
+Absolute mode is useful in top because it allows you to see resources by absolute values where they would have otherwise been percentages.
+I display only the process using the most cpu at any given time by running: top -o %CPU; n1.
+I display only processes owned by user $user by running: top -u $user.
+I change the display update interval (both statically and interactively) by running: top -d $n (static); s${n} (dynamic).

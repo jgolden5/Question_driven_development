@@ -1,0 +1,20 @@
+What is a child process? a process that was started by another process
+What is user space? the amount of space not being used directly by kernel processes in a program
+What is up time? the length of time the system has been running
+What is load average? a measurement of computational work being performed by the system
+What is a running task? a unit of execution that is currently being executed or actively processed by a system, meaning it has started and has not yet finished
+What is a sleeping task? a unit of execution that is waiting for some resource in order to execute
+What is a stopped task? a unit of execution that has been intentionally halted and is therefore no longer running
+What is a process? a bundle of instructions/programs being executed (basically a group of tasks, or just a bigger task--fairly synonymous with task, but may be on a bigger scale)
+What is a zombie task? a child process that has already executed, but is not yet removed from the process table so that its parent process can read its child's exit status, so it doesn't get "reaped" (actually stopped) until the parent process has received the exit status it needs from the child process once the parent process is ready for it
+What are threads (in mac top)? single, independent units of execution within a process
+What is kernel space? the part of a system's memory that the kernel uses to run and provide services
+What is the nice value of a process in linux? a numerical representation of a process' priority, where a higher number indicates a lower priority
+Which top command turns off the first few lines of top interactively? l, t, t, t, m, m, m
+What is cumulative mode in top? a setting where cpu time displayed for each process includes the cpu time used by its dead children (terminated child processes)
+What do the SharedLibs fields mean in macos top? resident sizes of code and data segments, and link editor memory usage
+What is delta mode in top? a mode where only changes since the last time top was refreshed are displayed for system statistics
+Why is absolute mode useful in top? it allows you to see resources by absolute values where they would have otherwise been percentages
+How do I display only the process using the most cpu at any given time? running: top -o %CPU; n1
+How do I display only processes owned by user $user? running: top -u $user
+How do I change the display update interval (both statically and interactively)? running: top -d $n (static); s${n} (dynamic)

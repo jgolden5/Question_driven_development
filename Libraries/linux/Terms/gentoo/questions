@@ -1,0 +1,17 @@
+What is an iso image?
+What does dhcp do?
+What is dhcpcd?
+What does ping do?
+What does it mean to partition a disk?
+What does it mean to make a filesystem on a device?
+What does it mean to mount a filesystem?
+What is a disklabel?
+What is swap storage on a computer used for?
+What is a stage file used for in gentoo?
+What is an init system in gentoo?
+What does it mean to archive a file in bash?
+What are the configurations in the /mnt/gentoo/etc/portage/make.conf file used for in gentoo?
+What do the mount flags types, bind, rbind, make-slave, and make-rslave mean?
+What does chroot do?
+Do I need cpu_flags enabled in make.conf in my case?
+What do the -m, -G, and -s flags do for the useradd command?

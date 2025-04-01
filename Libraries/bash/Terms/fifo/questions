@@ -1,0 +1,5 @@
+Is it possible for fifos to create messy race conditions when used with '&'?
+Can I run out of fifo inodes faster than I would run out of any other inodes?
+What role can the wait command play with fifos?
+What's the difference between mkfifo and mknod?
+What role can the trap command play with fifos?

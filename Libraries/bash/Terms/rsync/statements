@@ -1,0 +1,9 @@
+It IS possible to use rsync to copy a local filesystem to another local filesystem because because rsync can do everything cp can do and then some.
+It IS possible to use rsync to copy a local filesystem to another local filesystem because its purpose is to copy remote filesystems, but it can also copy local ones just fine.
+An openSSH server is a server which is attached to a suite of secure network utilities based on the ssh (secure shell) protocol, kind of like the gnu project is a collection of open source tools inspired by unix.
+A mirror directory in the context of rsync is a directory which only copies files that have changed or are new.
+What does the --archive (-a) option do for the rsync command? is basically a "smart rsync", meaning that where rsync would normally wipe out symbolic links, timestamps, and file permissions, the --archive option preserves these things from the source file/dir.
+The --archive (-a) option IS necessary for the assignment of backup files to a particular directory using --link-dest when running rsync because if you want to preserve all of the things the --archive option covers in your backup, you will need to use --archive.
+The difference that the -z option makes on rsync output is it affects how the data is transferred remotely by compressing it, allowing for better performance across the network; in other words, it does not do anything when I am transferring data locally.
+A cron job is a unix command line utility that specifies shell commands to run periodically on a given schedule.
+A PPP connection is a protocol at the data link layer (very low-level in networking) which is responsible for point-to-point connections, such as dial-up internet, vpn's, serial communication over networks, and certain other network interfaces like dsl, isdn, and other ppp links.

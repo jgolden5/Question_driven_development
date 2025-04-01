@@ -1,0 +1,108 @@
+A label in prometheus is a way to group targets together.
+I add a label to prometheus by writing group="label_name" to scrape_configs section of my prometheus.yml file, and then restarting the prometheus instance by running the binary again with ./prometheus.
+I reload a prometheus instance's configuration without restarting the process by using kill -s SIGHUP <PID>, replacing <PID> with your Prometheus process ID.
+Systems monitoring is essentially the monitoring of the system--it literally tracks a device's system to make sure it doesn't have any issues with performance, availability, or security.
+A multi-dimensional data model is working with data that has multiple categories or aspects to it, like a map which has a key and value for each entry--that would be an example of 2-dimensional data model, but some can have many more than that.
+Distributed storage is storage that is not stored and processed on a single server/node, but rather, distributed across multiple servers or nodes to be stored and processed.
+Prometheus is an open-source tool that monitors and alerts systems by collecting and storing metrics in a time-series database.
+An endpoint is a device that connects to a network or a point in an API where a request is made.
+A prometheus target is an endpoint that supplies metrics for Prometheus to store.
+Instrumentation is the process of amodifying software so that analysis can be performed on it.
+You should use prometheus when recording any purely numeric time series.
+You should should not use prometheus when you need 100% accuracy, because data collected with prometheus may not be detailed or complete enough.
+A prometheuss target expose metrics for collection by by providing a dedicated http endpoint, usually located at the path /metrics, where prometheus can periodically scrape the latest metric data in a plain text format that prometheus understands.
+To scrape data means to get structured data from some publicly available places.
+I download and run Prometheus locally by downloading the zip file on prometheus' website and following the instructions to unzip it then run the prometheus binary file that comes out of it.
+I configure prometheus to scrape itself by adding a job to my prometheus.yml configuration file with a static_configs section that points to the local host and port where prometheus is running (usually localhost:9090), which tells it to scrape metrics from its own endpoint.
+I configure prometheus to scrape itself by simply going to port 9090 of localhost after running prometheus, since prometheus usually does this by default.
+A query is a request for information or data from a database that is written in a specific format.
+A rule (in prometheus) is a configuration element that allows you to define specific conditions based on monitored metrics (kind of like a complex macro, triggered by particular conditions).
+The node exporter in prometheus is a dedicated tool that collects and exposes various system-level metrics from a server (such as cpu usage, memory, disk space, network statistics, etc) in a format that prometheus can easily scrape and monitor.
+A target is a device or service (endpoint) that connects to data to provide data that prometheus scrapes at regular intervals.
+I configure Prometheus to monitor a target by going to scrape_configs in prometheus.yml configuration file, and adding job name(s), static config(s), and target(s).
+A canary instance is like a beta version--it's a new version of software released to a limited number of users for testing.
+Grafana is open source software that allows the user to query, visualize, alert on, and explore your metrics, logs, and traces wherever they are stored.
+Grafana does NOT have to be used with prometheus because because grafana and prometheus are both flexible as to the tools they use to both gather and display data respectively--although they are often used together.
+Stored in metrics by prometheus is any measurable points of time series dat.
+Metrics are quantifiable measures of software characteristics, such as % cpu usage, gigabytes of memory, or program execution time, to name a few.
+Traces are a software process that captures and records information about the execution of a program.
+A push gateway allows components that are unscrapeable, whether due to short-lived jobs, no exposed metrics endpoint, or restricted access, to push their metrics to another component that CAN be scraped.
+I should use the pushgateway when I am working with data that cannot be scraped, such as a short-lived job, a component with restricted access, or a component with no exposed metrics endpoint.
+To store metrics as time series data means to include not just the data but the time points at which each piece of data was collected, and to collect data points over time.
+A pull model for time series collection is a system where data is requested by various sources (servers or sensors) at regular intervals, instead of those sources pushing data to the collector automatically.
+An intermediary gateway is synonymous in prometheus with a pushgateway, and acts as a middle ground to collect metrics from jobs or applications that cannot be directly scraped by the prometheus server.
+A push gateway is also known as an intermediary gateway because of its middle-man role in scraping metrics from prometheus jobs or applciations.
+A time-series is is a type of data that is collected over time for observation.
+To scrape time series data means to collect data over time, and come up with some way to store said data along with the time in which it was collected.
+An instance in prometheus is the host:port part of the target's url that was scraped.
+An instance in prometheus is a label that uniquely identifies a target in a job.
+A job in prometheus is a logical grouping of one or more targets that you want to monitor.
+To add scraped data to a new time series means to take data extracted from a website or other source using a web scraping technique and incoporating it into a new data set that is organized chronologically, creating a new time series where each data point is associated with a specific time stamp.
+To compute something ad-hoc means to compute something for a specific situation, since ad hoc means "for this" or "for this situation".
+A query in prometheus is a request for data from a data base that prometheus is scraping from at a given point.
+Prometheus makes queries that aggregate thousands of time series more efficient by prerecording expressions into new persisted time series via configured recording rules.
+A rule in prometheus is a powerful configuration element that allows you to define specific conditions based on the promql input.
+SIGHUP stands for Signal Hangup.
+SIGTERM shuts down a prometheus instance more cleanly than SIGHUP because when prometheus receives SIGTERM, it stops scraping targets and writing data to disk, whereas when prometheus receives SIGHUP it does NOT shut down, but instead just reloads its configuration program, so there is a chance that a new configuration state might mess with the current one when configured while the application is still running, although this is convenient.
+Some useful things I can do in prometheus are to be notified via email when memory usage gets to 80% to take proactive measures.
+For a time series to be marked as stale means that no value will be returned for said time series.
+An offset modifier in prometheus is a way to change the time offset for individual instant and range vectors in a query.
+A selector is a feature in promql that specifies which time series points to retrieve from a metric.
+Vectors in promql are a set of time series where every timestamp maps to a range of data points over a certain amount of time.
+An aggregation operator is used to aggregate the elements of a single instant vector, resulting in a new vector of fewer elements with aggregated values.
+The most notable features of PromQL are to display the return value either as a graph or plain text, or exported to some other application or website.
+The most notable features of PromQL are that it is a nested functional langauge, and the outermost expression defines the final value, and nested functions represent values for arguments and operands.
+The difference between an instant query and a range query in prometheus is that an instant query is evaluated at a specific moment, whereas a range query gets executed over a time rane.
+Instance and range queries are stored in the Table and Graph tabs in the prometheus ui.
+In other programs fetching the result of a PromQL expression, the HTTP API plays the role of allowing you to fetch raw metrics directly.
+The of the four expression evaluation types which is currently unused in prometheus is string.
+The four types that an expression or sub-expression can evaluate to are an instant vector, a range vector, a scalar, or a string.
+The data types which are supported by range queries are numeric data types like integers and floats, as well as date and time data types.
+The data type which represents a set of time series containing a single sample for each time series, all sharing the same timestamp is an instant vector.
+A feature flag in prometheus is a configuration setting that allows users to enable or disable experimental, less stable features within prometheus.
+A bucket in prometheus is a predefined range of values used to categorize and count observations in histogram metrics.
+The four metric types in prometheus are counter, gauge, histogram, and summary.
+A counter metric in prometheus is a value that can only increase or reset--it cannot be explicitly decremented (like my current qfi line-reading interface).
+A gauge metric in prometheus is a single numerical value that can arbitrarily go up and down (like a basic, simple integer).
+Latency is the amount of time it takes for a system to respond to a request.
+In prometheus, le means less than or equal to.
+A summary metric in prometheus is calculated at metric generation time and is fixed in its parameters.
+A histogram metric in prometheus is calculated after metrics are collected at query time, and is more flexible than a summary.
+The TSDB in prometheus is an abbreviation for "Time Series Database".
+The name of the function that returns an empty vector if the vector passed into it has any elements, and a 1-element vector with the value of 1 if the vector passed to it has no elements is absent().
+You would use +Inf (infinity) in prometheus if you want to know when an upper bound has been exceeded.
+The changes function returns the number of times the inputted value has changed within the provided time range (as an instant vector).
+The clamp function forces the values of all sample values in vector input to have a lower limit of min and upper limit of max (all 3 are inputs that get passed into clamp()).
+In promql, the rate function calculates the per-second average rate of increase of the time series in the range vector.
+Three examples of time calculation functions in prometheus are day_of_month(), day_of_week(), and days_in_month(), for example.
+In prometheus, the delta function calculates the difference between the first and last value of a time series within a specified range vector.
+The only metric type that the deriv function should be used on is a gauge.
+The specific metric type in prometheus which is experimental and may therefore be removed in future versions of prometheus is a native histogram.
+A float sample in prometheus is a single data point within a time series that consists of a floating point number and a timestamp, representing a measurement taken at a specific time.
+Exporting or otherwise using the same names for certain metrics would cause a naming collision in prometheus.
+A join query in prometheus is a way to combine or match time series from different metrics based on their labels.
+In the context of prometheus buckets, monotonic means the count in the buckets never decreases (in other words, the main characteristic of prometheus counters).
+The role of a smoothing factor in prometheus is to control how much emphasis is given to recent data points as opposed to older historic data when it comes to calculated a smoothed trend line.
+The syntax for inputting label matchers in promql is metric_name{label_matcher1, label_matcher2, etc...}.
+The role of the __name__ label matcher in prometheus is to act as a way to specifically target a metric by its actual name instead of a label.
+The i in irate stands for increase.
+You would use function to sort results in descending order sort_desc().
+The time function returns the time at which the function is to be evaluated (in seconds since January 1, 1970, UTC).
+I would select all HTTP status codes except for ones that include 5xx by typing http_requests_total{status!~"5.."}.
+What does it mean if an http request metric has a resolution of 1 minute? metric data points are gathered and recorded at 1-minute intervals.
+The data type which is a simple numeric floating point value is a scalar.
+Scalars in promql are floating point numbers, by which all prometheus calculations are made.
+A range vector data type is a set of time series containing a range of data points over time for each time series.
+A selector in prometheus is something which allows the selection of a time series and a single sample value for each at a given point in time (points to a moment in the time series' history of data).
+A string literal is represented in prometheus by backticks, single quotes, or double quotes.
+The smallest and largest time units that can be used in prometheus are milliseconds (ms) and years (y).
+When combining time units together on one line in prometheus, the order that be followed is highest to lowest time units (as in 5y6w3m42s).
+The difference between time series selectors and instant vector selectors is just that the sample value being snapshotted at some instance is over a single value in the latter case, and over a range of values (snapshots) in the former case.
+In promql, the @ modifier applies a command to a certain fixed timestamp (written in terms of seconds from January 1, 1970, UTC).
+I filter metric results in promql by using some command, and putting the metric with its label, operator, and operand inside {} and "" like this, http_requests_total{method="GET", status="200"}.
+Some label matches that are available in promql (besides simple =) include !=, =~, and !~.
+You would match any existing job label in promql by possibly using !="".
+What does __name__ do in promql? basically points to the value of a metric itself, meaning instead of referencing it with a superficial label, it uses a term which ALWAYS refers to that metric and only that metric.
+You select all values recorded less than 10 minutes ago in promql by giving a function, and any parameters or jobs to apply it to, then adding [10m] afterwards, like in the following example: http_requests_total{job="prometheus"}[10m].
+The lookback period in prometheus is the maximum time window that a query will look back when retrieving data.
+Graph mode in prometheus is a mode which literally displays a graph on the screen and lets the user observe and compare data points over time visually.

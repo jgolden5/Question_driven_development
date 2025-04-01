@@ -1,0 +1,28 @@
+Reflection Log Highlights:
+don't let my disappointment from not having solved the problem as soon as I would have liked to get in the way of gathering helpful hints to help me ACTUALLY solve the problem
+I might feel like the solution to my problem is miles away, when it's really only a few feet away, but I need to apply the resources of my tired mind wisely to find this solution
+if a feature I'm working on is to help with solving the problem, as opposed to actually solving the problem, treat it as a separate ticket at a restaurant, which may be solved before or after the main problem, but in every case should be treated as a SEPARATE entity
+I need to understand enough about a problem in order to tell problem x must be a problem with file f or tool t, because of a, b, and c. I need to have good reasons behind my reasoning
+the more I understand the fundamental tools I'm working with, the easier the debugging process will be overall, so it's always worth it to dedicate some extra time to understanding what the problem is and the frameworks involved in it
+it's not a bad idea to try to break a big problem into baby steps--but don't get discouraged by the fact that it's a baby step, because it helps me make real progress toward the bigger goal
+lean into the part of the project that a) appears to be most relevant to the problem through logical deduction and b) I understand the least
+if I'm struggling with something, and I'm using a tool I'm new to, it probably means I'm procrastinating learning said tool--this is very silly and futile! Face the tool head-on, learn it well
+believe that it's worth it to learn _, believe that I CAN learn _, and put effort into learning _ (at the time I wrote this, the technology I was working with was envoy)
+even though it may seem like I have an infinite lack of knowledge on a certain subject, the number of terms I have to learn is really quite finite--I just need to discover them (chatgpt can be helpful for this. For example, ask "what are the 10 most important concepts to know in order to understand _?")
+it can help to draw concepts out on a white board or even a slideshow in order to present them in a way that is more concrete than words, and confirm with others whether I'm on the right track
+push my brain to be at least a little tired by the end of every study day (this shows that I'm facing the most important problems instead of avoiding them)
+easy days always follow difficult ones, so have courage, even when I'm running out of juice. Push myself to study for just 2 more hours, 1 more hour, 30 more minutes, or even just 15 more minutes
+resting my brain for a couple hours lets me recover like 50% of my lost strength, even after depleting my brain completely. Make sure I highly value rest!
+try to work out any bugs and make sure all prerequisites to the problem are functioning properly BEFORE getting help about said problem
+note that even though the problem wasn't caused by a file untracked by git, it was related to the state of my docker image/containers, which are not, in fact, tracked by git
+follow build/launch instructions and believe them unless I prove them to be blatantly wrong
+I may do a quick scan of all RELEVANT files, but only deep dive into files that I know are behaving unexpectedly
+if a quick google search and chatgpt might confirm or disprove one of my assumptions, I should do that
+if I have a problem with a docker image build, only run a piece of its dockerfile and enter a terminal in a container running from said partially built image in order to debug the dockerfile
+talking about the problem out loud is usually a good idea, because it makes my thoughts more clear
+if I'm going to ask for help, make sure I have a question of substance if I want an answer of substance
+make sure I implement my solution ideas well, because if I am slightly off, I may spend extra time solving a problem which I essentially already solved
+I need to ask relevant clarifying questions about all culprits (probable causes of an issue) to get closer to solving said problem
+break up the problem into small substeps to identify where exactly said problem occurred
+disproving one of my incorrect theories still gets me one step closer to solving the problem
+if a solution idea is unclear to me, then it doesn't really matter if I'm right or not, a clearly reasoned solution idea is always better than a shot in the dark

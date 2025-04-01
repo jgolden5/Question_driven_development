@@ -1,0 +1,10 @@
+A cpu executes a program.
+What does a cpu do? is the hardware component that makes the computer run by executing instructions, processing data, and performing calculations.
+The three steps which are involved in a cpu's instruction cycle are fetch, decode, and execute.
+In the fetch step of a cpu's instruction cycle, the cpu fetches the next instruction from memory.
+In the decode step of a cpu's instruction cycle, the cpu interprets the instruction retrieved during the fetch stage, and determines the necessary operations.
+In the execute step of a cpu's instruction cycle, the operation determined in the decode stage gets executed using the cpu's alu or control unit.
+Yes, high cpu usage DOES cause fan to turn on in macbook because high cpu usage can raise the temperature of the macbook, and while it is the most common reason for the fan turning on, it is not the only reason; another could be from blocked air vents, excessively high temperatures, or hardware issues.
+Load average is the average amount of processes waiting at a given time (like how many people are waiting in line at walmart to order groceries, or in line to go down a slide that can only let one person go down at once).
+Load averages go up when using all 4 cpu cores to complete the same process because a lot of processes will be waiting their turn if all 4 processes are required for one task--in fact, the load is guaranteed to increase unless there are no other processes going on whatsoever.
+Load average is running and waiting processes (anything that's either using the cpu or waiting to be used by the cpue) over a period of time (1, 5 and 15 minutes, respectively [based on uptime command output and first line of top]); this metric helps determine if a system is overloaded, under-used, or running optimally.
