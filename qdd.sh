@@ -44,6 +44,9 @@ library_mode() {
     \')
       list_libraries
       ;;
+    \-*)
+      remove_library $command
+      ;;
     *)
       set_library_manually "$command"
       ;;
@@ -89,6 +92,19 @@ set_library_by_index() {
   done
 }
 
+get_library_from_index() {
+  local index_from_input="$1"
+  local i=0
+  for lib in Libraries/*; do
+    if [[ "$i" == "$index_from_input" ]]; then
+      echo "${lib#*/}"
+      break
+    else
+      (( i++ ))
+    fi
+  done
+}
+
 set_library_manually() {
   local library_name="$1"
   if [[ "$library_name" ]]; then
@@ -97,6 +113,7 @@ set_library_manually() {
       echo "changed library to $library_name"
     else
       read -n1 -p "library $library_name not recognized. Would you like to add it? " add_library_confirmation
+      echo
       if [[ "$add_library_confirmation" =~ y|Y ]]; then
         mkdir Libraries/$library_name
         library="$library_name"
@@ -106,6 +123,36 @@ set_library_manually() {
         echo "Ok. Back to business, then."
       fi
     fi
+  fi
+}
+
+remove_library() {
+  local library_to_remove=
+  if [[ "$2" ]]; then
+    if [[ "$2" =~ [a-zA-Z] ]]; then
+      library_to_remove="$(get_library_to_remove_by_name "$2")"
+    else
+      library_to_remove="$(get_library_from_index "$2")"
+    fi
+  else
+    library_to_remove="$library"
+  fi
+  read -n1 -p "Are you sure you want to remove library $library_to_remove? " confirmation
+  echo
+  if [[ $confirmation == "y" ]]; then
+    rm -r Libraries/$library_to_remove
+  else
+    echo "Ok. Library $library_to_remove is here to stay."
+  fi
+}
+
+get_library_to_remove_by_name() {
+  if [[ -d Libraries/"$1" ]]; then
+    echo "$1"
+  else
+    echo ""
+    echo "Library $1 does not exist" >&2
+    return 1
   fi
 }
 
