@@ -64,6 +64,9 @@ term_mode() {
     [0-9]*) 
       set_term_by_index "$command"
       ;;
+    \')
+      list_terms
+      ;;
     *)
       set_term_by_name "$command"
       ;;
@@ -228,4 +231,17 @@ set_term_by_index() {
       (( i++ ))
     fi
   done
+}
+
+list_terms() {
+  if [[ "$(ls Libraries/$library)" ]]; then
+    i=0
+    for t in Libraries/$library/*; do
+      t_cut="${t##*/}"
+      echo "$i - $t_cut"
+      (( i++ ))
+    done
+  else
+    echo "Library $library does not have any terms yet. You can add some if you'd like!"
+  fi
 }
