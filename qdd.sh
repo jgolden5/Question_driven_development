@@ -330,4 +330,7 @@ list_questions() {
     echo "$i - ${q##*/}"
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
+  if [[ $i == 0 ]]; then
+    echo "No questions exist yet for term $term"
+  fi
 }
