@@ -24,10 +24,10 @@ __Start purely in command line and then go from there__
 7. q - ?
 8. define 8 keys for positions that can be used in each of the above
   - *note* any actual text will be passed in without additional key parameter
-  - `<` is first
-  - `>` is last
-  - `,` is previous
-  - `.` is next
+  - `<` first
+  - `>` last
+  - `,` previous
+  - `.` next
   - `'` list
   - `=` is manual index switch
   - `-` remove
