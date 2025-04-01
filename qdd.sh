@@ -2,8 +2,8 @@
 
 source ~/p/bash-debugger
 
-library="${library:--}"
-term="${term:--}"
+library="${library:-"$(ls Libraries | head -1)"}"
+term="$(ls Libraries/$library | head -1)"
 index=0
 YELLOW="\e[93m"
 RED="\e[91m"
@@ -39,35 +39,16 @@ library_mode() {
   read command
   case "$command" in
     [0-9]*) 
-      i=0
-      for lib in Libraries/*; do
-        if [[ "$i" == "$command" ]]; then
-          library="${lib#*/}"
-          break
-        else
-          (( i++ ))
-        fi
-      done
+      set_library_by_index "$command"
       ;;
     \')
-      i=0
-      for lib in Libraries/*; do
-        lib_cut="${lib#*/}"
-        echo "$i - $lib_cut"
-        (( i++ ))
-      done
+      list_libraries
       ;;
     *)
-      if [[ "$command" ]]; then
-        if [[ -d "Libraries/$command" ]]; then
-          library="$command"
-          echo "changed library to $command"
-        else
-          echo "library $command not recognized"
-        fi
-      fi
+      set_library_manually "$command"
       ;;
   esac
+  set_default_term
 }
 
 alias a=ask_mode
@@ -93,5 +74,52 @@ get_index_from_library() {
     lib_index=0
   fi
   echo "$lib_index"
+}
+
+set_library_by_index() {
+  local index_from_input="$1"
+  local i=0
+  for lib in Libraries/*; do
+    if [[ "$i" == "$index_from_input" ]]; then
+      library="${lib#*/}"
+      break
+    else
+      (( i++ ))
+    fi
+  done
+}
+
+set_library_manually() {
+  local library_name="$1"
+  if [[ "$library_name" ]]; then
+    if [[ -d "Libraries/$library_name" ]]; then
+      library="$library_name"
+      echo "changed library to $library_name"
+    else
+      read -n1 -p "library $library_name not recognized. Would you like to add it? " add_library_confirmation
+      if [[ "$add_library_confirmation" =~ y|Y ]]; then
+        mkdir Libraries/$library_name
+        library="$library_name"
+        set_default_term
+        echo "library added"
+      else
+        echo "Ok. Back to business, then."
+      fi
+    fi
+  fi
+}
+
+list_libraries() {
+  i=0
+  for lib in Libraries/*; do
+    lib_cut="${lib#*/}"
+    echo "$i - $lib_cut"
+    (( i++ ))
+  done
+}
+
+set_default_term() {
+  term="$(ls Libraries/$library | head -1)"
+  term="${term:--}"
 }
 
