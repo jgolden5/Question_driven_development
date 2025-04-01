@@ -38,6 +38,17 @@ library_mode() {
   echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read command
   case "$command" in
+    [0-9]*) 
+      i=0
+      for lib in Libraries/*; do
+        if [[ "$i" == "$command" ]]; then
+          library="${lib#*/}"
+          break
+        else
+          (( i++ ))
+        fi
+      done
+      ;;
     \')
       i=0
       for lib in Libraries/*; do
@@ -47,11 +58,13 @@ library_mode() {
       done
       ;;
     *)
-      if [[ -d "Libraries/$command" ]]; then
-        library="$command"
-        echo "changed library to $command"
-      else
-        echo "library $command not recognized"
+      if [[ "$command" ]]; then
+        if [[ -d "Libraries/$command" ]]; then
+          library="$command"
+          echo "changed library to $command"
+        else
+          echo "library $command not recognized"
+        fi
       fi
       ;;
   esac
@@ -77,7 +90,6 @@ get_index_from_library() {
     lib_index="$(ls Libraries | grep -n "$library" | sed 's/\(.*\):.*/\1/')"
     (( lib_index-- ))
   else
-    echo "library is not set yet, therefore, index defaults to 0."
     lib_index=0
   fi
   echo "$lib_index"
