@@ -61,6 +61,9 @@ term_mode() {
   echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
   read command
   case "$command" in
+    [0-9]*) 
+      set_term_by_index "$command"
+      ;;
     *)
       set_term_by_name "$command"
       ;;
@@ -97,7 +100,7 @@ set_library_by_index() {
   local i=0
   for lib in Libraries/*; do
     if [[ "$i" == "$index_from_input" ]]; then
-      library="${lib#*/}"
+      library="${lib##*/}"
       break
     else
       (( i++ ))
@@ -194,8 +197,9 @@ set_term_by_name() {
       echo
       if [[ "$add_term_confirmation" =~ y|Y ]]; then
         mkdir Libraries/$library/$new_term
+        touch Libraries/$library/$new_term/answers
         term="$new_term"
-        echo "term $new_term added"
+        echo "term added"
       else
         echo "Ok. Back to business, then."
       fi
@@ -211,4 +215,17 @@ get_term_index() {
     term_index=0
   fi
   echo "$term_index"
+}
+
+set_term_by_index() {
+  local index_from_input="$1"
+  local i=0
+  for t in Libraries/$library/*; do
+    if [[ "$i" == "$index_from_input" ]]; then
+      term="${t##*/}"
+      break
+    else
+      (( i++ ))
+    fi
+  done
 }
