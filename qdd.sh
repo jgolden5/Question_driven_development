@@ -19,6 +19,8 @@ main() {
       eval "$mode"
     elif [[ "$mode" == q ]]; then
       break
+    else
+      echo "mode $mode not recognized"
     fi
   done
   unset a, ask_question
@@ -181,7 +183,7 @@ get_library_to_remove_by_name() {
 list_libraries() {
   i=0
   for lib in Libraries/*; do
-    lib_cut="${lib#*/}"
+    lib_cut="${lib##*/}"
     echo "$i - $lib_cut"
     (( i++ ))
   done
