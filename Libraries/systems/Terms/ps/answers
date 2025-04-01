@@ -1,8 +1,0 @@
-What does the TTY heading mean in the ps table? the terminal (device that manages reading and writing data to and from the system) that is running said process, and in the case of ps command, these are usually virtual terminals
-What is the nice value of a process? a numerical value which indicates the priority of a process on a system
-What does S+ status mean in ps -l table? a combination of S (which means the process is sleeping and waiting to be interrupted), and + (which indicates that the process is in the foreground process group and is therefore associated with the current terminal session and can receive input directly from the user)
-How do I view processes that get set by a flag which sorts by system usage (like -r for cpu usage)? using ps for a static snapshot or top for a dynamic process view
-How would I only list processes started by user $user? running: ps -u $user
-How would I find all processes that include a certain command name? running: ps | grep command
-How would I find all processes that include a certain command name? running: ps -C command
-How do I print processes and only include the columns pid and time? running: ps -o pid,time

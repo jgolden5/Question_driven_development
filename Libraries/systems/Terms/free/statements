@@ -1,7 +1,0 @@
-Mac doesn't have the free command because despite sharing many unix tools, mac does prefer to do their own thing still and use their own separate tools sometimes.
-Something that free can do that vmstat cannot is free is more of a quick snapshot, while vmstat does dynamic observation of memory usage.
-Disk caching is a memory feature which stores data that was recently accessed from a disk to a cache.
-Something that free can do that vmstat cannot is take more of a quick snapshot, whereas vmstat is dynamic, in other words, free is to vmstat kind of like ps is to top.
-I would only display available memory output from free command by running: free -h | cut -c 1-7,40-50.
-I would track my memory usage, update it every 2 seconds, repeated 5 times by running: free -s 2 -c 5.
-I only display total memory usage by running: free -h | grep Mem: | awk '{print $1, $2}'.

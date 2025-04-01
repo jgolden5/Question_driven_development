@@ -1,4 +1,0 @@
-What does it mean when a file descriptor points to a file?
-What happens when a fifo reads into itself indefinitely?
-Why are fifos in bash named for first in first out?
-What's the difference between sourcing and running a bash script?

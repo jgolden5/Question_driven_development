@@ -1,1 +1,0 @@
-What is a kernel ring buffer? a place where important system events and log messages are stored that were generated during the os' boot process, essentially acting as a log on disk

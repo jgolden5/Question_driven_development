@@ -1,5 +1,0 @@
-Is it possible for fifos to create messy race conditions when used with '&'? yes, if read and/or write operations to/from fifos are sent to the background, one might wrread before the other has finished writing, or vice versa; to work around this, I should consider looking into the bash 'wait' command
-Can I run out of fifo inodes faster than I would run out of any other inodes? yes, if you are creating more fifos than you are multiple files; other than that, fifos take up inodes the same as any other file
-What role can the wait command play with fifos? making sure that a process that is either writing to or reading from a fifo gets completed before moving beyond a certain point, thus preventing race condition issues
-What's the difference between mkfifo and mknod? that mkfifo can only make fifos, whereas mknod can make many different file types, and provides the user with greater control and low-level access
-What role can the trap command play with fifos? executing a certain command when a certain signal is received (like EXIT, SIGTERM, or SIGINT, for example)

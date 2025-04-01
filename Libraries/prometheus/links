@@ -1,6 +1,0 @@
-prometheus query screen: http://localhost:9090/
-prometheus documentation GETTING STARTED: https://prometheus.io/docs/prometheus/latest/getting_started/
-prometheus documentation QUERYING BASICS: https://prometheus.io/docs/prometheus/latest/querying/basics/
-prometheus documentation QUERYING OPERATORS: https://prometheus.io/docs/prometheus/latest/querying/operators/
-prometheus documentation QUERYING FUNCTIONS: https://prometheus.io/docs/prometheus/latest/querying/functions/
-prometheus documentation QUERYING EXAMPLES: https://prometheus.io/docs/prometheus/latest/querying/examples/

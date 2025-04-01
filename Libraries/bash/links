@@ -1,5 +1,0 @@
-medium.com about fifos: https://hopeness.medium.com/master-the-linux-mkfifo-command-a-comprehensive-guide-7e64ac926228
-linuxjournal about fifos: https://www.linuxjournal.com/content/using-named-pipes-fifos-bash
-in-depth article and video about fifos: https://www.softprayog.in/programming/interprocess-communication-using-fifos-in-linux
-a bunch of words about reading from two fifos in bash: https://unix.stackexchange.com/questions/706038/reading-from-two-fifos-in-bash
-article on fifos in bash with another video: https://offlinemark.com/fifos-and-simple-ipc-logging/

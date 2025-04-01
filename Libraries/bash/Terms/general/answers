@@ -1,2 +1,0 @@
-What does dollar dollar do in bash? represents a process id, but this should be avoided as a way of creating a tmp filename because it will often create a race condition which allows attackers time to intercept said pid, so a better alternative for making a temp file would be mktemp
-What does carriage return (backslash + r) do in bash? moves the cursor to the beginning of the current line without advancing it to the next line, which originates from the time of typewriters

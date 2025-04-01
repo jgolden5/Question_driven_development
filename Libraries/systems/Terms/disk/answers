@@ -1,7 +1,0 @@
-What is a sector in disk storage? the smallest size of data to be stored in a hard disk drive, meaning each file will have many sectors assigned to it
-What is a drive in disk storage? a device that uses a rotating disk to storea nd retrieve data--the most common of which is a hard disk drive (hdd)
-What is a track in disk storage? the circle of recorded data on a single recording surface of a platter
-What is a platter in disk storage? an individual recording disk
-What is a head in disk storage? the device that reads and writes the information--magnetic or optical--on the disk surface
-What is a block in disk storage? a fixed-size chunk of data on a storage device, essentially acting as the basic unit of data storage on a ahard drive, enabling fast read/write operations by accessing data in discrete portions
-What is a cylinder in disk storage? a set of tracks, one on each platter of a hard drive, that are aligned vertically, essentially forming a cylindrical slice through the stack of platters, where all tracks at the same radial position across all platters are considered part of the same cylinder, essentially providing a way to group tracks together for data access
