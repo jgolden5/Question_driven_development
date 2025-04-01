@@ -24,6 +24,8 @@ main() {
   unset a, ask_question
 }
 
+#modes
+
 ask_mode() {
   if [[ "$library" && "$term" ]]; then
     echo -ne "QDD $library:${GREEN}$term ${YELLOW}[$index] ${NC}(ASK): $question?"
@@ -34,7 +36,7 @@ ask_mode() {
 }
 
 library_mode() {
-  library_index="$(get_index_from_library)"
+  library_index="$(get_library_index)"
   echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read command
   case "$command" in
@@ -48,10 +50,21 @@ library_mode() {
       remove_library $command
       ;;
     *)
-      set_library_manually "$command"
+      set_library_by_name "$command"
       ;;
   esac
   set_default_term
+}
+
+term_mode() {
+  term_index="$(get_term_index)"
+  echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
+  read command
+  case "$command" in
+    *)
+      set_term_by_name "$command"
+      ;;
+  esac
 }
 
 alias a=ask_mode
@@ -69,7 +82,7 @@ get_questions() {
   echo -n "$questions"
 }
 
-get_index_from_library() {
+get_library_index() {
   if [[ "$library" != "-" ]]; then
     lib_index="$(ls Libraries | grep -n "$library" | sed 's/\(.*\):.*/\1/')"
     (( lib_index-- ))
@@ -105,7 +118,7 @@ get_library_from_index() {
   done
 }
 
-set_library_manually() {
+set_library_by_name() {
   local library_name="$1"
   if [[ "$library_name" ]]; then
     if [[ -d "Libraries/$library_name" ]]; then
@@ -170,3 +183,32 @@ set_default_term() {
   term="${term:--}"
 }
 
+set_term_by_name() {
+  local new_term="$1"
+  if [[ "$new_term" ]]; then
+    if [[ -d "Libraries/$library/$new_term" ]]; then
+      term="$new_term"
+      echo "changed term to $new_term"
+    else
+      read -n1 -p "term $new_term not recognized. Would you like to add it? " add_term_confirmation
+      echo
+      if [[ "$add_term_confirmation" =~ y|Y ]]; then
+        mkdir Libraries/$library/$new_term
+        term="$new_term"
+        echo "term $new_term added"
+      else
+        echo "Ok. Back to business, then."
+      fi
+    fi
+  fi
+}
+
+get_term_index() {
+  if [[ "$term" != "-" && "$library" != "-" && "$library" && "$term" ]]; then
+    term_index="$(ls Libraries/$library | grep -n "$term" | sed 's/\(.*\):.*/\1/')"
+    (( term_index-- ))
+  else
+    term_index=0
+  fi
+  echo "$term_index"
+}
