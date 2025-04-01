@@ -8,6 +8,7 @@ index=0
 YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
+MAGENTA="\e[35m"
 NC="\e[0m"
 
 main() {
@@ -15,23 +16,37 @@ main() {
     echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}$ "
     read -n1 mode
     echo
-    if [[ "$mode" == a || "$mode" == t || "$mode" == y ]]; then
-      eval "$mode"
-    elif [[ "$mode" == q ]]; then
-      break
-    else
-      echo "mode $mode not recognized"
-    fi
+    case "$mode" in
+      a)
+        ask_mode
+        ;;
+      q)
+        break
+        ;;
+      t)
+        term_mode
+        ;;
+      y)
+        library_mode
+        ;;
+      *)
+        echo "mode $mode not recognized"
+        ;;
+    esac
   done
-  unset a, ask_question
 }
 
 #modes
 
 ask_mode() {
   if [[ "$library" && "$term" ]]; then
-    echo -ne "QDD $library:${GREEN}$term ${YELLOW}[$index] ${NC}(ASK): $question?"
-    #...
+    echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$index${YELLOW}] ${NC}$ "
+    read command
+    case "$command" in 
+      *)
+        ask_question "$command"
+        ;;
+    esac
   else
     echo "Library and term must be defined before asking a question (enter term mode with 't' and library mode with 'y')"
   fi
@@ -78,9 +93,6 @@ term_mode() {
   esac
 }
 
-alias a=ask_mode
-alias t=term_mode
-alias y=library_mode
 alias qdd='source qdd.sh && echo qdd sourced successfully'
 
 #util functions (operative functions of the main functions)
@@ -289,4 +301,21 @@ get_term_by_index() {
       (( i++ ))
     fi
   done
+}
+
+ask_question() {
+  question="$1"
+  if [[ "$question" ]]; then
+    question_length="$(echo $question | wc -w | sed 's/ *//')"
+    if [[ "$question_length" -le 8 ]]; then
+      if [[ "$question" =~ "?" ]]; then
+        echo "$question" >>Libraries/$library/$term/answers
+      else
+        echo "$question?" >>Libraries/$library/$term/answers
+      fi
+      echo "question was added to answers file"
+    else
+      echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
+    fi
+  fi
 }
