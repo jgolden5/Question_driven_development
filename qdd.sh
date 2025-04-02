@@ -61,16 +61,18 @@ question_mode() {
 library_mode() {
   library_index="$(get_library_index)"
   echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
-  read command
+  read -n1 command
   case "$command" in
-    [0-9]*) 
+    [0-9]) 
       set_library_by_index "$command"
       ;;
     \')
       list_libraries
       ;;
-    \-*)
-      remove_library $command
+    \-)
+      echo
+      list_libraries
+      remove_library
       ;;
     *)
       set_library_by_name "$command"
@@ -169,20 +171,19 @@ set_library_by_name() {
 }
 
 remove_library() {
-  local library_to_remove=
-  if [[ "$2" ]]; then
-    if [[ "$2" =~ [a-zA-Z] ]]; then
-      library_to_remove="$(get_library_to_remove_by_name "$2")"
-    else
-      library_to_remove="$(get_library_by_index "$2")"
-    fi
-  else
-    library_to_remove="$library"
-  fi
-  read -n1 -p "Are you sure you want to remove library $library_to_remove? " confirmation
+  read -p "Which library do you want to remove? " lib_choice
+  case "$lib_choice" in
+    [0-9])
+      library_to_remove="$(get_library_by_index "$lib_choice")"
+      ;;
+    *)
+      library_to_remove="$library"
+      ;;
+  esac
+  read -n1 -p "Are you sure you want to remove $library_to_remove library? " confirmation
   echo
   if [[ $confirmation == "y" ]]; then
-    rm -r Libraries/$library_to_remove
+    rm -r Libraries/$library_to_remove && echo "Library remove successfully"
   else
     echo "Ok. Library $library_to_remove is here to stay."
   fi
@@ -199,7 +200,7 @@ get_library_to_remove_by_name() {
 }
 
 list_libraries() {
-  i=0
+  local i=0
   for lib in Libraries/*; do
     echo "$i - ${lib##*/}"
     (( i++ ))
