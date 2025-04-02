@@ -62,6 +62,7 @@ library_mode() {
   library_index="$(get_library_index)"
   echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read -n1 command
+  echo
   case "$command" in
     [0-9]) 
       set_library_by_index "$command"
@@ -70,12 +71,11 @@ library_mode() {
       list_libraries
       ;;
     \-)
-      echo
       list_libraries
       remove_library
       ;;
-    *)
-      set_library_by_name "$command"
+    i)
+      set_library_by_name
       ;;
   esac
   set_default_term
@@ -150,7 +150,7 @@ get_library_by_index() {
 }
 
 set_library_by_name() {
-  local library_name="$1"
+  read -p "Library name: " library_name
   if [[ "$library_name" ]]; then
     if [[ -d "Libraries/$library_name" ]]; then
       library="$library_name"
@@ -171,21 +171,24 @@ set_library_by_name() {
 }
 
 remove_library() {
+  local library_to_remove=
   read -p "Which library do you want to remove? " lib_choice
   case "$lib_choice" in
     [0-9])
       library_to_remove="$(get_library_by_index "$lib_choice")"
       ;;
-    *)
-      library_to_remove="$library"
-      ;;
   esac
-  read -n1 -p "Are you sure you want to remove $library_to_remove library? " confirmation
-  echo
-  if [[ $confirmation == "y" ]]; then
-    rm -r Libraries/$library_to_remove && echo "Library remove successfully"
-  else
-    echo "Ok. Library $library_to_remove is here to stay."
+  if [[ "$library_to_remove" ]]; then
+    read -n1 -p "Are you sure you want to remove $library_to_remove library? " confirmation
+    echo
+    if [[ $confirmation == "y" ]]; then
+      rm -r Libraries/$library_to_remove && echo "Library removed successfully"
+      if [[ $library == $library_to_remove ]]; then
+        library=-
+      fi
+    else
+      echo "Ok. Library $library_to_remove is here to stay."
+    fi
   fi
 }
 
@@ -208,8 +211,12 @@ list_libraries() {
 }
 
 set_default_term() {
-  term="$(ls Libraries/$library | head -1)"
-  term="${term:--}"
+  if [[ "$library" ]]; then
+    term="$(ls Libraries/$library | head -1)"
+    term="${term:--}"
+  else
+    library="${library:--}"
+  fi
 }
 
 set_term_by_name() {
