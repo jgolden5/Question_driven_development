@@ -4,7 +4,6 @@ source ~/p/bash-debugger
 
 library="${library:-"$(ls Libraries | head -1)"}"
 term="$(ls Libraries/$library | head -1)"
-index=0
 YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
@@ -39,12 +38,16 @@ main() {
 #modes
 
 question_mode() {
+  local question_index="${question_index:-0}"
   if [[ "$library" && "$term" ]]; then
-    echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$index${YELLOW}] ${NC}$ "
+    echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
     read command
     case "$command" in 
       \')
         list_questions
+        ;;
+      \-*)
+        remove_question $command
         ;;
       *)
         ask_question "$command"
@@ -317,7 +320,7 @@ ask_question() {
       else
         echo "$question?" >>Libraries/$library/$term/answers
       fi
-      echo "question was added to answers file"
+      echo "question was added to $term's answers"
     else
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
     fi
@@ -332,5 +335,29 @@ list_questions() {
   done < <(cat Libraries/$library/$term/answers)
   if [[ $i == 0 ]]; then
     echo "No questions exist yet for term $term"
+  fi
+}
+
+remove_question() {
+  local question_to_remove=
+  if [[ ! "$2" =~ [a-zA-Z] ]]; then
+    if [[ "$2" =~ [0-9] ]]; then
+      question_index="$2"
+    fi
+    question_position=$((question_index + 1))
+    question_to_remove="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
+    if [[ "$question_to_remove" ]]; then
+      read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" " confirmation
+      echo
+      if [[ $confirmation == "y" ]]; then
+        sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question"
+      else
+        echo "Ok. No question-removing took place"
+      fi
+    else
+      echo "No question exists yet for $term"
+    fi
+  else
+    echo "Please enter a question index (default is $question_index)"
   fi
 }
