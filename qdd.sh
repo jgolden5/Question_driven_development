@@ -8,6 +8,7 @@ YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
 MAGENTA="\e[35m"
+ORANGE="\e[38;5;214m"
 NC="\e[0m"
 
 main() {
@@ -26,6 +27,9 @@ main() {
       t)
         list_terms
         term_mode
+        ;;
+      w)
+        answer_mode
         ;;
       y)
         list_libraries
@@ -91,6 +95,19 @@ term_mode() {
       ;;
     *)
       echo "command not recognized"
+      ;;
+  esac
+}
+
+answer_mode() {
+  echo -ne "${ORANGE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in 
+    q|'')
+      ;;
+    *)
+      echo "Command not recognized"
       ;;
   esac
 }
