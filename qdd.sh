@@ -48,7 +48,8 @@ ask_mode() {
     echo
     case "$command" in 
       \-)
-        remove_question
+        read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
+        remove_question_at_index "$question_index"
         ;;
       i)
         read -p "Enter question here: " q
@@ -372,8 +373,8 @@ list_questions() {
   fi
 }
 
-remove_question() {
-  read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
+remove_question_at_index() {
+  question_index="$1"
   if [[ "$question_index" && ! "$question_index" =~ [a-zA-Z] ]]; then
     question_position=$((question_index + 1))
     question_to_remove="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
@@ -383,7 +384,7 @@ remove_question() {
       if [[ $confirmation == "y" ]]; then
         sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question"
       else
-        echo "Ok. No question-removing took place"
+        echo "Ok. No question removing took place"
       fi
     else
       echo "No question exists yet for $term"
