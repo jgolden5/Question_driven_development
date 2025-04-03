@@ -374,7 +374,7 @@ list_questions() {
 
 remove_question() {
   read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
-  if [[ ! "$question_index" =~ [a-zA-Z] ]]; then
+  if [[ "$question_index" && ! "$question_index" =~ [a-zA-Z] ]]; then
     question_position=$((question_index + 1))
     question_to_remove="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
     if [[ "$question_to_remove" ]]; then
