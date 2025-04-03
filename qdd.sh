@@ -117,7 +117,7 @@ term_mode() {
 
 alias qdd='source qdd.sh && echo qdd sourced successfully'
 
-#util functions (operative functions of the main functions)
+#utils -- auxiliary functions used for main and mode functions
 
 get_questions() {
   questions=
