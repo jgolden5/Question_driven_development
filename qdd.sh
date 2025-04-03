@@ -96,8 +96,8 @@ term_mode() {
     \-*)
       remove_term $command
       ;;
-    *)
-      set_term_by_name "$command"
+    i)
+      set_term_by_name
       ;;
   esac
 }
@@ -221,15 +221,15 @@ set_default_term() {
 }
 
 set_term_by_name() {
-  local new_term="$1"
-  if [[ "$new_term" && ! $new_term =~ " " ]]; then
-    if [[ -d "Libraries/$library/$new_term" ]]; then
-      term="$new_term"
-      echo "changed term to $new_term"
+  read -p "Enter term here: " term_to_set
+  if [[ "$term_to_set" && ! $term_to_set =~ " " ]]; then
+    if [[ -d "Libraries/$library/$term_to_set" ]]; then
+      term="$term_to_set"
+      echo "changed term to $term_to_set"
     else
-      mkdir Libraries/$library/$new_term
-      touch Libraries/$library/$new_term/answers
-      term="$new_term"
+      mkdir Libraries/$library/$term_to_set
+      touch Libraries/$library/$term_to_set/answers
+      term="$term_to_set"
       echo "term added"
     fi
   else
