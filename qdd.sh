@@ -178,6 +178,7 @@ set_library_by_index() {
   for lib in Libraries/*; do
     if [[ "$i" == "$index_from_input" ]]; then
       library="${lib##*/}"
+      library_index=$index_from_input
       break
     else
       (( i++ ))
@@ -254,7 +255,11 @@ get_library_to_remove_by_name() {
 list_libraries() {
   local i=0
   for lib in Libraries/*; do
-    echo "$i - ${lib##*/}"
+    if [[ $i == $library_index ]]; then
+      echo "$i - ${lib##*/} *"
+    else
+      echo "$i - ${lib##*/}"
+    fi
     (( i++ ))
   done
 }
