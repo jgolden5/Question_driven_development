@@ -108,7 +108,14 @@ answer_mode() {
     [0-9])
       answer_question_at_index "$command"
       ;;
-    q|'')
+    '')
+      if [[ "$question_index" ]]; then
+        answer_question_at_index "$question_index"
+      else
+        answer_question_at_index "0"
+      fi
+      ;;
+    q)
       ;;
     *)
       echo "Command not recognized"
