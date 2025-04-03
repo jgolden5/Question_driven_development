@@ -417,7 +417,11 @@ list_questions() {
   local i=0
   while read line; do
     question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
-    echo "$i - $question"
+    if [[ $i == $question_index ]]; then
+      echo "$i - $question *"
+    else
+      echo "$i - $question"
+    fi
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
   if [[ $i == 0 ]]; then
