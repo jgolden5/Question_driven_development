@@ -42,6 +42,7 @@ main() {
 #modes
 
 ask_mode() {
+  safeguard_question_index
   list_questions
   answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
   if [[ "$answers_length" -eq 0 ]]; then
@@ -99,6 +100,7 @@ term_mode() {
 }
 
 answer_mode() {
+  safeguard_question_index
   list_answers
   echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
   read -n1 command
@@ -429,7 +431,7 @@ remove_question_at_index() {
     question_position=$((question_index + 1))
     question_to_remove="$(get_question_by_index "$question_index")"
     if [[ "$question_to_remove" ]]; then
-      read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" " confirmation
+      read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" (Note this will also remove all of its answers!) " confirmation
       echo
       if [[ $confirmation == "y" ]]; then
         sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
@@ -574,5 +576,17 @@ remove_all_answers_at_question_index() {
   q_index="$1"
   q_position="$(( q_index + 1 ))"
   sed -i '' "${q_position}s/\(.*\?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
+}
+
+safeguard_question_index() {
+  answers_file_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
+  max_question_index="$(( answers_file_length - 1 ))"
+  if (( question_index > max_question_index )); then
+    if (( max_question_index >= 0 )); then
+      question_index=max_question_index
+    else
+      question_index=0
+    fi
+  fi
 }
 
