@@ -59,7 +59,7 @@ ask_mode() {
         read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
         remove_question_at_index "$question_index"
         ;;
-      i)
+      e)
         read -p "Enter question here: " q
         ask_question "$q"
         ;;
@@ -87,7 +87,7 @@ term_mode() {
     \-)
       remove_term $command
       ;;
-    i)
+    e)
       set_term_by_name
       ;;
     q|'')
@@ -138,7 +138,7 @@ library_mode() {
     \-)
       remove_library
       ;;
-    i)
+    e)
       set_library_by_name
       ;;
     q|'')
@@ -359,7 +359,7 @@ get_term_to_remove() {
     [0-9])
       term_to_remove="$(get_term_by_index "$t_choice")"
       ;;
-    i)
+    e)
       read -p "Enter term to remove here: " term_to_remove
       ;;
   esac
