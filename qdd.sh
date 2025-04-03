@@ -18,22 +18,18 @@ main() {
     echo
     case "$mode" in
       a)
-        list_questions
         ask_mode
         ;;
       q)
         break
         ;;
       t)
-        list_terms
         term_mode
         ;;
       w)
-        list_answers
         answer_mode
         ;;
       y)
-        list_libraries
         library_mode
         ;;
       *)
@@ -46,6 +42,7 @@ main() {
 #modes
 
 ask_mode() {
+  list_questions
   answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
   if [[ "$answers_length" -eq 0 ]]; then
     question_index=0
@@ -79,6 +76,7 @@ ask_mode() {
 
 term_mode() {
   term_index="$(get_term_index)"
+  list_terms
   echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
@@ -101,6 +99,7 @@ term_mode() {
 }
 
 answer_mode() {
+  list_answers
   echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
@@ -128,6 +127,7 @@ answer_mode() {
 
 library_mode() {
   library_index="$(get_library_index)"
+  list_libraries
   echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
@@ -306,6 +306,7 @@ set_term_by_index() {
   for t in Libraries/$library/*; do
     if [[ "$i" == "$index_from_input" ]]; then
       term="${t##*/}"
+      term_index=$index_from_input
       break
     else
       (( i++ ))
@@ -318,7 +319,11 @@ list_terms() {
     i=0
     for t in Libraries/$library/*; do
       t_cut="${t##*/}"
-      echo "$i - $t_cut"
+      if [[ $i == $term_index ]]; then
+        echo "$i - $t_cut *"
+      else
+        echo "$i - $t_cut"
+      fi
       (( i++ ))
     done
   else
