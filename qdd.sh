@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 
 source ~/p/bash-debugger
 
@@ -443,20 +443,22 @@ answer_question_at_index() {
     if (( "$answer_length" > 8 )); then
       echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question)." && return 1
     else
+      answer="${answer^}"
       sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
     fi
   else
-    echo "Answer was empty" && return 1
+    echo "Empty answer" && return 1
   fi
 }
 
 list_answers() {
   local i=0
   while read line; do
-    echo "$i - $line"
+    question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
+    echo "$i - $question"
     local j=-1
     while read inner_line; do
-      if (( j >= 0 )); then
+      if (( j > -1 )); then
         echo "  $j - $inner_line"
       fi
       (( j++ ))
