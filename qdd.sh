@@ -104,6 +104,9 @@ answer_mode() {
   read -n1 command
   echo
   case "$command" in 
+    [0-9])
+      answer_question_at_index "$command"
+      ;;
     q|'')
       ;;
     *)
@@ -368,9 +371,9 @@ get_term_by_index() {
 ask_question() {
   local question="$1"
   if [[ "$question" ]]; then
-    question_length="$(echo $question | wc -w | sed 's/ *//')"
+    local question_length="$(echo $question | wc -w | sed 's/ *//')"
     if [[ "$question_length" -le 8 ]]; then
-      answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
+      local answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
       echo "$question" >>Libraries/$library/$term/answers && echo "question was added to $term answers"
       if (( answers_length + 1 > 8 )); then
         questions_exceed_8=t
@@ -421,3 +424,21 @@ remove_question_at_index() {
     return 1
   fi
 }
+
+answer_question_at_index() {
+  question_index="$1"
+  local question_position="$(( question_index + 1 ))"
+  local question="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
+  read -p "$question " answer
+  if [[ "$answer" ]]; then
+    local answer_length="$(echo "$answer" | wc -w | sed 's/ *//')"
+    if (( "$answer_length" > 8 )); then
+      echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question)." && return 1
+    else
+      sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+    fi
+  else
+    echo "Answer was empty" && return 1
+  fi
+}
+
