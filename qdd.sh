@@ -43,15 +43,18 @@ ask_mode() {
   local question_index="${question_index:-0}"
   if [[ "$library" && "$term" ]]; then
     echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
-    read command
+    read -n1 command
     case "$command" in 
       \')
+        echo
         list_questions
         ;;
-      \-*)
-        remove_question $command
+      \-)
+        echo
+        remove_question
         ;;
       *)
+        echo
         ask_question "$command"
         ;;
     esac
@@ -90,7 +93,7 @@ term_mode() {
       echo
       set_term_by_index "$command"
       ;;
-    \-*)
+    \-)
       echo
       remove_term $command
       ;;
@@ -340,7 +343,7 @@ ask_question() {
       else
         echo "$question?" >>Libraries/$library/$term/answers
       fi
-      echo "question was added to $term's answers"
+      echo "question was added to $term answers"
     else
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
     fi
