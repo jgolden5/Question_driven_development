@@ -29,6 +29,7 @@ main() {
         term_mode
         ;;
       w)
+        list_answers
         answer_mode
         ;;
       y)
@@ -392,8 +393,8 @@ ask_question() {
 
 list_questions() {
   local i=0
-  while read q; do
-    echo "$i - ${q##*/}"
+  while read line; do
+    echo "$i - $line"
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
   if [[ $i == 0 ]]; then
@@ -442,3 +443,20 @@ answer_question_at_index() {
   fi
 }
 
+list_answers() {
+  local i=0
+  while read line; do
+    echo "$i - $line"
+    local j=-1
+    while read inner_line; do
+      if (( j >= 0 )); then
+        echo "  $j - $inner_line"
+      fi
+      (( j++ ))
+    done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+    (( i++ ))
+  done < <(cat Libraries/$library/$term/answers)
+  if [[ $i == 0 ]]; then
+    echo "No answers exist yet for term $term"
+  fi
+}
