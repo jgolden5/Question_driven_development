@@ -149,6 +149,9 @@ library_mode() {
     e)
       set_library_by_name
       ;;
+    h)
+      library_help
+      ;;
     x|Q|'')
       ;;
     *)
@@ -617,4 +620,13 @@ main_help() {
   echo "w - answer mode"
   echo "x/Q - exit"
   echo "y - library mode"
+}
+
+library_help() {
+  echo "Library Mode Help:"
+  echo "0-9 - set library by index"
+  echo "- - remove library"
+  echo "e - set library by name (multi-char)"
+  echo "h/? - library mode help"
+  echo "x/Q/Enter - exit library mode"
 }
