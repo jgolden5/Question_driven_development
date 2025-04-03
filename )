@@ -17,8 +17,8 @@ main() {
     read -n1 mode
     echo
     case "$mode" in
-      q)
-        question_mode
+      a)
+        ask_mode
         ;;
       t)
         term_mode
@@ -41,7 +41,7 @@ main() {
 
 #modes
 
-question_mode() {
+ask_mode() {
   safeguard_question_index
   list_questions
   answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
@@ -64,7 +64,7 @@ question_mode() {
         read -p "Enter question here: " q
         ask_question "$q"
         ;;
-      x|'')
+      q|'')
         ;;
       *)
         echo "command not recognized"
@@ -91,7 +91,7 @@ term_mode() {
     e)
       set_term_by_name
       ;;
-    x|'')
+    q|'')
       ;;
     *)
       echo "command not recognized"
@@ -143,7 +143,7 @@ library_mode() {
     e)
       set_library_by_name
       ;;
-    x|'')
+    q|'')
       ;;
     *)
       echo "command not recognized"
