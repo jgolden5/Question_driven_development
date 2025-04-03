@@ -84,7 +84,8 @@ library_mode() {
 term_mode() {
   term_index="$(get_term_index)"
   echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
-  read command
+  read -n1 command
+  echo
   case "$command" in
     [0-9]*) 
       set_term_by_index "$command"
