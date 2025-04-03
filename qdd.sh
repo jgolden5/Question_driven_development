@@ -17,6 +17,7 @@ main() {
     echo
     case "$mode" in
       a)
+        list_questions
         ask_mode
         ;;
       q)
@@ -44,19 +45,20 @@ ask_mode() {
   if [[ "$library" && "$term" ]]; then
     echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
     read -n1 command
+    echo
     case "$command" in 
-      \')
-        echo
-        list_questions
-        ;;
       \-)
-        echo
         remove_question
         ;;
       i)
-        echo
         read -p "Enter question here: " q
         ask_question "$q"
+        ;;
+      q)
+        break
+        ;;
+      *)
+        echo "command not recognized"
         ;;
     esac
   else
@@ -68,18 +70,22 @@ library_mode() {
   library_index="$(get_library_index)"
   echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read -n1 command
+  echo
   case "$command" in
     [0-9]) 
-      echo
       set_library_by_index "$command"
       ;;
     \-)
-      echo
       remove_library
       ;;
     i)
-      echo
       set_library_by_name
+      ;;
+    q)
+      break
+      ;;
+    *)
+      echo "command not recognized"
       ;;
   esac
   set_default_term
@@ -89,18 +95,22 @@ term_mode() {
   term_index="$(get_term_index)"
   echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
   read -n1 command
+  echo
   case "$command" in
     [0-9]*) 
-      echo
       set_term_by_index "$command"
       ;;
     \-)
-      echo
       remove_term $command
       ;;
     i)
-      echo
       set_term_by_name
+      ;;
+    q)
+      break
+      ;;
+    *)
+      echo "command not recognized"
       ;;
   esac
 }
@@ -363,11 +373,8 @@ list_questions() {
 }
 
 remove_question() {
-  local question_to_remove=
-  if [[ ! "$2" =~ [a-zA-Z] ]]; then
-    if [[ "$2" =~ [0-9] ]]; then
-      question_index="$2"
-    fi
+  read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
+  if [[ ! "$question_index" =~ [a-zA-Z] ]]; then
     question_position=$((question_index + 1))
     question_to_remove="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
     if [[ "$question_to_remove" ]]; then
@@ -382,6 +389,6 @@ remove_question() {
       echo "No question exists yet for $term"
     fi
   else
-    echo "Please enter a question index (default is $question_index)"
+    echo "Please enter a question index"
   fi
 }
