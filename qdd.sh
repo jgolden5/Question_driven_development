@@ -46,9 +46,9 @@ main() {
 
 ask_mode() {
   answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
-  if (( answers_length == 0 )); then
+  if [[ "$answers_length" -eq 0 ]]; then
     question_index=0
-  else
+  elif [[ ! "$question_index" ]]; then
     question_index="$(( answers_length - 1 ))"
   fi
   if [[ "$library" && "$term" ]]; then
