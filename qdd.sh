@@ -53,9 +53,10 @@ ask_mode() {
         echo
         remove_question
         ;;
-      *)
+      i)
         echo
-        ask_question "$command"
+        read -p "Enter question here: " q
+        ask_question "$q"
         ;;
     esac
   else
