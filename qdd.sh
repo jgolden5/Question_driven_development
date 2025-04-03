@@ -41,13 +41,19 @@ main() {
 #modes
 
 ask_mode() {
-  local question_index="${question_index:-0}"
+  answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
+  if (( answers_length == 0 )); then
+    question_index=0
+  else
+    question_index="$(( answers_length - 1 ))"
+  fi
   if [[ "$library" && "$term" ]]; then
     echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
     read -n1 command
     echo
     case "$command" in 
       \-)
+        list_questions
         read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
         remove_question_at_index "$question_index"
         ;;
@@ -55,8 +61,7 @@ ask_mode() {
         read -p "Enter question here: " q
         ask_question "$q"
         ;;
-      q)
-        break
+      q|'')
         ;;
       *)
         echo "command not recognized"
@@ -82,8 +87,7 @@ library_mode() {
     i)
       set_library_by_name
       ;;
-    q)
-      break
+    q|'')
       ;;
     *)
       echo "command not recognized"
@@ -107,8 +111,7 @@ term_mode() {
     i)
       set_term_by_name
       ;;
-    q)
-      break
+    q|'')
       ;;
     *)
       echo "command not recognized"
