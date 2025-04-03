@@ -83,15 +83,17 @@ term_mode() {
   term_index="$(get_term_index)"
   echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
   read -n1 command
-  echo
   case "$command" in
     [0-9]*) 
+      echo
       set_term_by_index "$command"
       ;;
     \-*)
+      echo
       remove_term $command
       ;;
     i)
+      echo
       set_term_by_name
       ;;
   esac
@@ -111,7 +113,7 @@ get_questions() {
 
 get_library_index() {
   if [[ "$library" != "-" ]]; then
-    lib_index="$(ls Libraries | grep -n "$library" | sed 's/\(.*\):.*/\1/')"
+    lib_index="$(ls Libraries | grep -nw "$library" | sed 's/\(.*\):.*/\1/')"
     (( lib_index-- ))
   else
     lib_index=0
@@ -234,7 +236,7 @@ set_term_by_name() {
 
 get_term_index() {
   if [[ "$term" != "-" && "$library" != "-" && "$library" && "$term" ]]; then
-    term_index="$(ls Libraries/$library | grep -n "$term" | sed 's/\(.*\):.*/\1/')"
+    term_index="$(ls Libraries/$library | grep -nw "$term" | sed 's/\(.*\):.*/\1/')"
     (( term_index-- ))
   else
     term_index=0
@@ -269,26 +271,38 @@ list_terms() {
 }
 
 remove_term() {
-  local term_to_remove=
-  if [[ "$2" ]]; then
-    if [[ "$2" =~ [a-zA-Z] ]]; then
-      term_to_remove="$(get_term_to_remove_by_name "$2")"
+  local term_to_remove="$(get_term_to_remove)"
+  if [[ "$term_to_remove" ]]; then
+    if [[ -d "Libraries/$library/$term_to_remove" ]]; then
+      read -n1 -p "Are you sure you want to remove term $term_to_remove? " confirmation
+      echo
+      if [[ $confirmation == "y" ]]; then
+        rm -r Libraries/$library/$term_to_remove && echo "Term removed successfully"
+        if [[ $term == $term_to_remove ]]; then
+          term=-
+        fi
+      else
+        echo "Ok. Term $term_to_remove is here to stay."
+      fi
     else
-      term_to_remove="$(get_term_by_index "$2")"
+      echo "Term $term_to_remove not found in $library library"
     fi
-  else
-    term_to_remove="$term"
   fi
-  read -n1 -p "Are you sure you want to remove term $term_to_remove? " confirmation
+}
+
+get_term_to_remove() {
+  local term_to_remove=
+  read -n1 -p "Which term do you want to remove? " t_choice
   echo
-  if [[ $confirmation == "y" ]]; then
-    rm -r Libraries/$library/$term_to_remove
-    if [[ "$term" == "$term_to_remove" ]]; then
-      term=-
-    fi
-  else
-    echo "Ok. Library $term_to_remove is here to stay."
-  fi
+  case "$t_choice" in
+    [0-9])
+      term_to_remove="$(get_term_by_index "$t_choice")"
+      ;;
+    i)
+      read -p "Enter term to remove here: " term_to_remove
+      ;;
+  esac
+  echo "$term_to_remove"
 }
 
 get_term_to_remove_by_name() {
