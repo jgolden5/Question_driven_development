@@ -16,16 +16,18 @@ main() {
     read -n1 mode
     echo
     case "$mode" in
-      q)
-        question_mode
+      a)
+        ask_mode
         ;;
-      Q)
+      q)
         break
         ;;
       t)
+        list_terms
         term_mode
         ;;
       y)
+        list_libraries
         library_mode
         ;;
       *)
@@ -37,7 +39,7 @@ main() {
 
 #modes
 
-question_mode() {
+ask_mode() {
   local question_index="${question_index:-0}"
   if [[ "$library" && "$term" ]]; then
     echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
@@ -67,11 +69,7 @@ library_mode() {
     [0-9]) 
       set_library_by_index "$command"
       ;;
-    \')
-      list_libraries
-      ;;
     \-)
-      list_libraries
       remove_library
       ;;
     i)
@@ -89,9 +87,6 @@ term_mode() {
   case "$command" in
     [0-9]*) 
       set_term_by_index "$command"
-      ;;
-    \')
-      list_terms
       ;;
     \-*)
       remove_term $command
