@@ -97,6 +97,9 @@ term_mode() {
     e)
       set_term_by_name
       ;;
+    h)
+      term_help
+      ;;
     x|Q|'')
       ;;
     *)
@@ -629,4 +632,13 @@ library_help() {
   echo "e - set library by name (multi-char)"
   echo "h/? - library mode help"
   echo "x/Q/Enter - exit library mode"
+}
+
+term_help() {
+  echo "Term Mode Help:"
+  echo "0-9 - set term by index"
+  echo "- - remove term"
+  echo "e - set term by name (multi-char)"
+  echo "h/? - term mode help"
+  echo "x/Q/Enter - exit term mode"
 }
