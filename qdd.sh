@@ -121,12 +121,15 @@ answer_mode() {
     [0-9])
       answer_question_at_index "$command"
       ;;
-    '')
+    ''|e)
       if [[ "$question_index" ]]; then
         answer_question_at_index "$question_index"
       else
         answer_question_at_index "0"
       fi
+      ;;
+    h)
+      answer_help
       ;;
     \-)
       remove_answer
@@ -177,7 +180,7 @@ main_help() {
   echo "q - question mode"
   echo "t - term mode"
   echo "w - answer mode"
-  echo "x/Q - exit"
+  echo "x/Q - exit qdd"
   echo "y - library mode"
 }
 
@@ -206,6 +209,15 @@ question_help() {
   echo "e - set question by name (multi-char)"
   echo "h/? - question mode help"
   echo "x/Q/Enter - exit question mode"
+}
+
+answer_help() {
+  echo "Answer Mode Help:"
+  echo "0-9 - answer question at index"
+  echo "- - remove answer by index"
+  echo "Enter/e - answer question at index (multi-char)"
+  echo "h/? - answer mode help"
+  echo "x/Q/Enter - exit answer mode"
 }
 
 #utils -- auxiliary functions used for main and mode functions
