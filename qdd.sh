@@ -62,17 +62,19 @@ ask_mode() {
 
 library_mode() {
   library_index="$(get_library_index)"
-  echo -ne "${RED}QDD $library ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
+  echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
   read -n1 command
-  echo
   case "$command" in
     [0-9]) 
+      echo
       set_library_by_index "$command"
       ;;
     \-)
+      echo
       remove_library
       ;;
     i)
+      echo
       set_library_by_name
       ;;
   esac
