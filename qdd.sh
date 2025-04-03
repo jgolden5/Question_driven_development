@@ -66,6 +66,9 @@ question_mode() {
         read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
         remove_question_at_index "$question_index"
         ;;
+      h)
+        question_help
+        ;;
       e)
         read -p "Enter question here: " q
         ask_question "$q"
@@ -165,6 +168,45 @@ library_mode() {
 }
 
 alias qdd='source qdd.sh && echo qdd sourced successfully'
+
+#help functions. These give every possible command I can access from the current state
+
+main_help() {
+  echo "Main Help:"
+  echo "h/? - main help"
+  echo "q - question mode"
+  echo "t - term mode"
+  echo "w - answer mode"
+  echo "x/Q - exit"
+  echo "y - library mode"
+}
+
+library_help() {
+  echo "Library Mode Help:"
+  echo "0-9 - set library by index"
+  echo "- - remove library"
+  echo "e - set library by name (multi-char)"
+  echo "h/? - library mode help"
+  echo "x/Q/Enter - exit library mode"
+}
+
+term_help() {
+  echo "Term Mode Help:"
+  echo "0-9 - set term by index"
+  echo "- - remove term"
+  echo "e - set term by name (multi-char)"
+  echo "h/? - term mode help"
+  echo "x/Q/Enter - exit term mode"
+}
+
+question_help() {
+  echo "Question Mode Help:"
+  echo "0-9 - change question index"
+  echo "- - remove question by index"
+  echo "e - set question by name (multi-char)"
+  echo "h/? - question mode help"
+  echo "x/Q/Enter - exit question mode"
+}
 
 #utils -- auxiliary functions used for main and mode functions
 
@@ -613,32 +655,3 @@ safeguard_question_index() {
   fi
 }
 
-#help functions. These give every possible command I can access from the current state
-
-main_help() {
-  echo "Main Help:"
-  echo "h/? - main help"
-  echo "q - question mode"
-  echo "t - term mode"
-  echo "w - answer mode"
-  echo "x/Q - exit"
-  echo "y - library mode"
-}
-
-library_help() {
-  echo "Library Mode Help:"
-  echo "0-9 - set library by index"
-  echo "- - remove library"
-  echo "e - set library by name (multi-char)"
-  echo "h/? - library mode help"
-  echo "x/Q/Enter - exit library mode"
-}
-
-term_help() {
-  echo "Term Mode Help:"
-  echo "0-9 - set term by index"
-  echo "- - remove term"
-  echo "e - set term by name (multi-char)"
-  echo "h/? - term mode help"
-  echo "x/Q/Enter - exit term mode"
-}
