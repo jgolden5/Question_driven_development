@@ -55,6 +55,9 @@ question_mode() {
     read -n1 command
     echo
     case "$command" in 
+      [0-9])
+        safeguard_question_index "$command" && echo "Question index was changed to $question_index"
+        ;;
       \-)
         list_questions
         read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
@@ -587,14 +590,16 @@ remove_all_answers_at_question_index() {
 }
 
 safeguard_question_index() {
+  if [[ "$1" ]]; then
+    question_index="$1"
+  fi
   answers_file_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
   max_question_index="$(( answers_file_length - 1 ))"
   if (( question_index > max_question_index )); then
     if (( max_question_index >= 0 )); then
-      question_index=max_question_index
+      question_index=$max_question_index
     else
       question_index=0
     fi
   fi
 }
-
