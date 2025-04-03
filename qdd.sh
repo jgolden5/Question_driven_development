@@ -72,6 +72,29 @@ ask_mode() {
   fi
 }
 
+term_mode() {
+  term_index="$(get_term_index)"
+  echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    [0-9]*) 
+      set_term_by_index "$command"
+      ;;
+    \-)
+      remove_term $command
+      ;;
+    i)
+      set_term_by_name
+      ;;
+    q|'')
+      ;;
+    *)
+      echo "command not recognized"
+      ;;
+  esac
+}
+
 library_mode() {
   library_index="$(get_library_index)"
   echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
@@ -94,29 +117,6 @@ library_mode() {
       ;;
   esac
   set_default_term
-}
-
-term_mode() {
-  term_index="$(get_term_index)"
-  echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
-  read -n1 command
-  echo
-  case "$command" in
-    [0-9]*) 
-      set_term_by_index "$command"
-      ;;
-    \-)
-      remove_term $command
-      ;;
-    i)
-      set_term_by_name
-      ;;
-    q|'')
-      ;;
-    *)
-      echo "command not recognized"
-      ;;
-  esac
 }
 
 alias qdd='source qdd.sh && echo qdd sourced successfully'
