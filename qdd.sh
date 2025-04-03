@@ -481,7 +481,11 @@ list_answers() {
   local i=0
   while read line; do
     question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
-    echo "$i - $question"
+    if [[ $i == $question_index ]]; then
+      echo "$i - $question *"
+    else 
+      echo "$i - $question"
+    fi
     local j=-1
     while read inner_line; do
       if (( j > -1 )); then
