@@ -481,9 +481,75 @@ list_answers() {
 }
 
 remove_answer() {
-  list_questions
+  list_questions_that_have_answers
   read -n1 -p "Which question do you want to remove an answer from? " q_index
   echo
-  question="$(get_question_by_index)"
-  remove_answer_by_indices
+  list_answers_for_question_at_index $q_index
+  read -n1 -p "Which answer do you want to remove from said question? (* removes all answers) " a_index
+  echo
+  if [[ $q_index =~ [0-9] ]]; then
+    if [[ $a_index == "*" ]]; then
+      remove_all_answers_at_question_index "$q_index"
+    else
+      remove_answer_by_indices "$q_index" "$a_index"
+    fi
+  else
+    echo "Invalid q index"
+  fi
+}
+
+list_answers_for_question_at_index() {
+  local q_index="$1"
+  local q_position="$(( q_index + 1 ))"
+  local line="$(sed -n "${q_position}p" Libraries/$library/$term/answers)"
+  local question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
+  echo "$q_index - $question"
+  local j=-1
+  while read inner_line; do
+    if (( j > -1 )); then
+      echo "  $j - $inner_line"
+    fi
+    (( j++ ))
+  done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+}
+
+remove_answer_by_indices() {
+  q_index="$1"
+  a_index="$2"
+  q_position="$(( q_index + 1 ))"
+  line="$(sed -n "${q_position}p" Libraries/$library/$term/answers)"
+  question="$(get_question_by_index $q_index)"
+  if [[ "$line" == "$question" ]]; then
+    echo "No answer exists for question yet"
+  else
+    answer_to_remove=
+    local j=-1
+    while read inner_line; do
+      if [[ $j == $a_index ]]; then
+        answer_to_remove="$inner_line"
+        break
+      fi
+      (( j++ ))
+    done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+    if [[ "$answer_to_remove" ]]; then
+      sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
+      question_index="$(( question_index - 1 ))"
+    else
+      echo "Answer index was invalid"
+    fi
+  fi
+}
+
+list_questions_that_have_answers() {
+  local i=0
+  while read line; do
+    question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
+    if [[ "$question" != "$line" ]]; then
+      echo "$i - $question"
+    fi
+    (( i++ ))
+  done < <(cat Libraries/$library/$term/answers)
+  if [[ $i == 0 ]]; then
+    echo "No questions exist yet for term $term"
+  fi
 }
