@@ -484,17 +484,21 @@ remove_answer() {
   list_questions_that_have_answers
   read -n1 -p "Which question do you want to remove an answer from? " q_index
   echo
-  list_answers_for_question_at_index $q_index
-  read -n1 -p "Which answer do you want to remove from said question? (* removes all answers) " a_index
-  echo
-  if [[ $q_index =~ [0-9] ]]; then
-    if [[ $a_index == "*" ]]; then
-      remove_all_answers_at_question_index "$q_index"
+  if [[ "$valid_question_indices" =~ $q_index ]]; then
+    list_answers_for_question_at_index $q_index
+    read -n1 -p "Which answer do you want to remove from said question? (* removes all answers) " a_index
+    echo
+    if [[ $q_index =~ [0-9] ]]; then
+      if [[ $a_index == "*" ]]; then
+        remove_all_answers_at_question_index "$q_index"
+      else
+        remove_answer_by_indices "$q_index" "$a_index"
+      fi
     else
-      remove_answer_by_indices "$q_index" "$a_index"
+      echo "Invalid q index"
     fi
   else
-    echo "Invalid q index"
+    echo "No answers exist yet for question at index $q_index"
   fi
 }
 
@@ -535,17 +539,19 @@ remove_answer_by_indices() {
       sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
       question_index="$(( question_index - 1 ))"
     else
-      echo "Answer index was invalid"
+      echo "Answer index was invalid. No answer was removed"
     fi
   fi
 }
 
 list_questions_that_have_answers() {
+  valid_question_indices=
   local i=0
   while read line; do
     question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
     if [[ "$question" != "$line" ]]; then
       echo "$i - $question"
+      valid_question_indices+="$i"
     fi
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
@@ -553,3 +559,10 @@ list_questions_that_have_answers() {
     echo "No questions exist yet for term $term"
   fi
 }
+
+remove_all_answers_at_question_index() {
+  q_index="$1"
+  q_position="$(( q_index + 1 ))"
+  sed -i '' "${q_position}s/\(.*\?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
+}
+
