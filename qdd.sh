@@ -346,16 +346,21 @@ get_term_by_index() {
 }
 
 ask_question() {
-  question="$1"
+  local question="$1"
   if [[ "$question" ]]; then
     question_length="$(echo $question | wc -w | sed 's/ *//')"
     if [[ "$question_length" -le 8 ]]; then
-      if [[ "$question" =~ "?" ]]; then
-        echo "$question" >>Libraries/$library/$term/answers
-      else
-        echo "$question?" >>Libraries/$library/$term/answers
+      answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
+      echo "$question" >>Libraries/$library/$term/answers && echo "question was added to $term answers"
+      if (( answers_length + 1 > 8 )); then
+        questions_exceed_8=t
+        while [[ $questions_exceed_8 == t ]]; do
+          list_questions
+          read -n1 -p "Number of $term questions exceeds 8. Choose a question to replace: " replacement_index
+          echo
+          remove_question_at_index "$replacement_index" && questions_exceed_8=f
+        done
       fi
-      echo "question was added to $term answers"
     else
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
     fi
@@ -382,14 +387,17 @@ remove_question_at_index() {
       read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" " confirmation
       echo
       if [[ $confirmation == "y" ]]; then
-        sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question"
+        sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
       else
         echo "Ok. No question removing took place"
+        return 1
       fi
     else
       echo "No question exists yet for $term"
+      return 1
     fi
   else
-    echo "Please enter a question index"
+    echo "No question index was entered"
+    return 1
   fi
 }
