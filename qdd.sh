@@ -17,6 +17,9 @@ main() {
     read -n1 mode
     echo
     case "$mode" in
+      \?|h)
+        main_help
+        ;;
       q)
         question_mode
         ;;
@@ -26,7 +29,7 @@ main() {
       w)
         answer_mode
         ;;
-      x)
+      x|Q)
         break
         ;;
       y)
@@ -67,7 +70,7 @@ question_mode() {
         read -p "Enter question here: " q
         ask_question "$q"
         ;;
-      x|'')
+      x|Q|'')
         ;;
       *)
         echo "command not recognized"
@@ -94,7 +97,7 @@ term_mode() {
     e)
       set_term_by_name
       ;;
-    x|'')
+    x|Q|'')
       ;;
     *)
       echo "command not recognized"
@@ -122,7 +125,7 @@ answer_mode() {
     \-)
       remove_answer
       ;;
-    x)
+    x|Q)
       ;;
     *)
       echo "Command not recognized"
@@ -146,7 +149,7 @@ library_mode() {
     e)
       set_library_by_name
       ;;
-    x|'')
+    x|Q|'')
       ;;
     *)
       echo "command not recognized"
@@ -602,4 +605,16 @@ safeguard_question_index() {
       question_index=0
     fi
   fi
+}
+
+#help functions. These give every possible command I can access from the current state
+
+main_help() {
+  echo "Main Help:"
+  echo "h/? - main help"
+  echo "q - question mode"
+  echo "t - term mode"
+  echo "w - answer mode"
+  echo "x/Q - exit"
+  echo "y - library mode"
 }
