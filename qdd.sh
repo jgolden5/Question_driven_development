@@ -101,7 +101,7 @@ term_mode() {
 }
 
 answer_mode() {
-  echo -ne "${ORANGE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
+  echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
   case "$command" in 
@@ -114,6 +114,9 @@ answer_mode() {
       else
         answer_question_at_index "0"
       fi
+      ;;
+    \-)
+      remove_answer
       ;;
     q)
       ;;
@@ -401,7 +404,8 @@ ask_question() {
 list_questions() {
   local i=0
   while read line; do
-    echo "$i - $line"
+    question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
+    echo "$i - $question"
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
   if [[ $i == 0 ]]; then
@@ -413,7 +417,7 @@ remove_question_at_index() {
   question_index="$1"
   if [[ "$question_index" && ! "$question_index" =~ [a-zA-Z] ]]; then
     question_position=$((question_index + 1))
-    question_to_remove="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
+    question_to_remove="$(get_question_by_index "$question_index")"
     if [[ "$question_to_remove" ]]; then
       read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" " confirmation
       echo
@@ -431,6 +435,12 @@ remove_question_at_index() {
     echo "No question index was entered"
     return 1
   fi
+}
+
+get_question_by_index() {
+  question_index="$1"
+  question_position="$(( question_index + 1 ))"
+  sed -n "${question_position}p" Libraries/$library/$term/answers | sed 's/\(.*\?\).*/\1/'
 }
 
 answer_question_at_index() {
@@ -468,4 +478,12 @@ list_answers() {
   if [[ $i == 0 ]]; then
     echo "No answers exist yet for term $term"
   fi
+}
+
+remove_answer() {
+  list_questions
+  read -n1 -p "Which question do you want to remove an answer from? " q_index
+  echo
+  question="$(get_question_by_index)"
+  remove_answer_by_indices
 }
