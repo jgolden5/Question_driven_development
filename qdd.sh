@@ -136,11 +136,14 @@ answer_mode() {
         answer_question_at_index "0"
       fi
       ;;
-    h)
-      answer_help
+    \#)
+      echo "$(get_answer_count) answers for term $term"
       ;;
     \-)
       remove_answer
+      ;;
+    h)
+      answer_help
       ;;
     x|Q)
       ;;
@@ -699,3 +702,22 @@ safeguard_question_index() {
   fi
 }
 
+get_question_count() {
+  local count=0
+  for question in Libraries/$library/$term/*; do
+    count="$(( count + "$(cat "$question" | wc -l | sed 's/ *//')" ))"
+  done
+  echo "$count"
+}
+
+get_answer_count() {
+  local count=0
+  if [[ $library && $term ]]; then
+    for answers in Libraries/$library/$term/*; do
+      list_answers_for_question_at_index 
+    done
+    echo "$count"
+  else
+    echo -1
+  fi
+}
