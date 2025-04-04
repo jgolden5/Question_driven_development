@@ -537,6 +537,14 @@ answer_question_at_index() {
     else
       answer="${answer^}"
       sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+      previous_answers="$(list_answers_for_question_at_index)"
+      previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
+      if (( previous_answer_length > 8 )); then
+        list_answers_for_question_at_index "$question_index"
+        read -n1 -p "There can't be more than 8 answers for the same question. Please choose the index of the answer you want to get rid of: " answer_index
+        echo
+        remove_answer_by_indices "$question_index" "$answer_index"
+      fi
     fi
   else
     echo "Empty answer" && return 1
@@ -623,7 +631,6 @@ remove_answer_by_indices() {
     done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
     if [[ "$answer_to_remove" ]]; then
       sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
-      question_index="$(( question_index - 1 ))"
     else
       echo "Answer index was invalid. No answer was removed"
     fi
