@@ -72,12 +72,12 @@ question_mode() {
           remove_question_at_index "$question_index"
         fi
         ;;
-      h)
-        question_help
-        ;;
-      e)
+      a)
         read -p "Enter question here: " q
         ask_question "$q"
+        ;;
+      h)
+        question_help
         ;;
       x|Q|'')
         ;;
@@ -103,7 +103,7 @@ term_mode() {
     \-)
       remove_term $command
       ;;
-    e)
+    a)
       set_term_by_name
       ;;
     h)
@@ -127,7 +127,7 @@ answer_mode() {
     [0-9])
       answer_question_at_index "$command"
       ;;
-    ''|e)
+    ''|a)
       if [[ "$question_index" ]]; then
         answer_question_at_index "$question_index"
       else
@@ -161,7 +161,7 @@ library_mode() {
     \-)
       remove_library
       ;;
-    e)
+    a)
       set_library_by_name
       ;;
     h)
@@ -196,7 +196,7 @@ library_help() {
   echo "Library Mode Help:"
   echo "0-9 - set library by index"
   echo "- - remove library"
-  echo "e - set library by name (multi-char)"
+  echo "a - add/adjust library by name (multi-char)"
   echo "h/? - library mode help"
   echo "x/Q/Enter - exit library mode"
 }
@@ -205,7 +205,7 @@ term_help() {
   echo "Term Mode Help:"
   echo "0-9 - set term by index"
   echo "- - remove term"
-  echo "e - set term by name (multi-char)"
+  echo "a - adjust/add term by name (multi-char)"
   echo "h/? - term mode help"
   echo "x/Q/Enter - exit term mode"
 }
@@ -214,7 +214,7 @@ question_help() {
   echo "Question Mode Help:"
   echo "0-9 - change question index"
   echo "- - remove question by index"
-  echo "e - set question by name (multi-char)"
+  echo "a - ask question (multi-char)"
   echo "h/? - question mode help"
   echo "x/Q/Enter - exit question mode"
 }
@@ -223,7 +223,7 @@ answer_help() {
   echo "Answer Mode Help:"
   echo "0-9 - answer question at index"
   echo "- - remove answer by index"
-  echo "Enter/e - answer question at index (multi-char)"
+  echo "Enter/a - answer question at index (multi-char)"
   echo "h/? - answer mode help"
   echo "x/Q/Enter - exit answer mode"
 }
@@ -435,7 +435,7 @@ get_term_to_remove() {
     [0-9])
       term_to_remove="$(get_term_by_index "$t_choice")"
       ;;
-    e)
+    a)
       read -p "Enter term to remove here: " term_to_remove
       ;;
   esac
@@ -550,25 +550,27 @@ answer_question_at_index() {
   question_index="$1"
   local question_position="$(( question_index + 1 ))"
   local question="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
-  read -p "$question " answer
-  if [[ "$answer" ]]; then
-    local answer_length="$(echo "$answer" | wc -w | sed 's/ *//')"
-    if (( "$answer_length" > 8 )); then
-      echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question)." && return 1
-    else
-      answer="${answer^}"
-      sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
-      previous_answers="$(list_answers_for_question_at_index)"
-      previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
-      if (( previous_answer_length > 8 )); then
-        list_answers_for_question_at_index "$question_index"
-        read -n1 -p "There can't be more than 8 answers for the same question. Please choose the index of the answer you want to get rid of: " answer_index
-        echo
-        remove_answer_by_indices "$question_index" "$answer_index"
+  if [[ "$question" ]]; then
+    read -p "$question " answer
+    if [[ "$answer" ]]; then
+      local answer_length="$(echo "$answer" | wc -w | sed 's/ *//')"
+      if (( "$answer_length" > 8 )); then
+        echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question)." && return 1
+      else
+        answer="${answer^}"
+        sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+        previous_answers="$(list_answers_for_question_at_index)"
+        previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
+        if (( previous_answer_length > 8 )); then
+          list_answers_for_question_at_index "$question_index"
+          read -n1 -p "There can't be more than 8 answers for the same question. Please choose the index of the answer you want to get rid of: " answer_index
+          echo
+          remove_answer_by_indices "$question_index" "$answer_index"
+        fi
       fi
+    else
+      echo "Empty answer" && return 1
     fi
-  else
-    echo "Empty answer" && return 1
   fi
 }
 
