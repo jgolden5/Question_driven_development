@@ -63,7 +63,7 @@ question_mode() {
         ;;
       \-)
         list_questions
-        read -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
+        read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
         remove_question_at_index "$question_index"
         ;;
       h)
