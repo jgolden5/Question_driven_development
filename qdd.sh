@@ -62,6 +62,9 @@ question_mode() {
       [0-9])
         safeguard_question_index "$command" && echo "Question index was changed to $question_index"
         ;;
+      \#)
+        echo "$(get_question_count) questions for term $term"
+        ;;
       \-)
         list_questions
         read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index_input
