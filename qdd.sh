@@ -711,13 +711,8 @@ get_question_count() {
 }
 
 get_answer_count() {
-  local count=0
-  if [[ $library && $term ]]; then
-    for answers in Libraries/$library/$term/*; do
-      list_answers_for_question_at_index 
-    done
-    echo "$count"
-  else
-    echo -1
-  fi
+  question_count="$(get_question_count)"
+  question_and_answer_count="$(list_answers | wc -l | sed 's/ *//')"
+  answer_count="$(( question_and_answer_count - question_count ))"
+  echo "$answer_count"
 }
