@@ -567,9 +567,9 @@ answer_question_at_index() {
       else
         answer="$(echo ${answer^} | sed 's|\/|\\/|')"
         sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
-        previous_answers="$(list_answers_for_question_at_index)"
+        previous_answers="$(list_answers_for_question_at_index "$question_index")"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
-        if (( previous_answer_length > 8 )); then
+        if (( previous_answer_length > 9 )); then #since answer is included, we need to check if it's greater than 9
           list_answers_for_question_at_index "$question_index"
           read -n1 -p "There can't be more than 8 answers for the same question. Please choose the index of the answer you want to get rid of: " answer_index
           echo
