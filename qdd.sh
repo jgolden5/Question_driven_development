@@ -64,11 +64,13 @@ question_mode() {
         ;;
       \-)
         list_questions
-        read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index
+        read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index_input
         echo
-        if [[ $question_index == '*' ]]; then
+        if [[ $question_index_input == '*' ]]; then
           remove_all_questions
-        elif [[ $question_index =~ [0-9] ]]; then
+        elif [[ $question_index_input =~ [0-9] ]]; then
+          remove_question_at_index "$question_index_input"
+        elif [[ ! "$question_index_input" ]]; then
           remove_question_at_index "$question_index"
         fi
         ;;
