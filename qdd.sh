@@ -12,6 +12,7 @@ ORANGE="\e[38;5;214m"
 NC="\e[0m"
 
 main() {
+  clear
   while true; do
     echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}$ "
     read -n1 mode
@@ -63,8 +64,13 @@ question_mode() {
         ;;
       \-)
         list_questions
-        read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove: " question_index
-        remove_question_at_index "$question_index"
+        read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index
+        echo
+        if [[ $question_index == '*' ]]; then
+          remove_all_questions
+        elif [[ $question_index =~ [0-9] ]]; then
+          remove_question_at_index "$question_index"
+        fi
         ;;
       h)
         question_help
@@ -171,6 +177,8 @@ library_mode() {
 }
 
 alias qdd='source qdd.sh && echo qdd sourced successfully'
+alias qmm='source qdd.sh && main'
+alias qvv='vi qdd.sh'
 
 #help functions. These give every possible command I can access from the current state
 
@@ -516,6 +524,19 @@ remove_question_at_index() {
   else
     echo "No question index was entered"
     return 1
+  fi
+}
+
+remove_all_questions() {
+  if [[ "$library" && "$term" ]]; then
+    read -n1 -p "Are you sure you want to remove all answers from $term? (This eliminates answers as well and cannot be undone!) " confirmation
+    echo
+    if [[ $confirmation == y ]]; then
+      echo -n "" >Libraries/$library/$term/answers
+      question_index=0
+    fi
+  else
+    echo "Library and/or term not defined"
   fi
 }
 
