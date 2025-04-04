@@ -591,7 +591,7 @@ list_answers() {
         echo "  $j - $inner_line"
       fi
       (( j++ ))
-    done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+    done < <(sed -r 's/([!.?]) ([A-Z]|[0-9])/\1\n\2/g' <<<"$line")
     (( i++ ))
   done < <(cat Libraries/$library/$term/answers)
   if [[ $i == 0 ]]; then
