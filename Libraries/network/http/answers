@@ -1,8 +1,8 @@
 What is a hypermedia information system? Links pointing to text, sound, images, or video.
 What is a resource defined as in http? Data that's accessible with a unique ID (uri).
 Why was http created? To send hypertext links simply across a network.
-How does http depend on tcp? Tcp ensures correct packet structure for http.
-What should I know about different http versions?
+How does http depend on tcp? Tcp ensures correct packet structure for http. Tjajsdf.
+What should I know about different http versions? Test. . Test/2.2. A normal ansewr.
 What do the main http request methods do?
 What do the main http response codes mean?
 How can I practice using http?

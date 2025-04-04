@@ -559,7 +559,7 @@ answer_question_at_index() {
       if (( "$answer_length" > 8 )); then
         echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
-        answer="${answer^}"
+        answer="$(echo ${answer^} | sed 's|\/|\\/|')"
         sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
         previous_answers="$(list_answers_for_question_at_index)"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
