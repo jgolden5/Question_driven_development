@@ -473,7 +473,7 @@ ask_question() {
     local question_length="$(echo $question | wc -w | sed 's/ *//')"
     if [[ "$question_length" -le 8 ]]; then
       local answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
-      echo "$question" >>Libraries/$library/$term/answers && echo "question was added to $term answers"
+      echo "$question" >>Libraries/$library/$term/answers && echo "question was added to $term questions"
       if (( answers_length + 1 > 8 )); then
         questions_exceed_8=t
         while [[ $questions_exceed_8 == t ]]; do
@@ -484,7 +484,7 @@ ask_question() {
         done
       fi
     else
-      echo "Question was $question_length words long. Please make sure questions are <= 8 words long"
+      echo "Question was $question_length words long. Please make sure questions are <= 8 words long. Question was not added."
     fi
   fi
 }
@@ -557,7 +557,7 @@ answer_question_at_index() {
     if [[ "$answer" ]]; then
       local answer_length="$(echo "$answer" | wc -w | sed 's/ *//')"
       if (( "$answer_length" > 8 )); then
-        echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question)." && return 1
+        echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
         answer="${answer^}"
         sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
