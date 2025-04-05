@@ -17,29 +17,8 @@ main() {
     echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}$ "
     read -n1 mode
     echo
-    case "$mode" in
-      \?|h)
-        main_help
-        ;;
-      q)
-        question_mode
-        ;;
-      t)
-        term_mode
-        ;;
-      w)
-        answer_mode
-        ;;
-      x|Q)
-        break
-        ;;
-      y)
-        library_mode
-        ;;
-      *)
-        echo "mode $mode not recognized"
-        ;;
-    esac
+    mode_func="$(choose_mode_func "$mode")"
+    eval "$mode_func"
   done
 }
 
@@ -237,6 +216,24 @@ answer_help() {
 }
 
 #utils -- auxiliary functions used for main and mode functions
+
+choose_mode_func() {
+  if [[ "$1" == '?' || "$1" == 'h' ]]; then
+    echo main_help
+  elif [[ "$1" == 'q' ]]; then
+    echo question_mode
+  elif [[ "$1" == 't' ]]; then
+    echo term_mode
+  elif [[ "$1" == 'w' ]]; then
+    echo answer_mode
+  elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
+    echo break
+  elif [[ "$1" == 'y' ]]; then
+    echo library_mode
+  else
+    echo 'echo "mode $mode not recognized"'
+  fi
+}
 
 get_questions() {
   questions=
