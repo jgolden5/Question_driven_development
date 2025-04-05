@@ -303,7 +303,8 @@ set_library_by_name() {
 
 remove_library() {
   local library_to_remove=
-  read -p "Which library do you want to remove? " lib_choice
+  read -n1 -p "Which library do you want to remove? " lib_choice
+  echo
   case "$lib_choice" in
     [0-9])
       library_to_remove="$(get_library_by_index "$lib_choice")"
@@ -413,21 +414,28 @@ list_terms() {
 }
 
 remove_term() {
-  local term_to_remove="$(get_term_to_remove)"
+  local term_to_remove=
+  read -n1 -p "Which term do you want to remove? " t_choice
+  echo
+  case "$t_choice" in
+    [0-9])
+      term_to_remove="$(get_term_by_index "$t_choice")"
+      ;;
+    a)
+      read -p "Enter term to remove: " term_name
+      term_to_remove="$(get_term_to_remove_by_name $term_name)"
+      ;;
+  esac
   if [[ "$term_to_remove" ]]; then
-    if [[ -d "Libraries/$library/$term_to_remove" ]]; then
-      read -n1 -p "Are you sure you want to remove term $term_to_remove? " confirmation
-      echo
-      if [[ $confirmation == "y" ]]; then
-        rm -r Libraries/$library/$term_to_remove && echo "Term removed successfully"
-        if [[ $term == $term_to_remove ]]; then
-          term=-
-        fi
-      else
-        echo "Ok. Term $term_to_remove is here to stay."
+    read -n1 -p "Are you sure you want to remove $term_to_remove term? " confirmation
+    echo
+    if [[ $confirmation == "y" ]]; then
+      rm -r Libraries/$library/$term_to_remove && echo "Term removed successfully"
+      if [[ $term == $term_to_remove ]]; then
+        term=-
       fi
     else
-      echo "Term $term_to_remove not found in $library library"
+      echo "Ok. Term $term_to_remove is here to stay."
     fi
   fi
 }
@@ -442,6 +450,7 @@ get_term_to_remove() {
       ;;
     a)
       read -p "Enter term to remove here: " term_to_remove
+      echo
       ;;
   esac
   echo "$term_to_remove"
