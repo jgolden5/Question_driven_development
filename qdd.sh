@@ -583,7 +583,7 @@ answer_question_at_index() {
         fi
       fi
     else
-      echo "Empty answer" && return 1
+      echo "Empty answer was not added" && return 1
     fi
   fi
 }
