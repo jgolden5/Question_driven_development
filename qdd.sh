@@ -612,24 +612,22 @@ list_all_answers() {
 }
 
 remove_answer() {
-  list_questions_that_have_answers
-  read -n1 -p "Which question do you want to remove an answer from? " q_index
-  echo
-  if [[ "$valid_question_indices" =~ $q_index ]]; then
-    list_answers_for_question_at_index $q_index
+  answer_count="$(list_answers_for_question_at_index "$question_index" | wc -l | sed 's/ *//')"
+  if [[ "$question_index" && $answer_count -gt 1 ]]; then
+    list_answers_for_question_at_index "$question_index"
     read -n1 -p "Which answer do you want to remove from said question? (* removes all answers) " a_index
     echo
-    if [[ $q_index =~ [0-9] ]]; then
+    if [[ $question_index =~ [0-9] ]]; then
       if [[ $a_index == "*" ]]; then
-        remove_all_answers_at_question_index "$q_index"
+        remove_all_answers_at_question_index "$question_index"
       else
-        remove_answer_by_indices "$q_index" "$a_index"
+        remove_answer_by_indices "$question_index" "$a_index"
       fi
     else
       echo "Invalid q index"
     fi
   else
-    echo "No answers exist yet for question at index $q_index"
+    echo "No answers exist yet for question at index $question_index"
   fi
 }
 
