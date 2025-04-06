@@ -122,7 +122,7 @@ answer_mode() {
       remove_answer
       ;;
     s)
-      list_answers && answer_mode
+      list_all_answers && answer_mode
       ;;
     h)
       answer_help
@@ -588,7 +588,7 @@ answer_question_at_index() {
   fi
 }
 
-list_answers() {
+list_all_answers() {
   local i=0
   while read line; do
     question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
@@ -721,7 +721,7 @@ get_question_count() {
 
 get_answer_count() {
   question_count="$(get_question_count)"
-  question_and_answer_count="$(list_answers | wc -l | sed 's/ *//')"
+  question_and_answer_count="$(list_all_answers | wc -l | sed 's/ *//')"
   answer_count="$(( question_and_answer_count - question_count ))"
   echo "$answer_count"
 }
