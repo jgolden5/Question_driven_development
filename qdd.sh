@@ -121,6 +121,9 @@ answer_mode() {
     \-)
       remove_answer
       ;;
+    s)
+      list_answers && answer_mode
+      ;;
     h)
       answer_help
       ;;
