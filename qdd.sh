@@ -122,7 +122,7 @@ answer_mode() {
       remove_answer
       ;;
     s)
-      list_all_answers && answer_mode
+      list_all_answers
       ;;
     h)
       answer_help
