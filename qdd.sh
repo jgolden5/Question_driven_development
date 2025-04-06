@@ -103,14 +103,11 @@ term_mode() {
 
 answer_mode() {
   safeguard_question_index
-  list_answers
+  list_answers_for_question_at_index "$question_index"
   echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
   case "$command" in 
-    [0-9])
-      answer_question_at_index "$command"
-      ;;
     ''|a)
       if [[ "$question_index" ]]; then
         answer_question_at_index "$question_index"
