@@ -44,7 +44,11 @@ question_mode() {
       \#)
         echo "$(get_question_count) questions for term $term"
         ;;
-      \-)
+      a)
+        read -p "Enter question here: " q
+        ask_question "$q"
+        ;;
+      d)
         list_questions
         read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index_input
         echo
@@ -55,10 +59,6 @@ question_mode() {
         elif [[ ! "$question_index_input" ]]; then
           remove_question_at_index "$question_index"
         fi
-        ;;
-      a)
-        read -p "Enter question here: " q
-        ask_question "$q"
         ;;
       h)
         question_help
@@ -84,11 +84,11 @@ term_mode() {
     [0-9]*) 
       set_term_by_index "$command"
       ;;
-    \-)
-      remove_term $command
-      ;;
     a)
       set_term_by_name
+      ;;
+    d)
+      remove_term $command
       ;;
     h)
       term_help
@@ -118,7 +118,7 @@ answer_mode() {
     \#)
       echo "$(get_answer_count) answers for term $term"
       ;;
-    \-)
+    d)
       remove_answer
       ;;
     s)
@@ -145,11 +145,11 @@ library_mode() {
     [0-9]) 
       set_library_by_index "$command"
       ;;
-    \-)
-      remove_library
-      ;;
     a)
       set_library_by_name
+      ;;
+    d)
+      remove_library
       ;;
     h)
       library_help
@@ -182,8 +182,8 @@ main_help() {
 library_help() {
   echo "Library Mode Help:"
   echo "0-9 - set library by index"
-  echo "- - remove library"
   echo "a - add/adjust library by name (multi-char)"
+  echo "d - delete library"
   echo "h/? - library mode help"
   echo "x/Q/Enter - exit library mode"
 }
@@ -191,8 +191,8 @@ library_help() {
 term_help() {
   echo "Term Mode Help:"
   echo "0-9 - set term by index"
-  echo "- - remove term"
   echo "a - adjust/add term by name (multi-char)"
+  echo "d - delete term"
   echo "h/? - term mode help"
   echo "x/Q/Enter - exit term mode"
 }
@@ -200,8 +200,8 @@ term_help() {
 question_help() {
   echo "Question Mode Help:"
   echo "0-9 - change question index"
-  echo "- - remove question by index"
   echo "a - ask question (multi-char)"
+  echo "d - delete question by index"
   echo "h/? - question mode help"
   echo "x/Q/Enter - exit question mode"
 }
@@ -209,8 +209,8 @@ question_help() {
 answer_help() {
   echo "Answer Mode Help:"
   echo "0-9 - answer question at index"
-  echo "- - remove answer by index"
   echo "Enter/a - answer question at index (multi-char)"
+  echo "d - delete answer by index"
   echo "h/? - answer mode help"
   echo "x/Q/Enter - exit answer mode"
 }
