@@ -131,6 +131,11 @@ answer_mode() {
     d)
       remove_answer
       ;;
+    e)
+      local index_of_answer_to_edit="$(get_answer_to_edit)"
+      local answer_to_edit="$(get_answer_by_index $index_of_answer_to_edit)"
+      edit_answer "$answer_to_edit" "$index_of_answer_to_edit"
+      ;;
     s)
       list_all_answers
       ;;
@@ -671,7 +676,7 @@ edit_question() {
           echo "successfully moved question \"$question_to_edit\" to \"$new_question\""
         fi
       else
-        echo "Question was $new_question_length words long. Please make sure questions are <= 8 words long. Question was not editted."
+        echo "Question was $new_question_length words long. Please make sure questions are <= 8 words long. Question was not changed."
       fi
     else
       echo "Ok then."
@@ -685,6 +690,24 @@ get_question_by_index() {
   sed -n "${question_position}p" Libraries/$library/$term/answers | sed 's/\(.*\?\).*/\1/'
 }
 
+get_answer_by_index() {
+  local answer_index="$1"
+  local answer_position="$((answer_index + 1))"
+  local question_position="$((question_index + 1))"
+  local current_question="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
+  local question_with_newlines="$(echo $current_question | sed -r 's/\.|\? /\n/g')"
+  i=0
+  while read answer; do
+    if (( i > 0 )); then
+      if (( answer_position == i )); then
+        echo "$answer"
+        break
+      fi
+    fi
+    (( i++ ))
+  done <<< $question_with_newlines
+}
+
 answer_question_at_index() {
   question_index="$1"
   local question_position="$(( question_index + 1 ))"
@@ -696,7 +719,7 @@ answer_question_at_index() {
       if (( "$answer_length" > 8 )); then
         echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
-        answer="$(echo ${answer^} | sed 's|\/|\\/|')"
+        answer="$(echo ${answer^})"
         sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
         previous_answers="$(list_answers_for_question_at_index "$question_index")"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
@@ -794,6 +817,45 @@ remove_answer_by_indices() {
       sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
     else
       echo "Answer index was invalid. No answer was removed"
+    fi
+  fi
+}
+
+get_answer_to_edit() {
+  list_answers_for_question_at_index "$question_index" >&2
+  echo -n "Which answer do you want to edit the name of? " >&2
+  read -n1 answer_choice
+  echo >&2
+  if [[ "$answer_choice" =~ [0-9] ]]; then
+    echo "$answer_choice"
+  elif [[ ! "$answer_choice" ]]; then
+    echo 0
+  else
+    echo "Invalid answer index" >&2
+  fi
+}
+
+edit_answer() {
+  local answer_to_edit="$1"
+  if [[ $(grep "$answer_to_edit" Libraries/$library/$term/answers) != "" ]]; then
+    echo "Changing $answer_to_edit "
+    read -p "to ..... " new_answer
+    if [[ $new_answer ]]; then
+      local new_answer_length="$(echo "$new_answer" | wc -w | sed 's/ *//')"
+      if [[ "$new_answer_length" -le 8 ]]; then
+        read -n1 -p "Are you sure you want to change answer \"$answer_to_edit\" to \"$new_answer\"? " confirmation
+        echo
+        if [[ $confirmation == "y" ]]; then
+          question_position="$((question_index + 1))"
+          echo "question position = $question_position" #
+          sed -i '' "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
+          echo "successfully moved answer \"$answer_to_edit\" to \"$new_answer\""
+        fi
+      else
+        echo "Answer was $new_answer_length words long. Please make sure answers are <= 8 words long. Answer was not changed."
+      fi
+    else
+      echo "Ok then."
     fi
   fi
 }
