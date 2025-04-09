@@ -60,6 +60,11 @@ question_mode() {
           remove_question_at_index "$question_index"
         fi
         ;;
+      e)
+        local index_of_question_to_edit="$(get_question_to_edit)"
+        local question_to_edit="$(get_question_by_index $index_of_question_to_edit)"
+        edit_question "$question_to_edit" "$index_of_question_to_edit"
+        ;;
       h)
         question_help
         ;;
@@ -629,6 +634,48 @@ remove_all_questions() {
     fi
   else
     echo "Library and/or term not defined"
+  fi
+}
+
+get_question_to_edit() {
+  list_questions >&2
+  echo -n "Which question do you want to edit the name of? " >&2
+  read -n1 question_choice
+  echo >&2
+  if [[ "$question_choice" =~ [0-9] ]]; then
+    echo "$question_choice"
+  elif [[ ! "$question_choice" ]]; then
+    echo "$question_index"
+  else
+    echo "Invalid question index" >&2
+  fi
+}
+
+edit_question() {
+  local question_to_edit="$1"
+  local temp_question_index="$2"
+  if [[ "$question_to_edit" && "$term" && "$library" ]]; then
+    echo "Changing $question_to_edit "
+    read -p "to ..... " new_question
+    if [[ $new_question ]]; then
+      local new_question_length="$(echo "$new_question" | wc -w | sed 's/ *//')"
+      if [[ "$new_question_length" -le 8 ]]; then
+        read -n1 -p "Are you sure you want to change question \"$question_to_edit\" to \"$new_question\"? " confirmation
+        echo
+        if [[ $confirmation == "y" ]]; then
+          if [[ ! $new_question =~ \?$ ]]; then
+            new_question+="?"
+          fi
+          local question_position="$((temp_question_index + 1))"
+          sed -i '' "${question_position}s/.*\?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
+          echo "successfully moved question \"$question_to_edit\" to \"$new_question\""
+        fi
+      else
+        echo "Question was $new_question_length words long. Please make sure questions are <= 8 words long. Question was not editted."
+      fi
+    else
+      echo "Ok then."
+    fi
   fi
 }
 
