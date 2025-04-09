@@ -851,7 +851,6 @@ edit_answer() {
         echo
         if [[ $confirmation == "y" ]]; then
           question_position="$((question_index + 1))"
-          echo "question position = $question_position" #
           sed -i '' "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
           echo "successfully moved answer \"$answer_to_edit\" to \"$new_answer\""
         fi
