@@ -48,6 +48,15 @@ question_mode() {
         read -p "Enter question here: " q
         ask_question "$q"
         ;;
+      c)
+        read -n1 -p "Which question index would you like to copy to clipboard? " q_index
+        echo
+        if [[ ! "$q_index" =~ [0-9] ]]; then
+          q_index=$question_index
+          echo "used default question index $question_index"
+        fi
+        copy_question "$(get_question_by_index $q_index)"
+        ;;
       d)
         list_questions
         read -n1 -p "Warning: Questions should typically be removed by replacing them with new questions. Please enter the index of the question you want to remove (* removes all): " question_index_input
@@ -591,6 +600,11 @@ ask_question() {
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long. Question was not added."
     fi
   fi
+}
+
+copy_question() {
+  echo "$1" | pbcopy
+  echo "question \"$1\" was successfully copied to the clipboard"
 }
 
 list_questions() {
