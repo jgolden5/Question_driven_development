@@ -74,6 +74,17 @@ question_mode() {
         local question_to_edit="$(get_question_by_index $index_of_question_to_edit)"
         edit_question "$question_to_edit" "$index_of_question_to_edit"
         ;;
+      g)
+        read -n1 -p "Which question index would you like to google and copy to clipboard? " q_index
+        echo
+        if [[ ! "$q_index" =~ [0-9] ]]; then
+          local q_index=$question_index
+          echo "used default question index $question_index"
+        fi
+        question_to_google="$(get_question_by_index $q_index)"
+        copy_question "$question_to_google"
+        google_question $question_to_google
+        ;;
       h)
         question_help
         ;;
@@ -607,6 +618,15 @@ copy_question() {
   echo "question \"$1\" was successfully copied to the clipboard"
 }
 
+google_question() {
+  local search=
+  for word in $@ ; do
+    search="$search%20$word"
+  done
+  open "http://www.google.com/search?q=$search"
+  echo "googled \"$@\""
+}
+
 list_questions() {
   local i=0
   while read line; do
@@ -703,8 +723,8 @@ edit_question() {
 }
 
 get_question_by_index() {
-  question_index="$1"
-  question_position="$(( question_index + 1 ))"
+  local q_index="$1"
+  question_position="$(( q_index + 1 ))"
   sed -n "${question_position}p" Libraries/$library/$term/answers | sed 's/\(.*\?\).*/\1/'
 }
 
