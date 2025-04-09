@@ -90,6 +90,11 @@ term_mode() {
     d)
       remove_term $command
       ;;
+    e)
+      local index_of_term_to_edit="$(get_term_to_edit)"
+      local term_to_edit="$(get_term_by_index $index_of_term_to_edit)"
+      edit_term "$term_to_edit"
+      ;;
     h)
       term_help
       ;;
@@ -344,7 +349,7 @@ get_library_to_edit() {
 }
 
 edit_library() {
-  library_to_edit="$1"
+  local library_to_edit="$1"
   if [[ "$library_to_edit" ]]; then
     echo "Changing $library_to_edit "
     read -p "to ..... " new_library_name
@@ -475,6 +480,40 @@ remove_term() {
       fi
     else
       echo "Ok. Term $term_to_remove is here to stay."
+    fi
+  fi
+}
+
+get_term_to_edit() {
+  list_terms >&2
+  echo -n "Which term do you want to edit the name of? " >&2
+  read -n1 term_choice
+  echo >&2
+  if [[ "$term_choice" =~ [0-9] ]]; then
+    echo "$term_choice"
+  elif [[ ! "$term_choice" ]]; then
+    echo "$term_index"
+  else
+    echo "Invalid term index" >&2
+  fi
+}
+
+edit_term() {
+  local term_to_edit="$1"
+  if [[ "$term_to_edit" && "$library" ]]; then
+    echo "Changing $term_to_edit "
+    read -p "to ..... " new_term_name
+    if [[ $new_term_name ]]; then
+      read -n1 -p "Are you sure you want to change term $term_to_edit to $new_term_name? " confirmation
+      echo
+      if [[ $confirmation == "y" ]]; then
+        mv Libraries/$library/$term_to_edit Libraries/$library/$new_term_name && echo "successfully moved term $term_to_edit to $new_term_name"
+        if [[ $term == $term_to_edit ]]; then
+          term=$new_term_name
+        fi
+      fi
+    else
+      echo "Ok then."
     fi
   fi
 }
@@ -629,6 +668,7 @@ answer_question_at_index() {
 
 list_all_answers() {
   local i=0
+  echo "Showing all answers:"
   while read line; do
     question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
     if [[ $i == $question_index ]]; then
