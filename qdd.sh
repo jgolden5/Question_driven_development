@@ -723,3 +723,5 @@ get_answer_count() {
   answer_count="$(( question_and_answer_count - question_count ))"
   echo "$answer_count"
 }
+
+echo "QDD was successfully sourced"
