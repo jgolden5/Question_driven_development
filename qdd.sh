@@ -151,6 +151,11 @@ library_mode() {
     d)
       remove_library
       ;;
+    e)
+      local index_of_library_to_edit="$(get_library_to_edit)"
+      local library_to_edit="$(get_library_by_index $index_of_library_to_edit)"
+      edit_library "$library_to_edit"
+      ;;
     h)
       library_help
       ;;
@@ -163,7 +168,7 @@ library_mode() {
   set_default_term
 }
 
-alias qdd='source qdd.sh && echo qdd sourced successfully'
+alias qdd='source qdd.sh'
 alias qmm='source qdd.sh && main'
 alias qvv='vi qdd.sh'
 
@@ -320,6 +325,40 @@ remove_library() {
       fi
     else
       echo "Ok. Library $library_to_remove is here to stay."
+    fi
+  fi
+}
+
+get_library_to_edit() {
+  list_libraries >&2
+  echo -n "Which library do you want to edit the name of? " >&2
+  read -n1 lib_choice
+  echo >&2
+  if [[ "$lib_choice" =~ [0-9] ]]; then
+    echo "$lib_choice"
+  elif [[ ! "$lib_choice" ]]; then
+    echo "$library_index"
+  else
+    echo "Invalid library index" >&2
+  fi
+}
+
+edit_library() {
+  library_to_edit="$1"
+  if [[ "$library_to_edit" ]]; then
+    echo "Changing $library_to_edit "
+    read -p "to ..... " new_library_name
+    if [[ $new_library_name ]]; then
+      read -n1 -p "Are you sure you want to change library $library_to_edit to $new_library_name? " confirmation
+      echo
+      if [[ $confirmation == "y" ]]; then
+        mv Libraries/$library_to_edit Libraries/$new_library_name && echo "successfully moved library $library_to_edit to $new_library_name"
+        if [[ $library == $library_to_edit ]]; then
+          library=$new_library_name
+        fi
+      fi
+    else
+      echo "Ok then."
     fi
   fi
 }
