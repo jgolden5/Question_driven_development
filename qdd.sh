@@ -204,6 +204,7 @@ library_help() {
   echo "0-9 - set library by index"
   echo "a - add/adjust library by name (multi-char)"
   echo "d - delete library"
+  echo "e - edit existing library names"
   echo "h/? - library mode help"
   echo "x/Q/Enter - exit library mode"
 }
@@ -213,6 +214,7 @@ term_help() {
   echo "0-9 - set term by index"
   echo "a - adjust/add term by name (multi-char)"
   echo "d - delete term"
+  echo "e - edit existing term names"
   echo "h/? - term mode help"
   echo "x/Q/Enter - exit term mode"
 }
@@ -222,6 +224,7 @@ question_help() {
   echo "0-9 - change question index"
   echo "a - ask question (multi-char)"
   echo "d - delete question by index"
+  echo "e - edit existing quesions"
   echo "h/? - question mode help"
   echo "x/Q/Enter - exit question mode"
 }
@@ -231,6 +234,7 @@ answer_help() {
   echo "0-9 - answer question at index"
   echo "Enter/a - answer question at index (multi-char)"
   echo "d - delete answer by index"
+  echo "e - edit existing answers"
   echo "h/? - answer mode help"
   echo "x/Q/Enter - exit answer mode"
 }
