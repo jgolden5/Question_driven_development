@@ -648,7 +648,7 @@ remove_all_questions() {
 
 get_question_to_edit() {
   list_questions >&2
-  echo -n "Which question do you want to edit the name of? " >&2
+  echo -n "Which question do you want to edit? " >&2
   read -n1 question_choice
   echo >&2
   if [[ "$question_choice" =~ [0-9] ]]; then
@@ -827,7 +827,7 @@ remove_answer_by_indices() {
 
 get_answer_to_edit() {
   list_answers_for_question_at_index "$question_index" >&2
-  echo -n "Which answer do you want to edit the name of? " >&2
+  echo -n "Which answer do you want to edit? " >&2
   read -n1 answer_choice
   echo >&2
   if [[ "$answer_choice" =~ [0-9] ]]; then
