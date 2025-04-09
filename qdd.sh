@@ -910,8 +910,16 @@ get_question_count() {
 }
 
 get_answer_count() {
-  question_count="$(get_question_count)"
-  question_and_answer_count="$(list_all_answers | wc -l | sed 's/ *//')"
+  local question_and_answer_count= \
+        answer_count= \
+
+  local question_count="$(get_question_count)"
+  if [[ -s Libraries/$library/$term/answers ]]; then
+    question_and_answer_count="$(list_all_answers | wc -l | sed 's/ *//')"
+    (( question_and_answer_count-- ))
+  else
+    question_and_answer_count=0
+  fi
   answer_count="$(( question_and_answer_count - question_count ))"
   echo "$answer_count"
 }
