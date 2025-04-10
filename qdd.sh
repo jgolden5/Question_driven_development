@@ -7,6 +7,7 @@ term="$(ls Libraries/$library | head -1)"
 YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
+CYAN="\e[96m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
 NC="\e[0m"
@@ -170,6 +171,17 @@ answer_mode() {
   esac
 }
 
+search_mode() {
+  echo -ne "${CYAN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${CYAN}$library_index${YELLOW}] ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    *)
+      echo "search mode test passed"
+      ;;
+  esac
+}
+
 library_mode() {
   library_index="$(get_library_index)"
   list_libraries
@@ -266,10 +278,12 @@ choose_mode_func() {
     echo main_help
   elif [[ "$1" == 'q' ]]; then
     echo question_mode
-  elif [[ "$1" == 't' ]]; then
-    echo term_mode
   elif [[ "$1" == 'w' ]]; then
     echo answer_mode
+  elif [[ "$1" == 'r' ]]; then
+    echo search_mode
+  elif [[ "$1" == 't' ]]; then
+    echo term_mode
   elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
     echo break
   elif [[ "$1" == 'y' ]]; then
