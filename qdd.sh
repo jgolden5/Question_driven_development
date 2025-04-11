@@ -621,6 +621,8 @@ ask_question() {
           remove_question_at_index "$replacement_index" && questions_exceed_8=f
         done
       fi
+      echo "Answers length = $answers_length" #
+      question_index="$answers_length"
     else
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long. Question was not added."
     fi
