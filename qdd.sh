@@ -611,6 +611,7 @@ ask_question() {
     local question_length="$(echo $question | wc -w | sed 's/ *//')"
     if [[ "$question_length" -le 8 ]]; then
       local answers_length="$(cat Libraries/$library/$term/answers | wc -l | sed 's/ *//')"
+      question="$(echo ${question^})"
       echo "$question" >>Libraries/$library/$term/answers && echo "question was added to $term questions"
       if (( answers_length + 1 > 8 )); then
         questions_exceed_8=t
