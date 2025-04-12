@@ -717,6 +717,7 @@ edit_question() {
   if [[ "$question_to_edit" && "$term" && "$library" ]]; then
     echo "Changing $question_to_edit "
     read -p "to ..... " new_question
+    new_question="$(echo ${new_question^})"
     if [[ $new_question ]]; then
       local new_question_length="$(echo "$new_question" | wc -w | sed 's/ *//')"
       if [[ "$new_question_length" -le 8 ]]; then
