@@ -686,7 +686,7 @@ remove_question_at_index() {
 
 remove_all_questions() {
   if [[ "$library" && "$term" ]]; then
-    read -n1 -p "Are you sure you want to remove all answers from $term? (This eliminates answers as well and cannot be undone!) " confirmation
+    read -n1 -p "Are you sure you want to remove all questions from $term? (This eliminates answers as well and cannot be undone!) " confirmation
     echo
     if [[ $confirmation == y ]]; then
       echo -n "" >Libraries/$library/$term/answers
