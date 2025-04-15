@@ -155,7 +155,6 @@ answer_mode() {
     e)
       local index_of_answer_to_edit="$(get_answer_to_edit)"
       local answer_to_edit="$(get_answer_by_index $index_of_answer_to_edit)"
-      echo "$answer_to_edit"
       edit_answer "$answer_to_edit" "$index_of_answer_to_edit"
       ;;
     s)
@@ -757,7 +756,11 @@ get_answer_by_index() {
   while read answer; do
     if (( i > 0 )); then
       if (( answer_position == i )); then
-        echo "$answer"
+        if [[ "$answer" =~ \.$ ]]; then
+          echo "${answer%?}"
+        else
+          echo "$answer"
+        fi
         break
       fi
     fi
