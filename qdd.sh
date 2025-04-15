@@ -848,7 +848,7 @@ list_answers_for_question_at_index() {
       echo "  $j - $inner_line"
     fi
     (( j++ ))
-  done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+  done < <(sed 's/\([\!\.\?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
 }
 
 remove_answer_by_indices() {
@@ -868,7 +868,7 @@ remove_answer_by_indices() {
         break
       fi
       (( j++ ))
-    done < <(sed 's/\([\!\.\?]\) \([A-Z]\)/\1\n\2/g' <<<"$line")
+    done < <(sed 's/\([\!\.\?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
     if [[ "$answer_to_remove" ]]; then
       sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
     else
