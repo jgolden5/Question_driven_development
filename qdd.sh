@@ -155,6 +155,7 @@ answer_mode() {
     e)
       local index_of_answer_to_edit="$(get_answer_to_edit)"
       local answer_to_edit="$(get_answer_by_index $index_of_answer_to_edit)"
+      echo "$answer_to_edit"
       edit_answer "$answer_to_edit" "$index_of_answer_to_edit"
       ;;
     s)
@@ -751,7 +752,7 @@ get_answer_by_index() {
   local answer_position="$((answer_index + 1))"
   local question_position="$((question_index + 1))"
   local current_question="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
-  local question_with_newlines="$(echo $current_question | sed -r 's/\.|\? /\n/g')"
+  local question_with_newlines="$(echo $current_question | sed 's/[.?] /\n/g')"
   i=0
   while read answer; do
     if (( i > 0 )); then
