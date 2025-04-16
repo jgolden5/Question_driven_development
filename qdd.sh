@@ -2,8 +2,20 @@
 
 source ~/p/bash-debugger
 
-library="${library:-"$(ls Libraries | head -1)"}"
-term="$(ls Libraries/$library | head -1)"
+if [[ "$last_tub" ]]; then
+  if [[ "$last_tub" == "$(pwd)" ]]; then
+    library="${library:-"$(ls Libraries | head -1)"}"
+    term="$(ls Libraries/$library | head -1)"
+  else
+    library_index=0
+    term_index=0
+    library=$(get_library_by_index 0)
+    term=$(get_term_by_index 0)
+    question_index=0
+  fi
+fi
+last_tub="$(pwd)"
+
 YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
@@ -622,7 +634,6 @@ ask_question() {
           remove_question_at_index "$replacement_index" && questions_exceed_8=f
         done
       fi
-      echo "Answers length = $answers_length" #
       question_index="$answers_length"
     else
       echo "Question was $question_length words long. Please make sure questions are <= 8 words long. Question was not added."
