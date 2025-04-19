@@ -183,13 +183,13 @@ answer_mode() {
   esac
 }
 
-search_mode() {
-  echo -ne "${CYAN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${CYAN}$library_index${YELLOW}] ${NC}$ "
+rank_mode() {
+  echo -ne "${CYAN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${CYAN}$question_index${YELLOW}] ${NC}$ "
   read -n1 command
   echo
-  case "$command" in
+  case "$command" in 
     *)
-      echo "search mode test passed"
+      echo "rank mode command was triggered"
       ;;
   esac
 }
@@ -293,7 +293,7 @@ choose_mode_func() {
   elif [[ "$1" == 'w' ]]; then
     echo answer_mode
   elif [[ "$1" == 'r' ]]; then
-    echo search_mode
+    echo rank_mode
   elif [[ "$1" == 't' ]]; then
     echo term_mode
   elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
