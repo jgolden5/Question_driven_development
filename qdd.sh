@@ -214,7 +214,11 @@ rank_mode() {
       read -n1 -p "Enter the index of the library you want to rank: " lib_index
       echo
       if [[ "$lib_index" ]]; then
-        rank_library "$lib_index"
+        if [[ "$lib_index" == '*' ]]; then
+          rank_tub
+        else
+          rank_library "$lib_index"
+        fi
       else
         rank_library "$library_index"
       fi
@@ -1140,6 +1144,14 @@ rank_library() {
   fi
   echo -e "    ${color}$1: ${library} - $total_questions_answered answers ($library_status)${NC}"
   library="$og_lib"
+}
+
+rank_tub() {
+  local i=0
+  for lib in Libraries/*; do
+    rank_library "$i"
+    (( i++ ))
+  done
 }
 
 echo "QDD was successfully sourced"
