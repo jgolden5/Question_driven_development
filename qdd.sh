@@ -199,6 +199,15 @@ rank_mode() {
         rank_question "$question_index"
       fi
       ;;
+    t)
+      list_terms
+      read -n1 -p "Enter the index of the term you want to rank: " t_index
+      if [[ "$t_index" ]]; then
+        rank_term "$t_index"
+      else
+        rank_term "$term_index"
+      fi
+      ;;
     *)
       echo "command not recognized"
       ;;
@@ -1002,14 +1011,11 @@ get_answer_count() {
 }
 
 rank_question() {
-  local lines_in_current_answers_file=$(list_answers_for_question_at_index "$1" | wc -l | sed 's/ *//')
-  local number_of_answers="$(( lines_in_current_answers_file - 1))"
+  local number_of_answers="$(get_number_of_answers_at_question_index "$1")"
   local color="${NC}"
   local answer_status=
-  if [[ "$(question_exists_at_index $1)" == "false" ]]; then
-    answer_status="non-existing question"
-    color="$BLACK_FG_RED_BG"
-  else
+  local question="$(get_question_by_index "$1")"
+  if [[ "$question" =~ '?' ]]; then
     case "$number_of_answers" in 
       0)
         answer_status="empty"
@@ -1032,18 +1038,59 @@ rank_question() {
         color="$CYAN"
         ;;
     esac
+  else
+    answer_status="non-existing question"
+    color="$BLACK_FG_RED_BG"
   fi
-  echo -e "${color}question at index #$1 has $number_of_answers answers ($answer_status)${NC}"
+  echo -e "${color}$1: ${question} - $number_of_answers answers ($answer_status)${NC}"
 }
 
-question_exists_at_index() {
-  question_position=$(( $1 + 1 ))
-  current_answer_line="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
-  if [[ "$current_answer_line" ]]; then
-    echo "true"
+get_number_of_answers_at_question_index() {
+  local lines_in_current_answers_file=$(list_answers_for_question_at_index "$1" | wc -l | sed 's/ *//')
+  echo "$(( lines_in_current_answers_file - 1 ))"
+}
+
+rank_term() {
+  local term_status=
+  local color=
+  og_term="$term"
+  term=$(get_term_by_index $1)
+  local total_questions_answered=0
+  for n in {0..7}; do
+    question_rank_description=$(rank_question "$n")
+    echo "$question_rank_description"
+    local new_questions_answered=$(get_number_of_answers_at_question_index "$n")
+    total_questions_answered=$(( total_questions_answered + new_questions_answered ))
+  done
+  if [[ "$term" ]]; then
+    case "$total_questions_answered" in 
+      0)
+        term_status="empty"
+        color="$RED"
+        ;;
+      [1-9]|1[0-9]|20)
+        term_status="low progress"
+        color="$ORANGE"
+        ;;
+      2[1-9]|3[0-9]|4[0-5])
+        term_status="medium progress"
+        color="$YELLOW"
+        ;;
+      4[6-9]|5[0-9]|6[0-3])
+        term_status="near complete"
+        color="$GREEN"
+        ;;
+      64)
+        term_status="complete"
+        color="$CYAN"
+        ;;
+    esac
   else
-    echo "false"
+    term_status="non-existing term"
+    color="$BLACK_FG_RED_BG"
   fi
+  echo -e "  ${color}$1: ${term} - $total_questions_answered answers ($term_status)${NC}"
+  term="$og_term"
 }
 
 echo "QDD was successfully sourced"
