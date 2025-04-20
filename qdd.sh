@@ -202,10 +202,21 @@ rank_mode() {
     t)
       list_terms
       read -n1 -p "Enter the index of the term you want to rank: " t_index
+      echo
       if [[ "$t_index" ]]; then
         rank_term "$t_index"
       else
         rank_term "$term_index"
+      fi
+      ;;
+    y)
+      list_libraries
+      read -n1 -p "Enter the index of the library you want to rank: " lib_index
+      echo
+      if [[ "$lib_index" ]]; then
+        rank_library "$lib_index"
+      else
+        rank_library "$library_index"
       fi
       ;;
     *)
@@ -1034,7 +1045,7 @@ rank_question() {
         color="$GREEN"
         ;;
       8) #complete
-        answer_status="complete"
+        answer_status="question complete"
         color="$CYAN"
         ;;
     esac
@@ -1055,14 +1066,14 @@ rank_term() {
   local color=
   og_term="$term"
   term=$(get_term_by_index $1)
-  local total_questions_answered=0
+  total_questions_answered=0
+  if [[ "$term" ]]; then
   for n in {0..7}; do
     question_rank_description=$(rank_question "$n")
     echo "$question_rank_description"
     local new_questions_answered=$(get_number_of_answers_at_question_index "$n")
     total_questions_answered=$(( total_questions_answered + new_questions_answered ))
   done
-  if [[ "$term" ]]; then
     case "$total_questions_answered" in 
       0)
         term_status="empty"
@@ -1081,7 +1092,7 @@ rank_term() {
         color="$GREEN"
         ;;
       64)
-        term_status="complete"
+        term_status="term complete"
         color="$CYAN"
         ;;
     esac
@@ -1091,6 +1102,44 @@ rank_term() {
   fi
   echo -e "  ${color}$1: ${term} - $total_questions_answered answers ($term_status)${NC}"
   term="$og_term"
+}
+
+rank_library() {
+  local lib_status=
+  local color=
+  og_lib="$library"
+  library=$(get_library_by_index $1)
+  local total_questions_answered=0
+  local number_of_terms=$(ls Libraries/$library | wc -l | sed 's/ *//')
+  for n in $(seq 0 "$number_of_terms"); do
+    term_rank_description=$(rank_term "$n")
+    echo "$term_rank_description" | grep -v "non-existing" | grep "  "
+    local new_questions_answered=$(echo "$term_rank_description" | tail -1 | sed -r 's/.* ([0-9]*) answers.*/\1/')
+    total_questions_answered=$(( total_questions_answered + new_questions_answered ))
+  done
+  if [[ "$library" ]]; then
+    if (( total_questions_answered == 0 )); then
+      library_status="empty"
+      color="$RED"
+    elif (( total_questions_answered < 161 )); then
+      library_status="low progress"
+      color="$ORANGE"
+    elif (( total_questions_answered < 360 )); then
+      library_status="medium progress"
+      color="$YELLOW"
+    elif (( total_questions_answered < 512 )); then
+      library_status="near complete"
+      color="$GREEN"
+    elif (( total_questions_answered == 512 )); then
+      library_status="library complete"
+      color="$CYAN"
+    fi
+  else
+    library_status="non-existing library"
+    color="$BLACK_FG_RED_BG"
+  fi
+  echo -e "    ${color}$1: ${library} - $total_questions_answered answers ($library_status)${NC}"
+  library="$og_lib"
 }
 
 echo "QDD was successfully sourced"
