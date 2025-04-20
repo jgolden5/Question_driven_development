@@ -97,7 +97,7 @@ question_mode() {
         fi
         question_to_google="$(get_question_by_index $q_index)"
         copy_question "$question_to_google"
-        google_question $question_to_google
+        google_keyword $question_to_google
         ;;
       h)
         question_help
@@ -133,6 +133,9 @@ term_mode() {
       local index_of_term_to_edit="$(get_term_to_edit)"
       local term_to_edit="$(get_term_by_index $index_of_term_to_edit)"
       edit_term "$term_to_edit"
+      ;;
+    g)
+      google_documentation_for_current_term
       ;;
     h)
       term_help
@@ -681,7 +684,7 @@ copy_question() {
   echo "question \"$1\" was successfully copied to the clipboard"
 }
 
-google_question() {
+google_keyword() {
   local search=
   for word in $@ ; do
     search="$search%20$word"
@@ -1152,6 +1155,22 @@ rank_tub() {
     rank_library "$i"
     (( i++ ))
   done
+}
+
+google_documentation_for_current_term() { 
+  read -n1 -p "Enter the index of the term I want to google documentation for: " t_index
+  echo
+  term_to_google="$(get_term_by_index $t_index)"
+  if [[ "$term_to_google" ]]; then
+    google_message="official $term_to_google documentation"
+    google_keyword "$google_message"
+    echo "Keep in mind, the web page I want from this will often not be the first one. Look for documentation that is..."
+    echo "1) Official"
+    echo "2) Made by experts"
+    echo "3) Filled with first-hand knowledge (not watered down)"
+  else
+    echo "Invalid term index"
+  fi
 }
 
 echo "QDD was successfully sourced"
