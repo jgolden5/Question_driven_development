@@ -20,6 +20,7 @@ YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
 CYAN="\e[96m"
+BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
 NC="\e[0m"
@@ -188,8 +189,18 @@ rank_mode() {
   read -n1 command
   echo
   case "$command" in 
+    q)
+      list_questions
+      read -n1 -p "Enter the index of the question you want to rank: " q_index
+      echo
+      if [[ "$q_index" ]]; then
+        rank_question "$q_index"
+      else
+        rank_question "$question_index"
+      fi
+      ;;
     *)
-      echo "rank mode command was triggered"
+      echo "command not recognized"
       ;;
   esac
 }
@@ -988,6 +999,51 @@ get_answer_count() {
   fi
   answer_count="$(( question_and_answer_count - question_count ))"
   echo "$answer_count"
+}
+
+rank_question() {
+  local lines_in_current_answers_file=$(list_answers_for_question_at_index "$1" | wc -l | sed 's/ *//')
+  local number_of_answers="$(( lines_in_current_answers_file - 1))"
+  local color="${NC}"
+  local answer_status=
+  if [[ "$(question_exists_at_index $1)" == "false" ]]; then
+    answer_status="non-existing question"
+    color="$BLACK_FG_RED_BG"
+  else
+    case "$number_of_answers" in 
+      0)
+        answer_status="empty"
+        color="$RED"
+        ;;
+      [1-2]) #low progress
+        answer_status="low progress"
+        color="$ORANGE"
+        ;;
+      [3-5]) #medium progress
+        answer_status="medium progress"
+        color="$YELLOW"
+        ;;
+      [6-7]) #near complete
+        answer_status="near complete"
+        color="$GREEN"
+        ;;
+      8) #complete
+        answer_status="complete"
+        color="$CYAN"
+        ;;
+    esac
+  fi
+  echo -e "${color}question at index #$1 has $number_of_answers answers ($answer_status)${NC}"
+}
+
+question_exists_at_index() {
+  question_position=$(( $1 + 1 ))
+  current_answer_line="$(sed -n "${question_position}p" Libraries/$library/$term/answers)"
+  if [[ "$current_answer_line" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
 }
 
 echo "QDD was successfully sourced"
