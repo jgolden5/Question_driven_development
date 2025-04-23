@@ -1152,7 +1152,7 @@ rank_library() {
 rank_tub() {
   local i=0
   for lib in Libraries/*; do
-    rank_library "$i"
+    rank_library "$i" | grep "    "
     (( i++ ))
   done
 }
