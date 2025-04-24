@@ -1173,4 +1173,4 @@ google_documentation_for_current_term() {
   fi
 }
 
-echo "QDD was successfully sourced"
+main

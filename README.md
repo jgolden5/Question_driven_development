@@ -1,4 +1,4 @@
-# Question_driven_development Version 8 Protcol (8P)
+# Question_driven_development Version 8 Protocol (8P)
 
 ## 8 Rules:
 1. Every complete library must have 8 complete terms—no more, no less
