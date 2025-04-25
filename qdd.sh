@@ -28,7 +28,7 @@ NC="\e[0m"
 main() {
   clear
   while true; do
-    echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}$ "
+    echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}(main) $ "
     read -n1 mode
     echo
     mode_func="$(choose_mode_func "$mode")"
@@ -48,7 +48,7 @@ question_mode() {
     question_index="$(( answers_length - 1 ))"
   fi
   if [[ "$library" && "$term" ]]; then
-    echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${NC}$ "
+    echo -ne "${MAGENTA}QDD ${RED}$library:${GREEN}$term ${YELLOW}[${MAGENTA}$question_index${YELLOW}] ${MAGENTA}(question) ${NC}$ "
     read -n1 command
     echo
     case "$command" in 
@@ -116,7 +116,7 @@ question_mode() {
 term_mode() {
   term_index="$(get_term_index)"
   list_terms
-  echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${NC}$ "
+  echo -ne "${GREEN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${GREEN}$term_index${YELLOW}] ${GREEN}(term) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
@@ -151,7 +151,7 @@ term_mode() {
 answer_mode() {
   safeguard_question_index
   list_answers_for_question_at_index "$question_index"
-  echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}] ${NC}$ "
+  echo -ne "${ORANGE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ORANGE}$question_index${YELLOW}]${ORANGE} (answer) ${NC}$ "
   read -n1 command
   echo
   case "$command" in 
@@ -188,7 +188,7 @@ answer_mode() {
 }
 
 rank_mode() {
-  echo -ne "${CYAN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${CYAN}$question_index${YELLOW}] ${NC}$ "
+  echo -ne "${CYAN}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${CYAN}$question_index${YELLOW}] ${CYAN}(rank) ${NC}$ "
   read -n1 command
   echo
   case "$command" in 
@@ -235,7 +235,7 @@ rank_mode() {
 library_mode() {
   library_index="$(get_library_index)"
   list_libraries
-  echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}] ${NC}$ "
+  echo -ne "${RED}QDD $library${NC}:${GREEN}$term ${YELLOW}[${RED}$library_index${YELLOW}]${RED} (library) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
