@@ -265,6 +265,45 @@ library_mode() {
   set_default_term
 }
 
+insert_mode() {
+  echo -ne "${YELLOW}QDD $library${NC}:${GREEN}$term ${YELLOW}[$question_index] (insert) ${NC}$ "
+  read -n1 command
+  echo
+  if [[ ! "yt" =~ "$command" ]]; then
+    echo "command not recognized"
+  else
+    if [[ "$command" == 'y' ]]; then
+      list_libraries
+      read -n1 -p "Enter index of term where desired question to edit is (keep blank for current): " y_index
+      echo
+    else
+      y_index="$library_index"
+    fi
+    if [[ "$command" == 't' ]]; then
+      list_terms
+      read -n1 -p "Enter index of term where desired question to edit is (keep blank for current): " t_index
+      echo
+    else
+      t_index="$term_index"
+    fi
+    if [[ ! "$y_index" ]]; then
+      y_index="$library_index"
+    elif [[ ! $y_index =~ [0-7] ]]; then
+      echo "invalid index"
+      return 1
+    fi
+    if [[ ! "$t_index" ]]; then
+      t_index="$term_index"
+    elif [[ ! $t_index =~ [0-7] ]]; then
+      echo "invalid index"
+      return 1
+    fi
+    library_to_edit="$(get_library_by_index $y_index)"
+    term_to_edit="$(get_term_by_index $t_index)"
+    vim Libraries/$library_to_edit/$term_to_edit/answers
+  fi
+}
+
 alias qdd='source qdd.sh'
 alias qvv='vi qdd.sh'
 
@@ -337,6 +376,8 @@ choose_mode_func() {
     echo break
   elif [[ "$1" == 'y' ]]; then
     echo library_mode
+  elif [[ "$1" == 'i' ]]; then
+    echo insert_mode
   else
     echo 'echo "mode $mode not recognized"'
   fi
