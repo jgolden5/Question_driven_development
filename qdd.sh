@@ -266,7 +266,6 @@ library_mode() {
 }
 
 alias qdd='source qdd.sh'
-alias qmm='source qdd.sh && main'
 alias qvv='vi qdd.sh'
 
 #help functions. These give every possible command I can access from the current state
@@ -509,6 +508,7 @@ set_term_by_name() {
       term="$term_to_set"
       echo "term added"
     fi
+    ensure_term_length_does_not_exceed_8
   else
     echo "invalid term"
   fi
@@ -536,6 +536,18 @@ set_term_by_index() {
       (( i++ ))
     fi
   done
+  ensure_term_length_does_not_exceed_8
+}
+
+ensure_term_length_does_not_exceed_8() {
+  local terms_length="$(ls Libraries/$library | wc -l | sed 's/ *//')"
+  if (( terms_length > 8 )); then
+    terms_exceed_8=t
+    while [[ $terms_exceed_8 == t ]]; do
+      list_terms
+      remove_term && terms_exceed_8=f
+    done
+  fi
 }
 
 list_terms() {
@@ -567,17 +579,25 @@ remove_term() {
       read -p "Enter term to remove: " term_name
       term_to_remove="$(get_term_to_remove_by_name $term_name)"
       ;;
+    *)
+      echo "Term not recognized"
+      return 1
+      ;;
   esac
   if [[ "$term_to_remove" ]]; then
-    read -n1 -p "Are you sure you want to remove $term_to_remove term? " confirmation
+    read -n1 -p "Are you sure you want to remove $term_to_remove term (note this will delete all its questions and answers as well)? " confirmation
     echo
     if [[ $confirmation == "y" ]]; then
       rm -r Libraries/$library/$term_to_remove && echo "Term removed successfully"
       if [[ $term == $term_to_remove ]]; then
-        term=-
+        term=$(get_term_by_index "$(( --term_index ))")
+        if [[ ! "$term" ]]; then
+          term=$(get_term_by_index 0)
+        fi
       fi
     else
       echo "Ok. Term $term_to_remove is here to stay."
+      return 1
     fi
   fi
 }
