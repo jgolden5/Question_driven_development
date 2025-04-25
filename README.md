@@ -1,6 +1,9 @@
 # Question_driven_development (QDD) Version 8 Protocol (8P)
 
-## Basic Walkthrough:
+## Purpose:
+### Question_driven_development is written with 8 Protocol in order to limit one's discoveries to the best of the best--the best terms, the best questions, the best answers. In order to get the most benefit from this, I have to start and end with those things which I am the most interested in--for those are the things which I will be most invested in learning and the things which I will learn the best.
+
+## Basic Walkthrough for newbies:
 1. Make sure you're in the right directory: After running git clone in the directory you want to keep qdd in, go to the directory this project was cloned in (it will contain qdd.sh). (If desired, you can make super-directories called "tubs" that categorize libraries. If you don't do this, your number of libraries will be limited to 10. Ignore this for simple implementation).
 2. Initialize program: Type `qdd` on the command line, and you will be taken to "main mode"
 3. Add library: Hit `y` to enter "library mode", then hit `a` to add a library. enter `health` to add a library called "health", which we can then add terms to. Once a library name has been added, you will be switched back to main mode. (Note, you can have up to 10 libraries per tub, but after that, the index will be greater than 1 digit, and since the input for library index is currently limited to accept 1 character.)
