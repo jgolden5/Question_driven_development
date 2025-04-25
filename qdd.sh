@@ -20,6 +20,7 @@ YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
 CYAN="\e[96m"
+BLUE="\e[38;5;26m"
 BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
@@ -266,7 +267,7 @@ library_mode() {
 }
 
 insert_mode() {
-  echo -ne "${YELLOW}QDD $library${NC}:${GREEN}$term ${YELLOW}[$question_index] (insert) ${NC}$ "
+  echo -ne "${BLUE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$question_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
   read -n1 command
   echo
   if [[ ! "yt" =~ "$command" ]]; then
