@@ -267,10 +267,10 @@ library_mode() {
 }
 
 insert_mode() {
-  echo -ne "${BLUE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$question_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
+  echo -ne "${BLUE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
   read -n1 command
   echo
-  if [[ ! "yt" =~ "$command" ]]; then
+  if [[ ! "yt" =~ "$command" && "$command" ]]; then
     echo "command not recognized"
   else
     if [[ "$command" == 'y' ]]; then
