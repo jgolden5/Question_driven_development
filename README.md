@@ -23,3 +23,5 @@
 8. It is wise to use version control with QDD 8P in case I decide I prefer a recently deleted item (question, answer, term, or rule)
 
 _See https://github.com/jgolden5/8_Protocol for more info_
+
+_Also note that the answers in this version are NOT the ones I use in my daily studies, as those are private. The public ones are just test libraries to make sure features work before committing. So please take the weird libraries in this project's directory with a grain of salt._
