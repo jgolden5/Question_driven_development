@@ -32,8 +32,12 @@ main() {
     echo -en "QDD ${RED}${library}${NC}:${GREEN}${term} ${NC}(main) $ "
     read -n1 mode
     echo
-    mode_func="$(choose_mode_func "$mode")"
-    eval "$mode_func"
+    if [[ $mode == '' ]]; then
+      main
+    else
+      mode_func="$(choose_mode_func "$mode")"
+      eval "$mode_func"
+    fi
   done
 }
 
