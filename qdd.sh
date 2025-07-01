@@ -20,6 +20,7 @@ YELLOW="\e[93m"
 RED="\e[91m"
 GREEN="\e[92m"
 CYAN="\e[96m"
+PURPLE="\e[38;5;141m"
 BLUE="\e[38;5;26m"
 BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
@@ -271,9 +272,7 @@ library_mode() {
 }
 
 insert_mode() {
-  local lib_for_insert_mode=
-  local term_for_insert_mode=
-  echo -ne "${BLUE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
+  echo -ne "${BLUE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
@@ -307,10 +306,11 @@ insert_mode() {
       echo
       ;;
     x|Q|'')
-      return
+      return 0
       ;;
     *)
       echo "command not recognized"
+      return 0
       ;;
   esac
   if [[ $library ]] && [[ $term ]]; then
@@ -318,6 +318,12 @@ insert_mode() {
   else
     echo "Library or term for insert mode was not successfully selected"
   fi
+}
+
+google_mode() {
+  echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$term_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
+  read -n1 command
+  echo
 }
 
 alias qdd='source qdd.sh'
@@ -384,6 +390,16 @@ insert_help() {
   echo "x/Q/Enter - exit insert mode"
 }
 
+google_help() {
+  echo "Google Mode Help:"
+  echo "y - look up library on wikipedia"
+  echo "t - look up term on wikipedia"
+  echo "q - google question"
+  echo "w - google answer"
+  echo "h/? - google mode help"
+  echo "x/Q/Enter - exit google mode"
+}
+
 #utils -- auxiliary functions used for main and mode functions
 
 choose_mode_func() {
@@ -403,6 +419,8 @@ choose_mode_func() {
     echo library_mode
   elif [[ "$1" == 'i' ]]; then
     echo insert_mode
+  elif [[ "$1" == 'g' ]]; then
+    echo google_mode
   else
     echo 'echo "mode $mode not recognized"'
   fi
@@ -1243,7 +1261,7 @@ rank_tub() {
   done
 }
 
-google_documentation_for_current_term() { 
+google_documentation_for_current_term() {
   read -n1 -p "Enter the index of the term I want to google documentation for: " t_index
   echo
   term_to_google="$(get_term_by_index $t_index)"
