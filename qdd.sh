@@ -258,7 +258,7 @@ library_mode() {
       local library_to_edit="$(get_library_by_index $index_of_library_to_edit)"
       edit_library "$library_to_edit"
       ;;
-    h)
+    h|\?)
       library_help
       ;;
     x|Q|'')
@@ -271,46 +271,57 @@ library_mode() {
 }
 
 insert_mode() {
+  local lib_for_insert_mode=
+  local term_for_insert_mode=
   echo -ne "${BLUE}QDD $library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
   read -n1 command
   echo
-  if [[ ! "yt" =~ "$command" && "$command" ]]; then
-    echo "command not recognized"
-  else
-    if [[ "$command" == 'y' ]]; then
-      list_libraries
-      read -n1 -p "Enter index of term where desired question to edit is (keep blank for current): " y_index
-      echo
-    else
-      y_index="$library_index"
-    fi
-    if [[ "$command" == 't' ]]; then
+  case "$command" in
+    h|\?)
+      insert_help
+      ;;
+    q|a)
+      continue
+      ;;
+    t)
       list_terms
-      read -n1 -p "Enter index of term where desired question to edit is (keep blank for current): " t_index
+      read -n1 -p "Which term would you like to choose? " user_term_index
       echo
-    else
-      t_index="$term_index"
-    fi
-    if [[ ! "$y_index" ]]; then
-      y_index="$library_index"
-    elif [[ ! $y_index =~ [0-7] ]]; then
-      echo "invalid index"
-      return 1
-    fi
-    if [[ ! "$t_index" ]]; then
-      t_index="$term_index"
-    elif [[ ! $t_index =~ [0-7] ]]; then
-      echo "invalid index"
-      return 1
-    fi
-    library_to_edit="$(get_library_by_index $y_index)"
-    term_to_edit="$(get_term_by_index $t_index)"
-    vim Libraries/$library_to_edit/$term_to_edit/answers
+      if [[ $user_term_index ]]; then
+        set_term_by_index $user_term_index
+      fi
+      ;;
+    y)
+      list_libraries
+      read -n1 -p "Which library would you like to choose? " user_library_index
+      echo
+      if [[ $user_library_index ]]; then
+        set_library_by_index $user_library_index
+      fi
+      list_terms
+      read -n1 -p "Which term would you like to choose? " user_term_index
+      echo
+      if [[ $user_term_index ]]; then
+        set_term_by_index $user_term_index
+      fi
+      echo
+      ;;
+    x|Q|'')
+      return
+      ;;
+    *)
+      echo "command not recognized"
+      ;;
+  esac
+  if [[ $library ]] && [[ $term ]]; then
+    vim "Libraries/$library/$term/answers"
+  else
+    echo "Library or term for insert mode was not successfully selected"
   fi
 }
 
 alias qdd='source qdd.sh'
-alias qvv='vi qdd.sh'
+alias qvv='vim /Users/jgolden1/bash/apps/question_driven_development/qdd.sh'
 
 #help functions. These give every possible command I can access from the current state
 
@@ -362,6 +373,15 @@ answer_help() {
   echo "e - edit existing answers"
   echo "h/? - answer mode help"
   echo "x/Q/Enter - exit answer mode"
+}
+
+insert_help() {
+  echo "Insert Mode Help:"
+  echo "y - edit answers file for library at index, then term at index"
+  echo "t - edit answers file for term at index"
+  echo "q/w - edit answers file of current term"
+  echo "h/? - insert mode help"
+  echo "x/Q/Enter - exit insert mode"
 }
 
 #utils -- auxiliary functions used for main and mode functions
