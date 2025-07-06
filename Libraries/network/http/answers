@@ -1,8 +1,0 @@
-What is a resource defined as in http? Data that's accessible with a unique ID (uri). To allow communication across the world wide web. Resources are what http requests are requesting. Resources are what https responses respond with. Urrl's are used to LOCATE uri's. Resources are nouns--not verbs, they get verb-ed. All url's are uri's, not vice verse. Moment of truth.
-What is a hypermedia information system? Links pointing to text, sound, images, or video. Test. Test again. Another test. Test a third time. Testing more than the restin. Moment of truth. Another moment of pure absolute truth.
-What is a resource defined as in http? Data that's accessible with a unique ID (uri). Data that can have requests performed on it.
-Why was http created? To send hypertext links simply across a network.
-How does http depend on tcp? Tcp ensures correct packet structure for http. Tjajsdf.
-What should I know about different http versions?
-What do the main http request methods do?
-What do the main http response codes mean?
