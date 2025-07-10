@@ -327,7 +327,20 @@ google_mode() {
     h|\?)
       google_help
       ;;
-    q|a)
+    q)
+      list_questions
+      safeguard_question_index
+      read -n1 -p "Choose a question by index (leave blank for current question): " q_index
+      echo
+      if [[ ! $q_index =~ [0-7] ]]; then
+        q_index=$question_index
+      fi
+      q=$(get_question_by_index $q_index)
+      if [[ $q_index =~ [0-7] ]]; then
+        google_search $q
+      else
+        echo "Sorry, no valid question was found at index $q_index"
+      fi
       ;;
     t)
       wikipedia_search $term
@@ -349,6 +362,16 @@ wikipedia_search() {
   open "https://en.wikipedia.org/wiki/$1"
   echo "Searched for $1 on wikipedia"
   sleep 0.5
+}
+
+google_search() {
+  search=""
+  for word in $@ ; do
+    search="$search%20$word"
+  done
+  open "http://www.google.com/search?q=$search"
+  echo "$search" | pbcopy
+  echo "Searched for $@ and copied it to clipboard"
 }
 
 alias qdd='source qdd.sh'
