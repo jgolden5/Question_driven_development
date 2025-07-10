@@ -352,9 +352,18 @@ google_mode() {
       list_answers_for_question_at_index $question_index
       read -n1 -s -p "Enter the index of the answer you want" answer_index
       echo
-      answer_position=$((answer_index+2))
-      answer_to_google=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
-      google_search "$answer_to_google"
+      if [[ $answer_index =~ [0-7] ]]; then
+        local answer_position=$((answer_index+2))
+        local answer_to_google=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        if [[ $answer_to_google ]]; then
+          google_search "$answer_to_google"
+          answer_to_google=
+        else
+          echo "invalid answer index"
+        fi
+      else
+        echo "invalid answer index"
+      fi
       ;;
     x|Q|'')
       return 0
