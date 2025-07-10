@@ -279,7 +279,8 @@ edit_mode() {
     h|\?)
       edit_help
       ;;
-    q|a)
+    q|w)
+      #this needs to be here because default breaks from function
       ;;
     t)
       list_terms
@@ -312,7 +313,7 @@ edit_mode() {
       return 0
       ;;
   esac
-  if [[ $library ]] && [[ $term ]]; then
+  if [[ $library ]] && [[ $term ]] && [[ "ty" =~ $command ]] || [[ "qw" =~ $command ]]; then
     vim "Libraries/$library/$term/answers"
   else
     echo "Library or term for edit mode was not successfully selected"
