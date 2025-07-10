@@ -280,7 +280,6 @@ insert_mode() {
       insert_help
       ;;
     q|a)
-      continue
       ;;
     t)
       list_terms
@@ -324,6 +323,32 @@ google_mode() {
   echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$term_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
   read -n1 command
   echo
+  case "$command" in
+    h|\?)
+      google_help
+      ;;
+    q|a)
+      ;;
+    t)
+      wikipedia_search $term
+      ;;
+    y)
+      wikipedia_search $library
+      ;;
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
+wikipedia_search() {
+  open "https://en.wikipedia.org/wiki/$1"
+  echo "Searched for $1 on wikipedia"
+  sleep 0.5
 }
 
 alias qdd='source qdd.sh'
@@ -417,10 +442,10 @@ choose_mode_func() {
     echo break
   elif [[ "$1" == 'y' ]]; then
     echo library_mode
+  elif [[ "$1" == 'u' ]]; then
+    echo google_mode
   elif [[ "$1" == 'i' ]]; then
     echo insert_mode
-  elif [[ "$1" == 'g' ]]; then
-    echo google_mode
   else
     echo 'echo "mode $mode not recognized"'
   fi
