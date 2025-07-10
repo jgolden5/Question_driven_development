@@ -271,13 +271,13 @@ library_mode() {
   set_default_term
 }
 
-insert_mode() {
-  echo -ne "${BLUE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
+edit_mode() {
+  echo -ne "${BLUE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(edit) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
     h|\?)
-      insert_help
+      edit_help
       ;;
     q|a)
       ;;
@@ -315,7 +315,7 @@ insert_mode() {
   if [[ $library ]] && [[ $term ]]; then
     vim "Libraries/$library/$term/answers"
   else
-    echo "Library or term for insert mode was not successfully selected"
+    echo "Library or term for edit mode was not successfully selected"
   fi
 }
 
@@ -446,13 +446,13 @@ answer_help() {
   echo "x/Q/Enter - exit answer mode"
 }
 
-insert_help() {
+edit_help() {
   echo "Insert Mode Help:"
   echo "y - edit answers file for library at index, then term at index"
   echo "t - edit answers file for term at index"
   echo "q/w - edit answers file of current term"
-  echo "h/? - insert mode help"
-  echo "x/Q/Enter - exit insert mode"
+  echo "h/? - edit mode help"
+  echo "x/Q/Enter - exit edit mode"
 }
 
 google_help() {
@@ -474,6 +474,8 @@ choose_mode_func() {
     echo question_mode
   elif [[ "$1" == 'w' ]]; then
     echo answer_mode
+  elif [[ "$1" == 'e' ]]; then
+    echo edit_mode
   elif [[ "$1" == 'r' ]]; then
     echo rank_mode
   elif [[ "$1" == 't' ]]; then
@@ -484,8 +486,6 @@ choose_mode_func() {
     echo library_mode
   elif [[ "$1" == 'u' ]]; then
     echo google_mode
-  elif [[ "$1" == 'i' ]]; then
-    echo insert_mode
   else
     echo 'echo "mode $mode not recognized"'
   fi
