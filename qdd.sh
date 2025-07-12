@@ -25,6 +25,7 @@ BLUE="\e[38;5;26m"
 BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
+ROSE="\e[38;5;163m"
 NC="\e[0m"
 
 main() {
@@ -321,7 +322,7 @@ edit_mode() {
 }
 
 google_mode() {
-  echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$term_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
+  echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$question_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
@@ -370,6 +371,33 @@ google_mode() {
       ;;
     x|Q|'')
       return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
+ai_mode() {
+  echo -ne "${ROSE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ROSE}$question_index${YELLOW}] ${ROSE}(ai) ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    h|\?)
+      ai_help
+      ;;
+    y)
+      list_libraries
+      read -n1 -p "Which library would you like to choose? " user_library_index
+      echo
+      if [[ $user_library_index =~ [0-7] ]]; then
+        set_library_by_index $user_library_index
+      elif [[ $user_library_index ]]; then
+        return 0
+      fi
+      prompt="Give 10 interesting facts about $library"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
     *)
       echo "command not recognized"
@@ -468,6 +496,16 @@ google_help() {
   echo "x/Q/Enter - exit google mode"
 }
 
+ai_help() {
+  echo "AI Mode Help:"
+  echo "y - copies the prompt: \"Give 10 interesting facts about [library]\""
+  echo "t - copies the prompt: \"What are the 10 most important things to know about [term]?\""
+  echo "q - copies the prompt: \"Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
+  echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
+  echo "h/? - AI mode help"
+  echo "x/Q/Enter - exit AI mode"
+}
+
 #utils -- auxiliary functions used for main and mode functions
 
 choose_mode_func() {
@@ -483,12 +521,14 @@ choose_mode_func() {
     echo rank_mode
   elif [[ "$1" == 't' ]]; then
     echo term_mode
-  elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
-    echo break
   elif [[ "$1" == 'y' ]]; then
     echo library_mode
   elif [[ "$1" == 'u' ]]; then
     echo google_mode
+  elif [[ "$1" == 'i' ]]; then
+    echo ai_mode
+  elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
+    echo break
   else
     echo 'echo "mode $mode not recognized"'
   fi
