@@ -451,12 +451,27 @@ ai_mode() {
       read -n1 -p "Which library do you want to generate terms for? " library_index
       echo
       if [[ $library_index =~ [0-7] ]]; then
-        library=$(get_library_by_index $library_index)
+        set_library_by_index $library_index
       elif [[ $library_index ]]; then
         return 0
       fi
       prompt="Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: $library"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    Q)
+      list_terms
+      read -n1 -p "Which term do you want to generate questions for? " term_index
+      echo
+      if [[ $term_index =~ [0-7] ]]; then
+        set_term_by_index $term_index
+      elif [[ $term_index ]]; then
+        return 0
+      fi
+      prompt="Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: $term"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    x|'')
+      return 0
       ;;
     *)
       echo "command not recognized"
@@ -563,8 +578,9 @@ ai_help() {
   echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
   echo "Y - copies the prompt: \"Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): [topics].\""
   echo "T - copies the prompt: \"Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: [library]\""
+  echo "Q - copies the prompt: \"Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: [term]\""
   echo "h/? - AI mode help"
-  echo "x/Q/Enter - exit AI mode"
+  echo "x/Enter - exit AI mode (note that Q usually will do this, but ai_mode is an exception. Confusing, for sure, but hopefully worth the consistency on this one. We'll see."
 }
 
 #utils -- auxiliary functions used for main and mode functions
