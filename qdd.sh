@@ -511,22 +511,6 @@ qdd_ai_mode() {
   esac
 }
 
-wikipedia_search() {
-  open "https://en.wikipedia.org/wiki/$1"
-  echo "Searched for $1 on wikipedia"
-  sleep 0.5
-}
-
-google_search() {
-  search=""
-  for word in $@ ; do
-    search="$search%20$word"
-  done
-  open "http://www.google.com/search?q=$search"
-  echo "$search" | pbcopy
-  echo "Searched for $@ and copied it to clipboard"
-}
-
 alias qdd='source qdd.sh'
 alias qvv='vim /Users/jgolden1/bash/apps/question_driven_development/qdd.sh'
 
@@ -1486,20 +1470,20 @@ rank_tub() {
   done
 }
 
-google_documentation_for_current_term() {
-  read -n1 -p "Enter the index of the term I want to google documentation for: " t_index
-  echo
-  term_to_google="$(get_term_by_index $t_index)"
-  if [[ "$term_to_google" ]]; then
-    google_message="official $term_to_google documentation"
-    google_keyword "$google_message"
-    echo "Keep in mind, the web page I want from this will often not be the first one. Look for documentation that is..."
-    echo "1) Official"
-    echo "2) Made by experts"
-    echo "3) Filled with first-hand knowledge (not watered down)"
-  else
-    echo "Invalid term index"
-  fi
+wikipedia_search() {
+  open "https://en.wikipedia.org/wiki/$1"
+  echo "Searched for $1 on wikipedia"
+  sleep 0.5
+}
+
+google_search() {
+  search=""
+  for word in $@ ; do
+    search="$search%20$word"
+  done
+  open "http://www.google.com/search?q=$search"
+  echo "$search" | pbcopy
+  echo "Searched for $@ and copied it to clipboard"
 }
 
 main
