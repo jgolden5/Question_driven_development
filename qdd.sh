@@ -25,6 +25,7 @@ BLUE="\e[38;5;26m"
 BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
+PINK="\e[38;5;219m"
 ROSE="\e[38;5;163m"
 NC="\e[0m"
 
@@ -380,7 +381,7 @@ google_mode() {
 }
 
 ai_mode() {
-  echo -ne "${ROSE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ROSE}$question_index${YELLOW}] ${ROSE}(ai) ${NC}$ "
+  echo -ne "${PINK}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PINK}$question_index${YELLOW}] ${PINK}(ai) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
@@ -441,12 +442,30 @@ ai_mode() {
         echo "invalid answer index"
       fi
       ;;
-    Y)
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
+qdd_ai_mode() {
+  echo -ne "${ROSE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ROSE}$question_index${YELLOW}] ${ROSE}(qdd_ai) ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    h|\?)
+      qdd_ai_help
+      ;;
+    y)
       read -p "Give a general topic or topics for which to generate several library ideas: " topics
       prompt="Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): $topics."
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
-    T)
+    t)
       list_libraries
       read -n1 -p "Which library do you want to generate terms for? " library_index
       echo
@@ -458,7 +477,7 @@ ai_mode() {
       prompt="Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: $library"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
-    Q)
+    q)
       list_terms
       read -n1 -p "Which term do you want to generate questions for? " term_index
       echo
@@ -470,7 +489,7 @@ ai_mode() {
       prompt="Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: $term"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
-    W)
+    w)
       list_questions
       read -n1 -p "Which question do you want to generate answers for? " question_index
       echo
@@ -482,7 +501,7 @@ ai_mode() {
       prompt="Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: $question"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
-    x|'')
+    x|Q|'')
       return 0
       ;;
     *)
@@ -588,12 +607,18 @@ ai_help() {
   echo "t - copies the prompt: \"What are the 10 most important things to know about [term]?\""
   echo "q - copies the prompt: \"Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
   echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
-  echo "Y - copies the prompt: \"Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): [topics].\""
-  echo "T - copies the prompt: \"Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: [library]\""
-  echo "Q - copies the prompt: \"Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: [term]\""
-  echo "W - copies the prompt: \"Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: [question]\""
   echo "h/? - AI mode help"
-  echo "x/Enter - exit AI mode (note that Q usually will do this, but ai_mode is an exception. Confusing, for sure, but hopefully worth the consistency on this one. We'll see."
+  echo "x/Q/Enter - exit AI mode"
+}
+
+qdd_ai_help() {
+  echo "QDD_AI Mode Help:"
+  echo "y - copies the prompt: \"Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): [topics].\""
+  echo "t - copies the prompt: \"Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: [library]\""
+  echo "q - copies the prompt: \"Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: [term]\""
+  echo "w - copies the prompt: \"Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: [question]\""
+  echo "h/? - QDD_AI mode help"
+  echo "x/Q/Enter - exit QDD_AI mode"
 }
 
 #utils -- auxiliary functions used for main and mode functions
@@ -617,6 +642,8 @@ choose_mode_func() {
     echo google_mode
   elif [[ "$1" == 'i' ]]; then
     echo ai_mode
+  elif [[ "$1" == 'o' ]]; then
+    echo qdd_ai_mode
   elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
     echo break
   else
