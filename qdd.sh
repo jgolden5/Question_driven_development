@@ -25,6 +25,8 @@ BLUE="\e[38;5;26m"
 BLACK_FG_RED_BG="\e[30;101m"
 MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
+PINK="\e[38;5;219m"
+ROSE="\e[38;5;163m"
 NC="\e[0m"
 
 main() {
@@ -271,16 +273,16 @@ library_mode() {
   set_default_term
 }
 
-insert_mode() {
-  echo -ne "${BLUE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(insert) ${NC}$ "
+edit_mode() {
+  echo -ne "${BLUE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${BLUE}$term_index${YELLOW}] ${BLUE}(edit) ${NC}$ "
   read -n1 command
   echo
   case "$command" in
     h|\?)
-      insert_help
+      edit_help
       ;;
-    q|a)
-      continue
+    q|w)
+      #this needs to be here because default breaks from function
       ;;
     t)
       list_terms
@@ -313,17 +315,200 @@ insert_mode() {
       return 0
       ;;
   esac
-  if [[ $library ]] && [[ $term ]]; then
+  if [[ $library ]] && [[ $term ]] && [[ "ty" =~ $command ]] || [[ "qw" =~ $command ]]; then
     vim "Libraries/$library/$term/answers"
   else
-    echo "Library or term for insert mode was not successfully selected"
+    echo "Library or term for edit mode was not successfully selected"
   fi
 }
 
 google_mode() {
-  echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$term_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
+  echo -ne "${PURPLE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PURPLE}$question_index${YELLOW}] ${PURPLE}(google) ${NC}$ "
   read -n1 command
   echo
+  case "$command" in
+    h|\?)
+      google_help
+      ;;
+    q)
+      list_questions
+      safeguard_question_index
+      read -n1 -p "Choose a question by index (leave blank for current question): " q_index
+      echo
+      if [[ ! $q_index =~ [0-7] ]] && [[ "$q_index" ]]; then
+        return 0
+      elif [[ ! $q_index =~ [0-7] ]]; then
+        q_index=$question_index
+      fi
+      q=$(get_question_by_index $q_index)
+      if [[ $q_index =~ [0-7] ]]; then
+        google_search $q
+      else
+        echo "Sorry, no valid question was found at index $q_index"
+      fi
+      ;;
+    t)
+      wikipedia_search $term
+      ;;
+    y)
+      wikipedia_search $library
+      ;;
+    w)
+      list_answers_for_question_at_index $question_index
+      read -n1 -s -p "Enter the index of the answer you want" answer_index
+      echo
+      if [[ $answer_index =~ [0-7] ]]; then
+        local answer_position=$((answer_index+2))
+        local answer_to_google=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        if [[ $answer_to_google ]]; then
+          google_search "$answer_to_google"
+          answer_to_google=
+        else
+          echo "invalid answer index"
+        fi
+      else
+        echo "invalid answer index"
+      fi
+      ;;
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
+ai_mode() {
+  echo -ne "${PINK}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${PINK}$question_index${YELLOW}] ${PINK}(ai) ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    h|\?)
+      ai_help
+      ;;
+    y)
+      list_libraries
+      read -n1 -p "Which library would you like to choose? " user_library_index
+      echo
+      if [[ $user_library_index =~ [0-7] ]]; then
+        set_library_by_index $user_library_index
+      elif [[ $user_library_index ]]; then
+        return 0
+      fi
+      prompt="Give 10 interesting facts about $library"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    t)
+      list_terms
+      read -n1 -p "Which term would you like to choose? " user_term_index
+      echo
+      if [[ $user_term_index =~ [0-7] ]]; then
+        set_term_by_index $user_term_index
+      elif [[ $user_term_index ]]; then
+        return 0
+      fi
+      prompt="What are the 10 most important things to know about $term?"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    q)
+      list_questions
+      read -n1 -p "Which question would you like to choose? " user_q_index
+      echo
+      if [[ $user_q_index =~ [0-7] ]]; then
+        question=$(get_question_by_index $user_q_index)
+      elif [[ $user_q_index ]]; then
+        return 0
+      fi
+      prompt="Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: $question"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    w)
+      list_answers_for_question_at_index $question_index
+      read -n1 -s -p "Which answer would you like to choose? " answer_index
+      echo
+      if [[ $answer_index =~ [0-7] ]]; then
+        local answer_position=$((answer_index+2))
+        local answer_to_search=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        if [[ $answer_to_search ]]; then
+          prompt="Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: $question. Answer: $answer_to_search."
+          echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+          answer_to_search=
+        else
+          echo "invalid answer index"
+        fi
+      else
+        echo "invalid answer index"
+      fi
+      ;;
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
+qdd_ai_mode() {
+  echo -ne "${ROSE}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${ROSE}$question_index${YELLOW}] ${ROSE}(qdd_ai) ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    h|\?)
+      qdd_ai_help
+      ;;
+    y)
+      read -p "Give a general topic or topics for which to generate several library ideas: " topics
+      prompt="Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): $topics."
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    t)
+      list_libraries
+      read -n1 -p "Which library do you want to generate terms for? " library_index
+      echo
+      if [[ $library_index =~ [0-7] ]]; then
+        set_library_by_index $library_index
+      elif [[ $library_index ]]; then
+        return 0
+      fi
+      prompt="Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: $library"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    q)
+      list_terms
+      read -n1 -p "Which term do you want to generate questions for? " term_index
+      echo
+      if [[ $term_index =~ [0-7] ]]; then
+        set_term_by_index $term_index
+      elif [[ $term_index ]]; then
+        return 0
+      fi
+      prompt="Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: $term"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    w)
+      list_questions
+      read -n1 -p "Which question do you want to generate answers for? " question_index
+      echo
+      if [[ $question_index =~ [0-7] ]]; then
+        question=$(get_question_by_index $question_index)
+      elif [[ $question_index ]]; then
+        return 0
+      fi
+      prompt="Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: $question"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
 }
 
 alias qdd='source qdd.sh'
@@ -381,13 +566,13 @@ answer_help() {
   echo "x/Q/Enter - exit answer mode"
 }
 
-insert_help() {
+edit_help() {
   echo "Insert Mode Help:"
   echo "y - edit answers file for library at index, then term at index"
   echo "t - edit answers file for term at index"
   echo "q/w - edit answers file of current term"
-  echo "h/? - insert mode help"
-  echo "x/Q/Enter - exit insert mode"
+  echo "h/? - edit mode help"
+  echo "x/Q/Enter - exit edit mode"
 }
 
 google_help() {
@@ -400,6 +585,26 @@ google_help() {
   echo "x/Q/Enter - exit google mode"
 }
 
+ai_help() {
+  echo "AI Mode Help:"
+  echo "y - copies the prompt: \"Give 10 interesting facts about [library]\""
+  echo "t - copies the prompt: \"What are the 10 most important things to know about [term]?\""
+  echo "q - copies the prompt: \"Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
+  echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
+  echo "h/? - AI mode help"
+  echo "x/Q/Enter - exit AI mode"
+}
+
+qdd_ai_help() {
+  echo "QDD_AI Mode Help:"
+  echo "y - copies the prompt: \"Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): [topics].\""
+  echo "t - copies the prompt: \"Given the following library, please generate 8 \"sub-libraries\" otherwise known as terms, each of which is not more than 2 words long and encapsulates a unique yet important aspect of the all-encompassing library. This is the library: [library]\""
+  echo "q - copies the prompt: \"Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. This is the term about which the questions will be generated: [term]\""
+  echo "w - copies the prompt: \"Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: [question]\""
+  echo "h/? - QDD_AI mode help"
+  echo "x/Q/Enter - exit QDD_AI mode"
+}
+
 #utils -- auxiliary functions used for main and mode functions
 
 choose_mode_func() {
@@ -409,18 +614,22 @@ choose_mode_func() {
     echo question_mode
   elif [[ "$1" == 'w' ]]; then
     echo answer_mode
+  elif [[ "$1" == 'e' ]]; then
+    echo edit_mode
   elif [[ "$1" == 'r' ]]; then
     echo rank_mode
   elif [[ "$1" == 't' ]]; then
     echo term_mode
-  elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
-    echo break
   elif [[ "$1" == 'y' ]]; then
     echo library_mode
-  elif [[ "$1" == 'i' ]]; then
-    echo insert_mode
-  elif [[ "$1" == 'g' ]]; then
+  elif [[ "$1" == 'u' ]]; then
     echo google_mode
+  elif [[ "$1" == 'i' ]]; then
+    echo ai_mode
+  elif [[ "$1" == 'o' ]]; then
+    echo qdd_ai_mode
+  elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
+    echo break
   else
     echo 'echo "mode $mode not recognized"'
   fi
@@ -822,7 +1031,7 @@ remove_question_at_index() {
       read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" (Note this will also remove all of its answers!) " confirmation
       echo
       if [[ $confirmation == "y" ]]; then
-        sed -i "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
+        sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
       else
         echo "Ok. No question removing took place"
         return 1
@@ -881,7 +1090,7 @@ edit_question() {
             new_question+="?"
           fi
           local question_position="$((temp_question_index + 1))"
-          sed -i "${question_position}s/.*\?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
+          sed -i '' "${question_position}s/.*\?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
           echo "successfully moved question \"$question_to_edit\" to \"$new_question\""
         fi
       else
@@ -933,7 +1142,7 @@ answer_question_at_index() {
         echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
         answer="$(echo ${answer^})"
-        sed -i "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+        sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
         previous_answers="$(list_answers_for_question_at_index "$question_index")"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
         if (( previous_answer_length > 9 )); then #since answer is included, we need to check if it's greater than 9
@@ -1027,7 +1236,7 @@ remove_answer_by_indices() {
       (( j++ ))
     done < <(sed 's/\([\!\.\?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
     if [[ "$answer_to_remove" ]]; then
-      sed -i "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
+      sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
     else
       echo "Answer index was invalid. No answer was removed"
     fi
@@ -1060,7 +1269,7 @@ edit_answer() {
         echo
         if [[ $confirmation == "y" ]]; then
           question_position="$((question_index + 1))"
-          sed -i "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
+          sed -i '' "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
           echo "successfully moved answer \"$answer_to_edit\" to \"$new_answer\""
         fi
       else
@@ -1091,7 +1300,7 @@ list_questions_that_have_answers() {
 remove_all_answers_at_question_index() {
   q_index="$1"
   q_position="$(( q_index + 1 ))"
-  sed -i "${q_position}s/\(.*\?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
+  sed -i '' "${q_position}s/\(.*\?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
 }
 
 safeguard_question_index() {
@@ -1261,20 +1470,20 @@ rank_tub() {
   done
 }
 
-google_documentation_for_current_term() {
-  read -n1 -p "Enter the index of the term I want to google documentation for: " t_index
-  echo
-  term_to_google="$(get_term_by_index $t_index)"
-  if [[ "$term_to_google" ]]; then
-    google_message="official $term_to_google documentation"
-    google_keyword "$google_message"
-    echo "Keep in mind, the web page I want from this will often not be the first one. Look for documentation that is..."
-    echo "1) Official"
-    echo "2) Made by experts"
-    echo "3) Filled with first-hand knowledge (not watered down)"
-  else
-    echo "Invalid term index"
-  fi
+wikipedia_search() {
+  open "https://en.wikipedia.org/wiki/$1"
+  echo "Searched for $1 on wikipedia"
+  sleep 0.5
+}
+
+google_search() {
+  search=""
+  for word in $@ ; do
+    search="$search%20$word"
+  done
+  open "http://www.google.com/search?q=$search"
+  echo "$search" | pbcopy
+  echo "Searched for $@ and copied it to clipboard"
 }
 
 main
