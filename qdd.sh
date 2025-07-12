@@ -411,6 +411,18 @@ ai_mode() {
       prompt="What are the 10 most important things to know about $term?"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
+    q)
+      list_questions
+      read -n1 -p "Which question would you like to choose? " user_q_index
+      echo
+      if [[ $user_q_index =~ [0-7] ]]; then
+        question=$(get_question_by_index $user_q_index)
+      elif [[ $user_q_index ]]; then
+        return 0
+      fi
+      prompt="Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: $question"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
     *)
       echo "command not recognized"
       return 0
