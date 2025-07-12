@@ -399,6 +399,18 @@ ai_mode() {
       prompt="Give 10 interesting facts about $library"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
+    t)
+      list_terms
+      read -n1 -p "Which term would you like to choose? " user_term_index
+      echo
+      if [[ $user_term_index =~ [0-7] ]]; then
+        set_term_by_index $user_term_index
+      elif [[ $user_term_index ]]; then
+        return 0
+      fi
+      prompt="What are the 10 most important things to know about $term?"
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
     *)
       echo "command not recognized"
       return 0
