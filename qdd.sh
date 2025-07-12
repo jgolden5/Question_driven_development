@@ -441,6 +441,11 @@ ai_mode() {
         echo "invalid answer index"
       fi
       ;;
+    Y)
+      read -p "Give a general topic or topics for which to generate several library ideas: " topics
+      prompt="Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): $topics."
+      echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+      ;;
     *)
       echo "command not recognized"
       return 0
@@ -544,6 +549,7 @@ ai_help() {
   echo "t - copies the prompt: \"What are the 10 most important things to know about [term]?\""
   echo "q - copies the prompt: \"Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
   echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
+  echo "Y - copies the prompt: \"Given the following topic idea(s), give 5 ideas of an all-encompassing concept, which can also branch into several smaller concepts, each of which could be individually dissected if desired. Call each of these all-encompassing concepts \"libraries\", and make each not more than 3 words long, and preferably less Topic idea(s): [topics].\""
   echo "h/? - AI mode help"
   echo "x/Q/Enter - exit AI mode"
 }
