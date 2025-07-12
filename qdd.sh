@@ -423,6 +423,24 @@ ai_mode() {
       prompt="Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: $question"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
+    w)
+      list_answers_for_question_at_index $question_index
+      read -n1 -s -p "Which answer would you like to choose? " answer_index
+      echo
+      if [[ $answer_index =~ [0-7] ]]; then
+        local answer_position=$((answer_index+2))
+        local answer_to_search=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        if [[ $answer_to_search ]]; then
+          prompt="Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: $question. Answer: $answer_to_search."
+          echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
+          answer_to_search=
+        else
+          echo "invalid answer index"
+        fi
+      else
+        echo "invalid answer index"
+      fi
+      ;;
     *)
       echo "command not recognized"
       return 0
