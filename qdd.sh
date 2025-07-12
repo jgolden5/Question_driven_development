@@ -333,7 +333,9 @@ google_mode() {
       safeguard_question_index
       read -n1 -p "Choose a question by index (leave blank for current question): " q_index
       echo
-      if [[ ! $q_index =~ [0-7] ]]; then
+      if [[ ! $q_index =~ [0-7] ]] && [[ "$q_index" ]]; then
+        return 0
+      elif [[ ! $q_index =~ [0-7] ]]; then
         q_index=$question_index
       fi
       q=$(get_question_by_index $q_index)
