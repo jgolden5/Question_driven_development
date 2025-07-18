@@ -639,7 +639,7 @@ get_questions() {
   questions=
   while read question; do
     questions+="$question"$'\n'
-  done < <(cat "Libraries/$library/$term/answers" | sed 's/\(.*\)\?.*/\1/')
+  done < <(cat "Libraries/$library/$term/answers" | sed 's/\(.*\)?.*/\1/')
   echo -n "$questions"
 }
 
@@ -1009,7 +1009,7 @@ google_keyword() {
 list_questions() {
   local i=0
   while read line; do
-    question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
+    question="$(echo "$line" | sed 's/\(.*?\).*/\1/')"
     if [[ $i == $question_index ]]; then
       echo "$i - $question *"
     else
@@ -1031,7 +1031,7 @@ remove_question_at_index() {
       read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" (Note this will also remove all of its answers!) " confirmation
       echo
       if [[ $confirmation == "y" ]]; then
-        sed -i '' "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
+        sed -i "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
       else
         echo "Ok. No question removing took place"
         return 1
@@ -1086,11 +1086,11 @@ edit_question() {
         read -n1 -p "Are you sure you want to change question \"$question_to_edit\" to \"$new_question\"? " confirmation
         echo
         if [[ $confirmation == "y" ]]; then
-          if [[ ! $new_question =~ \?$ ]]; then
+          if [[ ! $new_question =~ ?$ ]]; then
             new_question+="?"
           fi
           local question_position="$((temp_question_index + 1))"
-          sed -i '' "${question_position}s/.*\?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
+          sed -i "${question_position}s/.*?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
           echo "successfully moved question \"$question_to_edit\" to \"$new_question\""
         fi
       else
@@ -1105,7 +1105,7 @@ edit_question() {
 get_question_by_index() {
   local q_index="$1"
   question_position="$(( q_index + 1 ))"
-  sed -n "${question_position}p" Libraries/$library/$term/answers | sed 's/\(.*\?\).*/\1/'
+  sed -n "${question_position}p" Libraries/$library/$term/answers | sed 's/\(.*?\).*/\1/'
 }
 
 get_answer_by_index() {
@@ -1142,7 +1142,7 @@ answer_question_at_index() {
         echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
         answer="$(echo ${answer^})"
-        sed -i '' "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+        sed -i "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
         previous_answers="$(list_answers_for_question_at_index "$question_index")"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
         if (( previous_answer_length > 9 )); then #since answer is included, we need to check if it's greater than 9
@@ -1162,7 +1162,7 @@ list_all_answers() {
   local i=0
   echo "Showing all answers:"
   while read line; do
-    question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
+    question="$(sed 's/\(.*?\).*/\1/' <<<"$line")"
     if [[ $i == $question_index ]]; then
       echo "$i - $question *"
     else 
@@ -1206,7 +1206,7 @@ list_answers_for_question_at_index() {
   local q_index="$1"
   local q_position="$(( q_index + 1 ))"
   local line="$(sed -n "${q_position}p" Libraries/$library/$term/answers)"
-  local question="$(sed 's/\(.*\?\).*/\1/' <<<"$line")"
+  local question="$(sed 's/\(.*?\).*/\1/' <<<"$line")"
   echo "$q_index - $question"
   local j=-1
   while read inner_line; do
@@ -1214,7 +1214,7 @@ list_answers_for_question_at_index() {
       echo "  $j - $inner_line"
     fi
     (( j++ ))
-  done < <(sed 's/\([\!\.\?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
+  done < <(sed 's/\([!\.?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
 }
 
 remove_answer_by_indices() {
@@ -1234,9 +1234,9 @@ remove_answer_by_indices() {
         break
       fi
       (( j++ ))
-    done < <(sed 's/\([\!\.\?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
+    done < <(sed 's/\([\!\.?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
     if [[ "$answer_to_remove" ]]; then
-      sed -i '' "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
+      sed -i "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
     else
       echo "Answer index was invalid. No answer was removed"
     fi
@@ -1269,7 +1269,7 @@ edit_answer() {
         echo
         if [[ $confirmation == "y" ]]; then
           question_position="$((question_index + 1))"
-          sed -i '' "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
+          sed -i "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
           echo "successfully moved answer \"$answer_to_edit\" to \"$new_answer\""
         fi
       else
@@ -1285,7 +1285,7 @@ list_questions_that_have_answers() {
   valid_question_indices=
   local i=0
   while read line; do
-    question="$(echo "$line" | sed 's/\(.*\?\).*/\1/')"
+    question="$(echo "$line" | sed 's/\(.*?\).*/\1/')"
     if [[ "$question" != "$line" ]]; then
       echo "$i - $question"
       valid_question_indices+="$i"
@@ -1300,7 +1300,7 @@ list_questions_that_have_answers() {
 remove_all_answers_at_question_index() {
   q_index="$1"
   q_position="$(( q_index + 1 ))"
-  sed -i '' "${q_position}s/\(.*\?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
+  sed -i "${q_position}s/\(.*?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
 }
 
 safeguard_question_index() {
