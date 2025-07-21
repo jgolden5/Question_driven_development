@@ -421,7 +421,7 @@ ai_mode() {
       elif [[ $user_q_index ]]; then
         return 0
       fi
-      prompt="Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: $question"
+      prompt="Please provide 10 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: $question"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
     w)
@@ -589,7 +589,7 @@ ai_help() {
   echo "AI Mode Help:"
   echo "y - copies the prompt: \"Give 10 interesting facts about [library]\""
   echo "t - copies the prompt: \"What are the 10 most important things to know about [term]?\""
-  echo "q - copies the prompt: \"Please provide 8 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
+  echo "q - copies the prompt: \"Please provide 10 uniquely insightful answers to the following question, along with explanations as to why you gave each answer: [question]\""
   echo "w - copies the prompt: \"Please give reasons as to why the following answer was given to the following question, along with a rating of how accurate the answer is on a scale of 1-10, 10 being the most accurate and 1 being the least accurate. Question: [question]. Answer: [answer].\""
   echo "h/? - AI mode help"
   echo "x/Q/Enter - exit AI mode"
