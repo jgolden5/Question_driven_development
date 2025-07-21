@@ -512,7 +512,7 @@ qdd_ai_mode() {
 }
 
 alias qdd='source qdd.sh'
-alias qvv='vim /Users/jgolden1/bash/apps/question_driven_development/qdd.sh'
+alias qvv='vim qdd.sh'
 
 #help functions. These give every possible command I can access from the current state
 
