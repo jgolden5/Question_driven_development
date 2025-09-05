@@ -1478,11 +1478,13 @@ wikipedia_search() {
 
 google_search() {
   search=""
+  text=""
   for word in $@ ; do
     search="$search%20$word"
+    text="$text $word"
   done
   open "http://www.google.com/search?q=$search"
-  echo "$search" | pbcopy
+  echo "$text" | pbcopy
   echo "Searched for $@ and copied it to clipboard"
 }
 
