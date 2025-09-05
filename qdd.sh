@@ -486,7 +486,7 @@ qdd_ai_mode() {
       elif [[ $term_index ]]; then
         return 0
       fi
-      prompt="Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. Also note that I want you to give me questions--NOT just a quiz, but questions that will give me a wide variety of knowledge on the term I choose! This is the term about which the questions will be generated: $term"
+      prompt="Given the following term, please generate 8 questions which would gain the maximum amount and variety of knowledge on the subject. Note that each question must not exceed 8 words in length. Also note that I want you to give me questions--NOT just a quiz, but questions that will give me a wide variety of knowledge on the term I choose! One last thing, make these questions in terms of not only the term, but also $library. This is the term about which the questions will be generated: $term"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
     w)

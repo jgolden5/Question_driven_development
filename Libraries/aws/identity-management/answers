@@ -1,0 +1,8 @@
+What is AWS Identity and Access Management?
+How does IAM differ from AWS Cognito?
+Which AWS services support federated identity management?
+Can IAM roles be assumed cross-account?
+How does AWS enforce least privilege access?
+What identity protocols does AWS Cognito support?
+How are temporary credentials managed in AWS?
+What tools audit identity usage in AWS?
