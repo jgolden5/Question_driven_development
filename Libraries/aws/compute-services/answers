@@ -1,8 +1,8 @@
-What are examples of cloud compute services?
-How does serverless computing differ from EC2?
-What is autoscaling in compute environments?
-How do containers relate to compute services?
-What pricing models exist for compute usage?
-How is compute performance measured and optimized?
-What security risks affect compute services most?
-How do regions impact compute service latency?
+What's useful to know about Amazon EC2? EC2 stands for Elastic Compute Cloud. Instance type optimizes compute, memory, storage, or high-performance-computing. User chooses OS, instance type, storage, and networking. Automatically scales to adjust network capacity by demand. Amazon Machine Images simplify deployment. EBS volumes provide EC2 instances persistent storage. Spot instances can dramatically cut server costs. EC2 works seamlessly with other AWS services.
+What's useful to know about Amazon ECS?
+What's useful to know about Amazon EKS?
+What's useful to know about Amazon Lightsail?
+What's useful to know about AWS Lambda?
+What's useful to know about AWS Fargate?
+What's useful to know about AWS Elastic Beanstalk?
+What's useful to know about AWS Batch?

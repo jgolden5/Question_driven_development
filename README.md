@@ -1,7 +1,7 @@
 # Question_driven_development (QDD) Version 8 Protocol (8P)
 
 ## Purpose:
-### Question_driven_development is written with 8 Protocol in order to limit one's discoveries to the best of the best--the best terms, the best questions, the best answers. In order to get the most benefit from this, I have to start and end with those things which I am the most interested in--for those are the things which I will be most invested in learning and the things which I will learn the best.
+### Question_driven_development is written compliant with [8 Protocol](https://github.com/jgolden5/8_Protocol) in order to limit one's note-taking to the best of the best--the best terms, the best questions, the best answers.
 
 ## Basic Walkthrough for newbies:
 1. Make sure you're in the right directory: After running git clone in the directory you want to keep qdd in, go to the directory this project was cloned in (it will contain qdd.sh). (If desired, you can make super-directories called "tubs" that categorize libraries. If you don't do this, your number of libraries will be limited to 10. Ignore this for simple implementation).
