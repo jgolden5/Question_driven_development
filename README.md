@@ -1,7 +1,23 @@
 # Question_driven_development (QDD) Version 8 Protocol (8P)
 
 ## Purpose:
-### Question_driven_development is written compliant with [8 Protocol](https://github.com/jgolden5/8_Protocol) in order to limit one's note-taking to the best of the best--the best terms, the best questions, the best answers.
+As software developers, we have to learn a LOT of new stuff, and we have to learn it fast. Because of this, we often find ourselves hitting an information overload, and it can be hard to effectively keep all that information in our heads. So, we take notes--_so_ many notes--that it can often be difficult to store, navigate, or even find them as time goes on and the entropy of our notes goes up and up! Is it possible to make this note-taking process less painful, less "entropic", more focused on learning the right stuff well instead of looking at all the words fast? Enter QDD. Question-driven development focuses on catapulting the user's learning speed forward by applying simple constraints to the note-taking process which forces the user to focus on _quality over quantity_. 
+
+### The result? You _always_... 
+* know **where** notes are
+* focus on the **most relevant** info
+* keep notes **short**
+* increase note-taking **quality** over time without increasing entropy
+
+## 8 Rules of QDD:
+1. Every complete library must have 8 complete terms—no more, no less
+2. Every complete term must have 8 complete questions—no more, no less (note that there is no rule against using AI to generate _questions_ simply as a place to start)
+3. Every complete question may only have 1 final answer (if there are more or less, the question is incomplete)
+4. Any of these rules may be changed at any time, but just like the questions and terms, there may not be any more (or less) than 8 at any one time. So if I want to add one rule, I must remove another, and if I want to remove one rule, I must replace it with another. Thus we allow our 8 rules to be dynamic when improvements present themselves, while also remaining static in practice
+5. Questions in QDD should only be asked with the intention of A) solving the problem at hand, or B) clarifying concepts relevant to the problem/topic at hand in order to reduce the number of future problems, and regardless they must be C) 8 words long or less
+6. Answers in QDD must be A) my own words having passed through my own brain, B) helpful information, and C) 8 sentences or less, where each sentence is 8 words or less
+7. I am encouraged to add questions and answers to my terms often, and even add new terms to my libraries, if that which I am adding is more valuable than that which I am replacing. This is the vision which empowers 8P—the idea that my quality of information and understanding can constantly increase while keeping my resulting knowledge base simple, relevant, and easy to navigate and improve
+8. It is wise to use version control with QDD 8P in case I decide I prefer a recently deleted item (question, answer, term, or rule)
 
 ## Basic Walkthrough for newbies:
 1. Make sure you're in the right directory: After running git clone in the directory you want to keep qdd in, go to the directory this project was cloned in (it will contain qdd.sh). (If desired, you can make super-directories called "tubs" that categorize libraries. If you don't do this, your number of libraries will be limited to 10. Ignore this for simple implementation).
@@ -11,16 +27,6 @@
 5. Add questions: First, type `t` and then the index of the term you want to add the question to. As an example, choose index `0`. Libraries and terms are alphabetically sorted automatically, so the term at index 0 should be the term "diet". hit `q` to enter "question mode", then hit `a` to add a question. To demonstrate how qdd works, enter the following question: `What does eating chocolate do to the immune system?` You should get an error message that says, "Question was 9 words long. Please make sure questions are <= 8 words long. Question was not added." Because of the "8 Rules" defined below, questions must not be more than 8 words long. We can still use the question by shortening it like this: `How does eating chocolate affect the immune system?` Now you should get the following success message: "question was added to diet questions". Although it can sometimes be frustrating when your well-thought question is just a little too long, this limitation is actually one of the things that makes QDD great. It keeps things simple and concise, and forces us to not bloat our notes excessively. If we just can't come up with a way to shorten our question, we can also do a little bit of hyphenation to save a word or two, but this should be an exception and not a rule. An example of doing that with our previous question would be as follows: `What does eating chocolate do to the immune-system?` Try adding a few of your own questions for practice (note that if you try to add more than 8, you will have to need one to delete, as the upper limit on number of questions per term is 8
 6. Add answers: First, type `q` to choose the index of the question you want to answer. Let's choose the first one we added by selecting `0`. Then hit `w` for answer mode, and `a` to add an answer. We will now have to answer the question in 8 words or less. Let's add the answer `chocolate can improve immune system and decrease stress`. Add whatever other answers you want, but also note that if more than 8 answers are added, you will be prompted to delete one just like with questions.
 7. Delete answers, questions, terms, or libraries: Try adding another answer to some question, but make it a dumb answer - `dumb`. We don't want our dumb answer, so let's delete it. First hit `w` for answer mode, then hit `d` for delete, and then enter whatever the index of the answer is. It should delete the answer. You can repeat this process with questions, terms, or libraries by following an identical process, but changing modes respectively (`q` for question mode, `t` for term mode, and `y` for library mode)
-
-## 8 Rules:
-1. Every complete library must have 8 complete terms—no more, no less
-2. Every complete term must have 8 complete questions—no more, no less (note that there is no rule against using AI to generate _questions_ simply as a place to start)
-3. Every complete question may only have 1 final answer (if there are more or less, the question is incomplete)
-4. Any of these rules may be changed at any time, but just like the questions and terms, there may not be any more (or less) than 8 at any one time. So if I want to add one rule, I must remove another, and if I want to remove one rule, I must replace it with another. Thus we allow our 8 rules to be dynamic when improvements present themselves, while also remaining static in practice
-5. Questions in QDD should only be asked with the intention of A) solving the problem at hand, or B) clarifying concepts relevant to the problem/topic at hand in order to reduce the number of future problems, and regardless they must be C) 8 words long or less
-6. Answers in QDD must be A) my own words having passed through my own brain, B) helpful information, and C) 8 sentences or less, where each sentence is 8 words or less
-7. I am encouraged to add questions and answers to my terms often, and even add new terms to my libraries, if that which I am adding is more valuable than that which I am replacing. This is the vision which empowers 8P—the idea that my quality of information and understanding can constantly increase while keeping my resulting knowledge base simple, relevant, and easy to navigate and improve
-8. It is wise to use version control with QDD 8P in case I decide I prefer a recently deleted item (question, answer, term, or rule)
 
 _See https://github.com/jgolden5/8_Protocol for more info_
 
