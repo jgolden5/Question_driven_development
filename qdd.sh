@@ -1,6 +1,8 @@
 #!/usr/local/bin/bash
 
-source ~/p/bash-debugger
+sys=$(uname -a)
+browser_command=
+set_browser_command_by_system "$sys"
 
 if [[ "$last_tub" ]]; then
   if [[ "$last_tub" == "$(pwd)" ]]; then
@@ -28,6 +30,17 @@ ORANGE="\e[38;5;214m"
 PINK="\e[38;5;219m"
 ROSE="\e[38;5;163m"
 NC="\e[0m"
+
+set_browser_command_by_system() {
+  system_type="$1"
+  if [[ $system_type =~ "MINGW64" ]]; then
+    browser_command="start"
+  elif [[ $system_type =~ "Darwin" ]]; then
+    browser_command="open"
+  else
+    echo "System type \"$system_type\" not recognized, no browser command was set. Uh oh..."
+  fi
+}
 
 main() {
   clear
@@ -1002,7 +1015,7 @@ google_keyword() {
   for word in $@ ; do
     search="$search%20$word"
   done
-  open "http://www.google.com/search?q=$search"
+  $browser_command "http://www.google.com/search?q=$search"
   echo "googled \"$@\""
 }
 
@@ -1471,7 +1484,7 @@ rank_tub() {
 }
 
 wikipedia_search() {
-  open "https://en.wikipedia.org/wiki/$1"
+  $browser_command "https://en.wikipedia.org/wiki/$1"
   echo "Searched for $1 on wikipedia"
   sleep 0.5
 }
@@ -1483,7 +1496,7 @@ google_search() {
     search="$search%20$word"
     text="$text $word"
   done
-  open "http://www.google.com/search?q=$search"
+  $browser_command "http://www.google.com/search?q=$search"
   echo "$text" | pbcopy
   echo "Searched for $@ and copied it to clipboard"
 }
