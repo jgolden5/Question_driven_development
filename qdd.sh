@@ -29,6 +29,7 @@ MAGENTA="\e[35m"
 ORANGE="\e[38;5;214m"
 PINK="\e[38;5;219m"
 ROSE="\e[38;5;163m"
+SILVER="\e[38;5;244m"
 NC="\e[0m"
 
 set_browser_command_by_system() {
@@ -524,6 +525,36 @@ qdd_ai_mode() {
   esac
 }
 
+copy_mode() {
+  echo -ne "${SILVER}QDD ${RED}$library${NC}:${GREEN}$term ${YELLOW}[${SILVER}$question_index${YELLOW}] ${SILVER}(copy) ${NC}$ "
+  read -n1 command
+  echo
+  case "$command" in
+    h|\?)
+      copy_help
+      ;;
+    y)
+      echo "Copy library"
+      ;;
+    t)
+      echo "Copy term"
+      ;;
+    q)
+      echo "Copy question"
+      ;;
+    w)
+      echo "Copy answer"
+      ;;
+    x|Q|'')
+      return 0
+      ;;
+    *)
+      echo "command not recognized"
+      return 0
+      ;;
+  esac
+}
+
 alias qdd='source qdd.sh'
 alias qvv='vim qdd.sh'
 
@@ -641,6 +672,8 @@ choose_mode_func() {
     echo ai_mode
   elif [[ "$1" == 'o' ]]; then
     echo qdd_ai_mode
+  elif [[ "$1" == 'p' ]]; then
+    echo copy_mode
   elif [[ "$1" == 'x' || "$1" == 'Q' ]]; then
     echo break
   else
