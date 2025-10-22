@@ -376,7 +376,6 @@ google_mode() {
         local answer_to_google=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
         if [[ $answer_to_google ]]; then
           google_search "$answer_to_google"
-          answer_to_google=
         else
           echo "invalid answer index"
         fi
@@ -534,16 +533,43 @@ copy_mode() {
       copy_help
       ;;
     y)
-      echo "Copy library"
+      echo "$library" | pbcopy && echo "Copied library $library to clipboard"
       ;;
     t)
-      echo "Copy term"
+      echo "$term" | pbcopy && echo "Copied term $term to clipboard"
       ;;
     q)
-      echo "Copy question"
+      list_questions
+      safeguard_question_index
+      read -n1 -p "Choose a question by index (leave blank for current question): " q_index
+      echo
+      if [[ ! $q_index =~ [0-7] ]] && [[ "$q_index" ]]; then
+        return 0
+      elif [[ ! $q_index =~ [0-7] ]]; then
+        q_index=$question_index
+      fi
+      q=$(get_question_by_index $q_index)
+      if [[ $q_index =~ [0-7] ]]; then
+        echo "$q" | pbcopy && echo "Copied question \"$q\" to clipboard"
+      else
+        echo "Sorry, no valid question was found at index $q_index"
+      fi
       ;;
     w)
-      echo "Copy answer"
+      list_answers_for_question_at_index $question_index
+      read -n1 -s -p "Enter the index of the answer you want" answer_index
+      echo
+      if [[ $answer_index =~ [0-7] ]]; then
+        local answer_position=$((answer_index+2))
+        local answer_to_copy=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        if [[ $answer_to_copy ]]; then
+          echo "$answer_to_copy" | pbcopy && echo "Copied answer \"$answer\" to clipboard"
+        else
+          echo "invalid answer index"
+        fi
+      else
+        echo "invalid answer index"
+      fi
       ;;
     x|Q|'')
       return 0
@@ -647,6 +673,16 @@ qdd_ai_help() {
   echo "w - copies the prompt: \"Given the following question, please generate 8 answers which give the most comprehensive and uniquely insightful answers to the question. Note that each answer must not exceed 8 words in length. This is the question about which the answers will be generated: [question]\""
   echo "h/? - QDD_AI mode help"
   echo "x/Q/Enter - exit QDD_AI mode"
+}
+
+copy_help() {
+  echo "Copy Mode Help:"
+  echo "y - copy current library to clipboard"
+  echo "t - copy current term to clipboard"
+  echo "q - copy question by index to clipboard"
+  echo "w - copy answer (for current question) by index to clipboard"
+  echo "h/? - copy mode help"
+  echo "x/Q/Enter - exit copy mode"
 }
 
 #utils -- auxiliary functions used for main and mode functions
