@@ -369,7 +369,7 @@ google_mode() {
       ;;
     w)
       list_answers_for_question_at_index $question_index
-      read -n1 -s -p "Enter the index of the answer you want" answer_index
+      read -n1 -s -p "Enter the index of the answer you want: " answer_index
       echo
       if [[ $answer_index =~ [0-7] ]]; then
         local answer_position=$((answer_index+2))
@@ -557,13 +557,13 @@ copy_mode() {
       ;;
     w)
       list_answers_for_question_at_index $question_index
-      read -n1 -s -p "Enter the index of the answer you want" answer_index
+      read -n1 -p "Enter the index of the answer you want: " answer_index
       echo
       if [[ $answer_index =~ [0-7] ]]; then
         local answer_position=$((answer_index+2))
-        local answer_to_copy=$(list_answers_for_question_at_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
+        local answer_to_copy=$(list_answers_for_question_at_index $question_index | sed -n "${answer_position}p" | sed 's/.*- \(.*\)\./\1/')
         if [[ $answer_to_copy ]]; then
-          echo "$answer_to_copy" | pbcopy && echo "Copied answer \"$answer\" to clipboard"
+          echo "$answer_to_copy" | pbcopy && echo "Copied answer \"$answer_to_copy\" to clipboard"
         else
           echo "invalid answer index"
         fi
