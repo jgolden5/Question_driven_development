@@ -590,10 +590,16 @@ main_help() {
   echo "Main Help:"
   echo "h/? - main help"
   echo "q - question mode"
-  echo "t - term mode"
   echo "w - answer mode"
-  echo "x/Q - exit qdd"
+  echo "e - edit mode"
+  echo "r - rank mode"
+  echo "t - term mode"
   echo "y - library mode"
+  echo "u - google mode"
+  echo "i - ai mode"
+  echo "o - qdd_ai mode"
+  echo "p - copy mode"
+  echo "x/Q - exit qdd"
 }
 
 library_help() {
