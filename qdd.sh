@@ -2,7 +2,8 @@
 
 sys=$(uname -a)
 browser_command=
-set_browser_command_by_system "$sys"
+interactive_sed=
+set_vars_by_system "$sys"
 
 if [[ "$last_tub" ]]; then
   if [[ "$last_tub" == "$(pwd)" ]]; then
@@ -32,12 +33,14 @@ ROSE="\e[38;5;163m"
 SILVER="\e[38;5;244m"
 NC="\e[0m"
 
-set_browser_command_by_system() {
+set_vars_by_system() {
   system_type="$1"
   if [[ $system_type =~ "MINGW64" ]]; then
     browser_command="start"
+    interactive_sed="sed -i"
   elif [[ $system_type =~ "Darwin" ]]; then
     browser_command="open"
+    interactive_sed="sed -i ''"
   else
     echo "System type \"$system_type\" not recognized, no browser command was set. Uh oh..."
   fi
@@ -1119,7 +1122,7 @@ remove_question_at_index() {
       read -n1 -p "Are you sure you want to remove the question \"$question_to_remove\" (Note this will also remove all of its answers!) " confirmation
       echo
       if [[ $confirmation == "y" ]]; then
-        sed -i "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
+        $interactive_sed "/$question_to_remove/d" Libraries/$library/$term/answers && echo "Successfully removed question at index $question_index"
       else
         echo "Ok. No question removing took place"
         return 1
@@ -1178,7 +1181,7 @@ edit_question() {
             new_question+="?"
           fi
           local question_position="$((temp_question_index + 1))"
-          sed -i "${question_position}s/.*?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
+          $interactive_sed "${question_position}s/.*?\(.*\)/$new_question\1/" Libraries/$library/$term/answers
           echo "successfully moved question \"$question_to_edit\" to \"$new_question\""
         fi
       else
@@ -1230,7 +1233,7 @@ answer_question_at_index() {
         echo "Answer was $answer_length words long. Please make sure answers are <= 8 words long (note that I may add up to 8 answers per question). Answer was not added." && return 1
       else
         answer="$(echo ${answer^})"
-        sed -i "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
+        $interactive_sed "${question_position}s/$/ $answer./" Libraries/$library/$term/answers && echo "Answer successfully added"
         previous_answers="$(list_answers_for_question_at_index "$question_index")"
         previous_answer_length="$(echo "$previous_answers" | wc -l | sed 's/ *//')"
         if (( previous_answer_length > 9 )); then #since answer is included, we need to check if it's greater than 9
@@ -1324,7 +1327,7 @@ remove_answer_by_indices() {
       (( j++ ))
     done < <(sed 's/\([\!\.?]\) \([A-Z0-9]\)/\1\n\2/g' <<<"$line")
     if [[ "$answer_to_remove" ]]; then
-      sed -i "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
+      $interactive_sed "s/ $answer_to_remove//" Libraries/$library/$term/answers && echo "Answer \"$answer_to_remove\" was removed successfully"
     else
       echo "Answer index was invalid. No answer was removed"
     fi
@@ -1357,7 +1360,7 @@ edit_answer() {
         echo
         if [[ $confirmation == "y" ]]; then
           question_position="$((question_index + 1))"
-          sed -i "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
+          $interactive_sed "${question_position}s/\(.*\)$answer_to_edit\(.*\)/\1${new_answer^}\2/" Libraries/$library/$term/answers 
           echo "successfully moved answer \"$answer_to_edit\" to \"$new_answer\""
         fi
       else
@@ -1388,7 +1391,7 @@ list_questions_that_have_answers() {
 remove_all_answers_at_question_index() {
   q_index="$1"
   q_position="$(( q_index + 1 ))"
-  sed -i "${q_position}s/\(.*?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
+  $interactive_sed "${q_position}s/\(.*?\).*/\1/" "Libraries/$library/$term/answers" && echo "Successfully removed all answers from question \"$question\""
 }
 
 safeguard_question_index() {
