@@ -264,7 +264,7 @@ library_mode() {
   read -n1 command
   echo
   case "$command" in
-    [0-9]) 
+    [0-7]) 
       set_library_by_index "$command"
       ;;
     a)
@@ -425,7 +425,7 @@ ai_mode() {
       elif [[ $user_term_index ]]; then
         return 0
       fi
-      prompt="What are the 10 most important things to know about $term?"
+      prompt="What are the 10 most important things to know about $term in the context of $library?"
       echo "$prompt" | pbcopy && echo "Copied the following prompt to clipboard: \"$prompt\""
       ;;
     q)
