@@ -2,7 +2,7 @@ What's useful to know about Amazon EC2? EC2 stands for Elastic Compute Cloud. In
 What's useful to know about Amazon ECS?
 What's useful to know about Amazon EKS?
 What's useful to know about Amazon Lightsail?
-What's useful to know about AWS Lambda?
+What's useful to know about AWS Lambda? It is a function-as-a-service tool. You can run event-driven functions in the cloud.
 What's useful to know about AWS Fargate?
 What's useful to know about AWS Elastic Beanstalk?
 What's useful to know about AWS Batch?
