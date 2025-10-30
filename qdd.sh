@@ -737,7 +737,7 @@ get_questions() {
 
 get_library_index() {
   if [[ "$library" != "-" ]]; then
-    lib_index="$(ls Libraries | grep -nw "$library" | sed 's/\(.*\):.*/\1/')"
+    lib_index="$(ls Libraries | grep -nw "$library" | head -1 | sed 's/\(.*\):.*/\1/')"
     (( lib_index-- ))
   else
     lib_index=0
