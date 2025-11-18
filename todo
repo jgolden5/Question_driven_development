@@ -1,3 +1,2 @@
-make a project on Github called "cail", which stands for "curl+ai" and is pronounced "kale", whose purpose is to hack AI websites to use their api's for free from the command line (just as this is possible to do via web browser, therefore, it must be possible via curl)
 add a feature to qdd google mode which prints out suggested websites to visit in order to learn more about particular library, term, or question, based on "cail" project (presently described above) which fetches AI result
 brainstorm ideas of which mode would be used for the 'p' key (mostly just arbitrarily because every other key on the top row of the keyboard has a mode associated with it)

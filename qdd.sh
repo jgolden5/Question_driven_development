@@ -386,6 +386,30 @@ google_mode() {
         echo "invalid answer index"
       fi
       ;;
+    u)
+      read -n1 -p "Would you like web search suggestions for library, term, question, or answer? " cmd
+      echo
+      case $cmd in
+        y)
+          local library_index="$(get_library_index)"
+          web_suggestions "$(get_library_by_index $library_index)"
+          ;;
+        t)
+          web_suggestions "$(get_term_by_index $term_index)"
+          ;;
+        w)
+          list_answers_for_question_at_index $question_index
+          read -n1 -p "Select the index of the answer you want search suggestions for: " a_index
+          web_suggestions "$(get_answer_by_index $a_index)"
+          ;;
+        q)
+          web_suggestions "$(get_question_by_index $question_index)"
+          ;;
+        *)
+          echo "That wasn't a library, term, question or answer, so no web suggestions took place"
+          ;;
+      esac
+      ;;
     x|Q|'')
       return 0
       ;;
@@ -661,6 +685,7 @@ google_help() {
   echo "t - look up term on wikipedia"
   echo "q - google question"
   echo "w - google answer"
+  echo "u - find AI google suggestions for library, term, question or answer"
   echo "h/? - google mode help"
   echo "x/Q/Enter - exit google mode"
 }
@@ -1096,6 +1121,11 @@ google_keyword() {
   done
   $browser_command "http://www.google.com/search?q=$search"
   echo "googled \"$@\""
+}
+
+web_suggestions() {
+  target="$1"
+  echo "Please come up with some web resources that would help me learn more about $target" | pbcopy && echo "copied web suggestion prompt \"$(pbpaste)\" into clipboard to be used by your favorite AI"
 }
 
 list_questions() {
