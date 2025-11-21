@@ -162,7 +162,7 @@ term_mode() {
     g)
       google_documentation_for_current_term
       ;;
-    h)
+    h|\?)
       term_help
       ;;
     x|Q|'')
@@ -201,7 +201,7 @@ answer_mode() {
     s)
       list_all_answers
       ;;
-    h)
+    h|\?)
       answer_help
       ;;
     x|Q)
@@ -217,6 +217,9 @@ rank_mode() {
   read -n1 command
   echo
   case "$command" in 
+    h|\?)
+      rank_help
+      ;;
     q)
       list_questions
       read -n1 -p "Enter the index of the question you want to rank: " q_index
@@ -226,6 +229,9 @@ rank_mode() {
       else
         rank_question "$question_index"
       fi
+      ;;
+    r)
+      rank_tub
       ;;
     t)
       list_terms
@@ -242,11 +248,7 @@ rank_mode() {
       read -n1 -p "Enter the index of the library you want to rank: " lib_index
       echo
       if [[ "$lib_index" ]]; then
-        if [[ "$lib_index" == '*' ]]; then
-          rank_tub
-        else
-          rank_library "$lib_index"
-        fi
+        rank_library "$lib_index"
       else
         rank_library "$library_index"
       fi
@@ -677,6 +679,14 @@ edit_help() {
   echo "q/w - edit answers file of current term"
   echo "h/? - edit mode help"
   echo "x/Q/Enter - exit edit mode"
+}
+
+rank_help() {
+  echo "Rank Mode Help:"
+  echo "y - rank current library (check completion level of library via terms, questions, and answers)"
+  echo "t - rank current term (check completion level of term via questions)"
+  echo "r - rank current tub (check completion level of ALL libraries, questions, and answers in current tub)"
+  echo "q - rank current question (check completion level of question via answers)"
 }
 
 google_help() {
@@ -1586,10 +1596,13 @@ rank_library() {
 
 rank_tub() {
   local i=0
+  local current_tub=$(pwd | sed 's/.*\/\(.*\)$/\1/')
+  echo "Ranking tub $current_tub. This could take awhile...(don't worry, still not nearly as long as a Windows update)"
   for lib in Libraries/*; do
-    rank_library "$i" | grep "    "
+    rank_library "$i"
     (( i++ ))
   done
+  echo "Now take a peek at the totals and do the math yourself, cause I'm too lazy to code that right now!"
 }
 
 wikipedia_search() {
