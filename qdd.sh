@@ -989,11 +989,20 @@ list_terms() {
 
 remove_term() {
   local term_to_remove=
-  read -n1 -p "Which term do you want to remove? " t_choice
+  read -n1 -p "Which term do you want to remove? (* removes all terms) " t_choice
   echo
   case "$t_choice" in
     [0-9])
       term_to_remove="$(get_term_by_index "$t_choice")"
+      ;;
+    '*')
+      read -n1 -p "Are you sure you want to remove ALL terms in the current library (This will remove all questions and answers in the term)? " confirm_term_removal
+      echo
+      if [[ $confirm_term_removal == 'y' ]]; then
+        remove_all_terms_in_current_library "$library_index"
+      else
+        echo "Ok, no term removal took place"
+      fi
       ;;
     a)
       read -p "Enter term to remove: " term_name
@@ -1019,6 +1028,17 @@ remove_term() {
       echo "Ok. Term $term_to_remove is here to stay."
       return 1
     fi
+  fi
+}
+
+remove_all_terms_in_current_library() {
+  local current_library="$(get_library_by_index $1)"
+  if [[ -d Libraries/$current_library ]]; then
+    rm -r Libraries/$current_library/* && echo "All terms in library \"$current_library\" removed successfully"
+    term_index=0
+    term='-'
+  else
+    echo "Sorry, library \"$current_library\" doesn't seem to exist"
   fi
 }
 
