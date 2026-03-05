@@ -36,7 +36,7 @@ NC="\e[0m"
 set_vars_by_system() {
   system_type="$1"
   if [[ $system_type =~ "MINGW64" ]]; then
-    browser_command="start"
+    browser_command="explorer"
     interactive_sed="sed -i"
   elif [[ $system_type =~ "Darwin" ]]; then
     browser_command="open"
@@ -1149,7 +1149,7 @@ google_keyword() {
   for word in $@ ; do
     search="$search%20$word"
   done
-  $browser_command "http://www.google.com/search?q=$search"
+  $browser_command "https://www.google.com/search?q=$search"
   echo "googled \"$@\""
 }
 
@@ -1632,15 +1632,10 @@ wikipedia_search() {
 }
 
 google_search() {
-  search=""
-  text=""
-  for word in $@ ; do
-    search="$search%20$word"
-    text="$text $word"
-  done
-  $browser_command "http://www.google.com/search?q=$search"
-  echo "$text" | pbcopy
-  echo "Searched for $@ and copied it to clipboard"
+  search="$@"
+  "$browser_command" "https://www.google.com/search?q=$search"
+  echo "$search" | pbcopy
+  echo "Searched for \"$@\" and copied it to clipboard"
 }
 
 main
