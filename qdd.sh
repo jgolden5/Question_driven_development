@@ -1431,22 +1431,6 @@ edit_answer() {
   fi
 }
 
-list_questions_that_have_answers() {
-  valid_question_indices=
-  local i=0 line question
-  while IFS= read -r line; do
-    if [[ $line =~ ^([^?]*\?) ]]; then
-      question="${BASH_REMATCH[1]}"
-      echo "$i - $question"
-      valid_question_indices+="$i"
-    fi
-    (( i++ ))
-  done < "Libraries/$library/$term/answers"
-  if (( i == 0 )); then
-    echo "No questions exist yet for term $term"
-  fi
-}
-
 remove_all_answers_at_question_index() {
   q_index="$1"
   q_position="$(( q_index + 1 ))"
