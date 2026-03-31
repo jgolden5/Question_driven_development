@@ -1159,19 +1159,17 @@ web_suggestions() {
 }
 
 list_questions() {
-  local i=0
-  while read line; do
-    question="$(echo "$line" | sed 's/\(.*?\).*/\1/')"
+  local i=0 line question
+  while IFS= read -r line; do
+    question="${line%%\?*}?"
     if [[ $i == $question_index ]]; then
       echo "$i - $question *"
     else
       echo "$i - $question"
     fi
-    (( i++ ))
-  done < <(cat Libraries/$library/$term/answers)
-  if [[ $i == 0 ]]; then
-    echo "No questions exist yet for term $term"
-  fi
+    ((i++))
+  done < "Libraries/$library/$term/answers"
+  (( i == 0 )) && echo "No questions exist yet for term $term"
 }
 
 remove_question_at_index() {
@@ -1435,16 +1433,16 @@ edit_answer() {
 
 list_questions_that_have_answers() {
   valid_question_indices=
-  local i=0
-  while read line; do
-    question="$(echo "$line" | sed 's/\(.*?\).*/\1/')"
-    if [[ "$question" != "$line" ]]; then
+  local i=0 line question
+  while IFS= read -r line; do
+    if [[ $line =~ ^([^?]*\?) ]]; then
+      question="${BASH_REMATCH[1]}"
       echo "$i - $question"
       valid_question_indices+="$i"
     fi
     (( i++ ))
-  done < <(cat Libraries/$library/$term/answers)
-  if [[ $i == 0 ]]; then
+  done < "Libraries/$library/$term/answers"
+  if (( i == 0 )); then
     echo "No questions exist yet for term $term"
   fi
 }
