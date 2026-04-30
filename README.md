@@ -1,4 +1,4 @@
-# Question_driven_development (QDD) Version 8 Protocol (8P)
+# Question Driven Development (QDD)
 
 ## Purpose:
 As software developers, we have to learn a LOT of new stuff, and we have to learn it fast. Because of this, we often find ourselves hitting an information overload, and it can be hard to effectively keep all that information in our heads. So, we take notes--_so_ many notes--that it can often be difficult to store, navigate, or even find them as time goes on and the entropy of our notes goes up and up! Is it possible to make this note-taking process less painful, less "entropic", more focused on learning the right stuff well instead of looking at all the words fast? Enter QDD. Question-driven development focuses on catapulting the user's learning speed forward by applying simple constraints to the note-taking process which forces the user to focus on _quality over quantity_. 
@@ -33,3 +33,39 @@ As software developers, we have to learn a LOT of new stuff, and we have to lear
 _See [8 Protocol](https://github.com/jgolden5/8_Protocol) for more info_
 
 _Also note that the answers in this version are NOT the ones I use in my daily studies, as those are private. The public ones are just test libraries to make sure features work before committing. So please take the weird libraries in this project's directory with a grain of salt._
+
+## Project Structure:
+```
+your-app/
+│
+├── cmd/
+│   └── cli/
+│       └── main.go          # CLI entry point (user interface)
+│
+├── internal/
+│   ├── api/
+│   │   ├── server.go        # HTTP server setup
+│   │   └── handlers.go      # API endpoints
+│   │
+│   ├── service/
+│   │   └── library.go       # business logic (create/get library)
+│   │
+│   ├── db/
+│   │   └── postgres.go      # DB connection + queries
+│   │
+│   └── model/
+│       └── library.go       # structs (Library, Term, etc.)
+│
+├── migrations/
+│   └── 001_init.sql         # database schema
+│
+├── go.mod
+└── main.go (optional if you merge CLI/API later)
+```
+
+## Steps to run
+1. 'createdb qdd'
+2. 'psql qdd < migrations/001_init.sql'
+3. 'go run main.go'
+4. (in another terminal) 'go run cmd/cli/main.go create-library "fish"
+5. 'curl "localhost:8080/library?id=1"'

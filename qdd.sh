@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+!/usr/local/bin/bash
 
 sys=$(uname -a)
 browser_command=
