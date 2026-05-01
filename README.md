@@ -64,8 +64,19 @@ your-app/
 ```
 
 ## Steps to run
+### Postgres setup
+1. install Postgres with package manager of your choice. For example, 'pacman -S postgresql'
+2. (if this file already exists, skip this step): 'mkdir -p /var/lib/postgres/data'
+3. initialize database cluster: 'initdb -D /var/lib/postgres/data'
+4. start postgres server: 'pg_ctl -D /var/lib/postgres/data -l logfile start'
+> stop server: 'pg_ctl -D /var/lib/postgres/data stop'
+> check server status: 'pg_ctl -D /var/lib/postgres/data status'
+
+5. connect to postgres with username: 'psql -U username'
+
+### Local DB setup
 1. 'createdb qdd'
 2. 'psql qdd < migrations/001_init.sql'
 3. 'go run main.go'
-4. (in another terminal) 'go run cmd/cli/main.go create-library "fish"
+4. (in another terminal) 'go run cmd/cli/main.go create-library "test-lib"
 5. 'curl "localhost:8080/library?id=1"'
