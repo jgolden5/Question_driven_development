@@ -266,7 +266,7 @@ library_mode() {
   read -n1 command
   echo
   case "$command" in
-    [0-7]) 
+    [0-9]) 
       set_library_by_index "$command"
       ;;
     a)
