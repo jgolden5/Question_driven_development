@@ -366,12 +366,6 @@ google_mode() {
         echo "Sorry, no valid question was found at index $q_index"
       fi
       ;;
-    t)
-      wikipedia_search $term
-      ;;
-    y)
-      wikipedia_search $library
-      ;;
     w)
       list_answers_for_question_at_index $question_index
       read -n1 -s -p "Enter the index of the answer you want: " answer_index
@@ -387,6 +381,15 @@ google_mode() {
       else
         echo "invalid answer index"
       fi
+      ;;
+    e)
+      edit_google_search
+      ;;
+    t)
+      wikipedia_search $term
+      ;;
+    y)
+      wikipedia_search $library
       ;;
     u)
       read -n1 -p "Would you like web search suggestions for library, term, question, or answer? " cmd
@@ -691,10 +694,11 @@ rank_help() {
 
 google_help() {
   echo "Google Mode Help:"
-  echo "y - look up library on wikipedia"
-  echo "t - look up term on wikipedia"
   echo "q - google question"
   echo "w - google answer"
+  echo "e - pull up editor for something to google"
+  echo "t - look up term on wikipedia"
+  echo "y - look up library on wikipedia"
   echo "u - find AI google suggestions for library, term, question or answer"
   echo "h/? - google mode help"
   echo "x/Q/Enter - exit google mode"
@@ -1605,6 +1609,17 @@ rank_tub() {
     (( i++ ))
   done
   echo "Now take a peek at the totals and do the math yourself, cause I'm too lazy to code that right now!"
+}
+
+edit_google_search() {
+  vim temp_file_for_edit_google_search
+  if [[ -s temp_file_for_edit_google_search ]]; then #file is not empty
+    local query=$(sed 's/\n/. /g' temp_file_for_edit_google_search)
+    google_search "$query"
+  else
+    echo "Empty file was not searched"
+  fi
+  rm temp_file_for_edit_google_search
 }
 
 wikipedia_search() {
