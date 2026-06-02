@@ -600,6 +600,8 @@ copy_mode() {
         else
           echo "invalid answer index"
         fi
+      elif [[ $answer_index == '*' ]]; then
+        list_answers_for_question_at_index $question_index | grep -v '?' | sed 's/^.*[0-9] - //' | pbcopy && echo -e "Copied all answers to clipboard:\n$(pbpaste)"
       else
         echo "invalid answer index"
       fi
